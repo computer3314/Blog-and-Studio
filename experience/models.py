@@ -10,7 +10,7 @@ class Experience(models.Model):
     position = models.CharField('職位', max_length=50)
     content = models.TextField('工作內容', max_length=600)
     start= models.DateField('工作時間起', auto_now_add=False)
-    end= models.DateField('工作時間迄', auto_now_add=False)
+    end= models.DateField('工作時間迄', null=True, blank=True)
   
     def __str__(self):
         return self.companyname

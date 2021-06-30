@@ -18,9 +18,10 @@ from django.conf.urls import url
 from django.urls import path
 from musics.views import hello_view
 from post.views import PostListView, PostDetailView
+from about import views
 urlpatterns = [
     path('admin/', admin.site.urls),
      url('hello/', hello_view),
-    path('', PostListView.as_view()),
+    path('', views.aboutget),
     path('<pk>', PostDetailView.as_view()),
 ]
