@@ -15,15 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import url
-from django.urls import path
-from musics.views import hello_view
+from django.urls import path, re_path
+from stock.views import  stock_views,stock1_view
 from post.views import PostListView, PostDetailView
 from post import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-     url('hello/', hello_view),
+    re_path(r'stock/(?P<p1>\d{1,5})', stock_views),
+    url('stock/', stock1_view),
     path('', views.aboutget),
-    path('<pk>', PostDetailView.as_view()),
+   
 ]
