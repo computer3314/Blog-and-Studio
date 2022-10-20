@@ -14,16 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.conf.urls import url
-from django.urls import path
-from musics.views import hello_view
+from django.urls import path, re_path as url 
 from post.views import PostListView, PostDetailView
 from post import views
-
+from django.http import StreamingHttpResponse
+from camera.views import VideoCamera,gen
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-     url('hello/', hello_view),
     path('', views.aboutget),
-    path('<pk>', PostDetailView.as_view()),
+    path('monitor/', lambda r: StreamingHttpResponse(gen(VideoCamera()),
+                                                     content_type='multipart/x-mixed-replace; boundary=frame')),
 ]

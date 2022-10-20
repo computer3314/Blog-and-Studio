@@ -1,16 +1,55 @@
-{% extends 'base.html' %}
- {% block body %}
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/">文章列表</a></li>
-    <li class="breadcrumb-item active" aria-current="page">
-      {{ post.title }}
-    </li>
-  </ol>
-</nav>
-<div class="container mt-2">
-  <h1>{{ post.title }}</h1>
-  <hr />
-  <p>{{ post.content }}</p>
-</div>
-{% endblock %}
+<!-- Write HTML code here -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{j.title }}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="data-table">
+
+   <h2 class="text-center"><u>{{today}}三大法人買超/{{ date_list.0.stock_name}}/{{ date_list.0.stock_id}}</u></h2><button type="button" class="btn btn-primary"  onclick="location.href='/stock';" >首頁</button><br> 
+ 
+  <table class="table table-dark table-striped">
+     <thead>
+  
+          <tr>
+        <th>日期</th>
+         <th>開盤價</th>
+        <th>最高點</th>
+        <th>最低點</th>
+        <th>收盤</th>
+        <th>當日漲幅</th>
+        <th>第二天預估買入</th>
+        <th>第三天預估賣出</th>
+         <th></th>
+      </tr>
+  
+    </thead>
+     <tbody>
+ 
+   {% for i in date_list %}
+     <tr>
+         <td>{{i.stock_date}}</td>
+        <td>{{ i.open }}</td>
+        <td>{{ i.high }}</td>
+         <td>{{ i.low }}</td>
+          <td>{{ i.close }}</td>
+          <td>{{ i.Increase }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+  </div>
+    
+    
+
+
+
+</body>
+</html>

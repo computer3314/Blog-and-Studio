@@ -13,8 +13,8 @@
 <body>
   
 <div class="container">
-{{errormessage}}
-  <h2 class="text-center"><u>{{today}} 三大法人\當日買賣超股票</u></h2><br>            
+
+  <h2 class="text-center"><u>{{today}} 三大法人\當日買賣超股票{{errormessage1}}{{errormessage2}}</u></h2><br>           
   <table class="table table-dark table-striped">
     <thead>
       <tr>
@@ -26,23 +26,24 @@
         <th>最低點</th>
         <th>收盤</th>
         <th>當日漲幅</th>
-        <th>三大法人買賣超數</th>
+        <th>第二天預估買入</th>
+        <th>第三天預估賣出</th>
          <th></th>
       </tr>
     </thead>
     <tbody>
     <!-- jinja2 Technique  -->
-      {% for i in  date_list %} 
+        {% for i in date_list %}
      <tr>
-        <td>{{i.3}}</td>
-        <td><a href="stock/{{ i.0 }}">{{ i.0 }}</a></td>
-        <td>{{ i.1 }}</td>
-        <td>{{ i.6 }}</td>
-        <td>{{ i.7 }}</td>
-         <td>{{ i.8 }}</td>
-          <td>{{ i.9 }}</td>
-          <td>{{ i.10 }}</td>
-           <td>{{ i.2 }}</td>
+         <td>{{i.stock_date}}</td>
+        <td><a href="/stock/{{ i.stock_id }}">{{ i.stock_id }}</a></td>
+        <td>{{ i.stock_name }}</td>
+        <td>{{ i.open }}</td>
+        <td>{{ i.high }}</td>
+         <td>{{ i.low }}</td>
+          <td>{{ i.close }}</td>
+          <td>{{ i.Increase }}</td>
+          <td>high:{{ i.close }}/avg:{{ i.buy }}/low:{{ i.open }}</td>
       </tr>
     {% endfor %}
 
