@@ -48,10 +48,10 @@ def gen(camera):
    
     # 初始化平均影像
     ret, frame = camera.video.read()
-    avg= cv2.blur(frame, (4, 4))
-    avg_float = np.float32(avg)
-    # 輸出圖檔用的計數器
-    outputCounter = 0
+    if(camera.video.isOpened()):
+      avg= cv2.blur(frame, (4, 4))
+      avg_float = np.float32(avg)
+
     while (camera.video.isOpened()):
         success, frame = camera.video.read()
          # 若讀取至影片結尾，則跳出
