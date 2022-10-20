@@ -1,0 +1,47 @@
+HELP.md
+.gradle
+bin/
+gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### PLUGIN ###
+.pmd
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### KDiff3 ###
+*.orig
+**_BACKUP_**
+**_BASE_**
+**_LOCAL_**
+**_REMOTE_**
+.db.sqlite3
+
+/Demo/settings
