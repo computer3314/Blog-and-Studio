@@ -44,4 +44,4 @@ out/
 **_REMOTE_**
 .db.sqlite3
 
-/Demo/settings
+/Demo/settings.py
