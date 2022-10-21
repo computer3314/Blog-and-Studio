@@ -5,3 +5,4 @@ db.sqlite3
 /my_output/*
 *.jpg
 *.sqlite3
+db.sqlite3
