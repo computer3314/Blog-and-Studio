@@ -36,15 +36,17 @@ class BaseCamera:
     height = 500
      # 輸出目錄
     outputFolder = "my_output"
-    # 移動畫面
-    check_frame = None
-    
+    #計算幀數幀
+    counter = 0
+    fps = 0
+    start_time=time.time()
     #計算目前秒數
     min = '2022-01-01 8:01:01'
      #靈敏度
-    fast=2000
-    # 相機基礎類
+    fast=1200
+   #檔案超過多久刪除
     Dday = 1
+    # 相機基礎類
     def __init__(self, camera_model: Camera):
         
         self.cam = cv2.VideoCapture(camera_model.camera_api(),cv2.CAP_DSHOW)
@@ -54,6 +56,7 @@ class BaseCamera:
         else:
          self._removeold()
         if self.cam.isOpened():
+            self.fps=self.cam.get(cv2.CAP_PROP_FPS)
             # 相機打開成功
             self.thread = threading.Thread(target=self._thread, daemon=True)
             self.thread.start()
@@ -89,7 +92,7 @@ class BaseCamera:
         可能為空，需做判空處理
         """
         return self.queue_image.get()
-    def send_mail(self):
+    def send_mail(self,img):
        # 電子郵件內容樣板
             localtime = time.localtime()
             check=self.timeSecond()
@@ -97,10 +100,10 @@ class BaseCamera:
                 result = time.strftime("%Y-%m-%d %I:%M:%S", localtime)
                 result1 = time.strftime("%Y%m%d%I%M%S%p", localtime)
                 subject = "移動偵測信通知信"
-                message="監視器在 " + check + "偵測到移動!! url:https://happy.shengda.ga/monitor/"
+                message="監視器在 " + check + "偵測到移動!! url:https://happy.shengda.ga/camera/"
                 from_email=settings.EMAIL_HOST_USER
                 my_send_mail(subject, message,from_email, ['computer30422@gmail.com'])
-                cv2.imwrite("%s/output_%s.jpg" % (self.outputFolder, result1), self.check_frame)
+                cv2.imwrite("%s/output_%s.jpg" % (self.outputFolder, result1), img)
     #時間相減
     def timeSecond(self):
         now_time=datetime.datetime.now()
@@ -119,11 +122,38 @@ class BaseCamera:
      if datetime.datetime.fromtimestamp( os.path.getmtime(file) ) > \
         datetime.datetime.now() - datetime.timedelta(self.Dday):
         return True
+    #刪除檔案
     def _removeold(self):
         for i in os.walk(self.outputFolder):
             for j in i[2]:
                 if not self.shouldkeep(os.path.join(i[0],j)):
                  os.remove( os.path.join(i[0],j) )
+      #製作fps
+    def makefps(self,image):
+            # img 來源影像
+            # text 文字內容
+            # org 文字座標 ( 垂直方向是文字底部到影像頂端的距離 )
+            # fontFace 文字字型
+            # fontScale 文字尺寸
+            # color 線條顏色，使用 BGR
+            # thickness 文字外框線條粗細，預設 1
+            # lineType 外框線條樣式，預設 cv2.LINE_8，設定 cv2.LINE_AA 可以反鋸齒   
+        org = (500,50)
+        fontFace = cv2.FONT_HERSHEY_SIMPLEX
+        fontScale = 1
+        color = (0,0,255)
+        thickness = 1
+        lineType = cv2.LINE_AA
+        if(time.time() - self.start_time) > 1 : #目前顯示鎮數
+            self.fps=self.counter
+            self.counter=1
+            self.start_time=time.time()
+        else:
+            self.counter +=1
+        text = "FPS :"+str(self.fps)
+        if(self.fps>=30):
+            color = (0,255,0)
+        cv2.putText(image, text, org, fontFace, fontScale, color, thickness, lineType)
     def get_frame(self,admin):
         """
         獲取加工後的圖片，可以直接返回給前端顯示
@@ -167,13 +197,12 @@ class BaseCamera:
                 # 畫出外框
                 cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
             if hasMotion:
-                self.check_frame=img
                 if admin is not None:
-                 self.send_mail()
+                 self.send_mail(img)
          # 儲存有變動的影像
             # 畫出等高線（除錯用）
             #cv2.drawContours(frame, cnts, -1, (0, 255, 255), 2)
-
+            self.makefps(img)
             # 顯示偵測結果影像
             #cv2.imshow('frame', frame)
             # 更新平均影像
