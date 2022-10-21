@@ -47,7 +47,7 @@ class BaseCamera:
     Dday = 1
     def __init__(self, camera_model: Camera):
         
-        self.cam = cv2.VideoCapture(camera_model.camera_api())
+        self.cam = cv2.VideoCapture(camera_model.camera_api(),cv2.CAP_DSHOW)
          # 自動建立目錄
         if not os.path.exists(self.outputFolder):
          os.makedirs(self.outputFolder)
