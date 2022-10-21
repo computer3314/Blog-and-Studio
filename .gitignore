@@ -4,3 +4,4 @@ Demo/settings.py
 db.sqlite3
 /my_output/*
 *.jpg
+*.sqlite3
