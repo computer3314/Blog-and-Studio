@@ -32,8 +32,8 @@ class BaseCamera:
     thread = None
     # 相機modal
     camera_model = None
-    width = 500
-    height = 500
+    width = 800
+    height = 600
      # 輸出目錄
     outputFolder = "my_output"
     #計算幀數幀
@@ -43,7 +43,7 @@ class BaseCamera:
     #計算目前秒數
     min = '2022-01-01 8:01:01'
      #靈敏度
-    fast=1200
+    fast=25
    #檔案超過多久刪除
     Dday = 1
     # 相機基礎類
