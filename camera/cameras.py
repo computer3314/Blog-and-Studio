@@ -43,7 +43,7 @@ class BaseCamera:
     #計算目前秒數
     min = '2022-01-01 8:01:01'
      #靈敏度
-    fast=25
+    fast=4
    #檔案超過多久刪除
     Dday = 1
     # 相機基礎類
@@ -84,7 +84,8 @@ class BaseCamera:
                 else:
                     # 插入最後面
                     self.queue_image.put(img)
-
+    def __del__(self):
+        self.cam.release()
     # 直接讀取圖片
     def read(self):
         """
@@ -236,12 +237,15 @@ class CameraFactory:
                     cls.cameras.setdefault(camera_id, base_camera)
                     return cls.cameras.get(camera_id)
                 else:
+                    base_camera.__del__()
                     return None
             except Camera.DoesNotExist:
                 # 相機不存在
+                base_camera.__del__()
                 return None
             except CameraException:
                 # 相機實例失敗
+                base_camera.__del__()
                 return None
         else:
             # 存在相機，直接返回
