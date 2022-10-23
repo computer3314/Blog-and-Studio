@@ -15,9 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path as url 
-from post.views import PostListView, PostDetailView
 from post import views
-from django.http import StreamingHttpResponse
 from camera.views import video,video_view,videoAdmin,videoAdmin_view
 from django .contrib.auth.decorators import login_required
 urlpatterns = [

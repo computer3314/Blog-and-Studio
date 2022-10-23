@@ -26,16 +26,15 @@ class CameraException(Exception):
 class BaseCamera:
     #相機對象
     cam = None
-    # 保存每一幀讀取的畫面
-    queue_image = queue.Queue(maxsize=10)
     # 後台取幀數的線程
     thread = None
+    queue = None
     # 相機modal
     camera_model = None
-    width = 800
-    height = 600
+    width = 1920
+    height = 1080
      # 輸出目錄
-    outputFolder = "my_output"
+    outputFolder = "static/my_output"
     #計算幀數幀
     counter = 0
     fps = 0
@@ -47,7 +46,7 @@ class BaseCamera:
    #檔案超過多久刪除
     Dday = 1
     # 相機基礎類
-    def __init__(self, camera_model: Camera):
+    def __init__(self, camera_model: Camera,queue_image:queue):
         
         self.cam = cv2.VideoCapture(camera_model.camera_api(),cv2.CAP_DSHOW)
          # 自動建立目錄
@@ -57,11 +56,13 @@ class BaseCamera:
          self._removeold()
         if self.cam.isOpened():
             self.fps=self.cam.get(cv2.CAP_PROP_FPS)
+            self.queue=queue_image
             # 相機打開成功
             self.thread = threading.Thread(target=self._thread, daemon=True)
             self.thread.start()
         else:
             # 打開是失敗
+            self.cam = None
             raise CameraException("訪問失敗")
    
     def _thread(self):
@@ -76,14 +77,14 @@ class BaseCamera:
                 pass
             else:
                 # 讀取內容成功，將數據存放在緩存區
-                if self.queue_image.full():
+                if self.queue.full():
                     # 對列滿了，出對
-                    self.queue_image.get()
+                    self.queue.get()
                     # 插入最後面
-                    self.queue_image.put(img)
+                    self.queue.put(img)
                 else:
                     # 插入最後面
-                    self.queue_image.put(img)
+                    self.queue.put(img)
     def __del__(self):
         self.cam.release()
     # 直接讀取圖片
@@ -98,10 +99,9 @@ class BaseCamera:
             localtime = time.localtime()
             check=self.timeSecond()
             if check is not None:           
-                result = time.strftime("%Y-%m-%d %I:%M:%S", localtime)
                 result1 = time.strftime("%Y%m%d%I%M%S%p", localtime)
                 subject = "移動偵測信通知信"
-                message="監視器在 " + check + "偵測到移動!! url:https://happy.shengda.ga/camera/"
+                message="監視器在 " + check + "偵測到移動!! url:https://happy.shengda.ga/camera"
                 from_email=settings.EMAIL_HOST_USER
                 my_send_mail(subject, message,from_email, ['computer30422@gmail.com'])
                 cv2.imwrite("%s/output_%s.jpg" % (self.outputFolder, result1), img)
@@ -113,7 +113,7 @@ class BaseCamera:
         end_time= self.min
         end_time = datetime.datetime.strptime(end_time, r"%Y-%m-%d %I:%M:%S")
         diff = now_timer - end_time
-        if(diff.total_seconds() > 30):
+        if(diff.total_seconds() > 60):
             self.min = now_time
             return now_time
         else:
@@ -129,7 +129,7 @@ class BaseCamera:
             for j in i[2]:
                 if not self.shouldkeep(os.path.join(i[0],j)):
                  os.remove( os.path.join(i[0],j) )
-      #製作fps
+      #製作fps/time
     def makefps(self,image):
             # img 來源影像
             # text 文字內容
@@ -139,9 +139,10 @@ class BaseCamera:
             # color 線條顏色，使用 BGR
             # thickness 文字外框線條粗細，預設 1
             # lineType 外框線條樣式，預設 cv2.LINE_8，設定 cv2.LINE_AA 可以反鋸齒   
-        org = (500,50)
+        org = (10,10)
+        org1 = (580,10)
         fontFace = cv2.FONT_HERSHEY_SIMPLEX
-        fontScale = 1
+        fontScale = 1/3
         color = (0,0,255)
         thickness = 1
         lineType = cv2.LINE_AA
@@ -151,18 +152,20 @@ class BaseCamera:
             self.start_time=time.time()
         else:
             self.counter +=1
+        now_time=datetime.datetime.now()
+        now_time=now_time.strftime("%Y-%m-%d %I:%M:%S %p")
         text = "FPS :"+str(self.fps)
-        if(self.fps>=30):
-            color = (0,255,0)
-        cv2.putText(image, text, org, fontFace, fontScale, color, thickness, lineType)
+        cv2.putText(image, now_time, org, fontFace, fontScale, color, thickness, lineType)
+        cv2.putText(image, text, org1, fontFace, fontScale, color, thickness, lineType)
     def get_frame(self,admin):
         """
         獲取加工後的圖片，可以直接返回給前端顯示
         """
-        img = self.queue_image.get()
+        img = self.queue.get()
         if img is None:
             return None
-        else:       
+        else:   
+            
             ret, frame = self.cam.read()
             if(self.cam.isOpened()):
                 avg= cv2.blur(frame, (4, 4))
@@ -185,6 +188,7 @@ class BaseCamera:
 
             # 產生等高線
             cnts, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            self.makefps(img)
             hasMotion = False
             for c in cnts:
                 # 忽略太小的區域
@@ -197,15 +201,14 @@ class BaseCamera:
 
                 # 畫出外框
                 cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            
             if hasMotion:
                 if admin is not None:
                  self.send_mail(img)
          # 儲存有變動的影像
             # 畫出等高線（除錯用）
-            #cv2.drawContours(frame, cnts, -1, (0, 255, 255), 2)
-            self.makefps(img)
-            # 顯示偵測結果影像
-            #cv2.imshow('frame', frame)
+            #cv2.drawContours(frame, cnts, -1, (0, 255, 255), 2)        
+
             # 更新平均影像
             cv2.accumulateWeighted(blur, avg_float, 0.01)
             avg = cv2.convertScaleAbs(avg_float)
@@ -223,30 +226,39 @@ class CameraFactory:
     """
     # 存儲實例化的所有相機
     cameras = {}
-
+   
     @classmethod
     def get_camera(cls, camera_id: int):
         # 通過ID取得相機
         camera = cls.cameras.get(camera_id)
+        queue_image = queue.Queue(maxsize=10)
         if camera is None:
+            print("不存在cameras")
             # 查看像是否存在
             try:
-                camera_model = Camera.objects.get(id=camera_id)
-                base_camera = BaseCamera(camera_model=camera_model)
+                camera_model = Camera.objects.get(camera_id=camera_id)
+                base_camera = BaseCamera(camera_model=camera_model,queue_image=queue_image)
                 if base_camera is not None:
                     cls.cameras.setdefault(camera_id, base_camera)
                     return cls.cameras.get(camera_id)
                 else:
-                    base_camera.__del__()
+                    print("不存在error")
                     return None
             except Camera.DoesNotExist:
                 # 相機不存在
-                base_camera.__del__()
+                print("不存在")
                 return None
             except CameraException:
                 # 相機實例失敗
-                base_camera.__del__()
+                print("相機實例")
                 return None
         else:
             # 存在相機，直接返回
-            return camera
+            if camera is not None and camera.cam is not None:
+                    cls.cameras.setdefault(camera_id, base_camera)
+                    print("相機存在")
+                    return cls.cameras.get(camera_id)
+            else:
+                    print("不存在error")
+                    return None
+       

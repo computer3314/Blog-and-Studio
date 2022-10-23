@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.http import StreamingHttpResponse
 from .cameras import CameraFactory, BaseCamera
@@ -34,6 +35,8 @@ def video(request):
     camera_id = request.GET.get('camera_id')
     camera: BaseCamera = CameraFactory.get_camera(camera_id)
     #使用流傳輸傳輸影片流
+    if(camera is None):
+         return HttpResponse(content='該相機不存在或已經暫停！ ', status=200)
     return StreamingHttpResponse(gen_display(camera), content_type='multipart/x-mixed-replace; boundary=frame')
 def videoAdmin(request):
     """
@@ -43,6 +46,8 @@ def videoAdmin(request):
     # 影片相機對象
     camera_id = request.GET.get('camera_id')
     camera: BaseCamera = CameraFactory.get_camera(camera_id)
+    if(camera is None):
+         return HttpResponse(content='該相機不存在或已經暫停！ ', status=200)
     #使用流傳輸傳輸影片流
     return StreamingHttpResponse(gen_displayAdmin(camera), content_type='multipart/x-mixed-replace; boundary=frame')
 def video_view(request):
