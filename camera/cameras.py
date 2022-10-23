@@ -254,11 +254,5 @@ class CameraFactory:
                 return None
         else:
             # 存在相機，直接返回
-            if camera is not None and camera.cam is not None:
-                    cls.cameras.setdefault(camera_id, base_camera)
-                    print("相機存在")
-                    return cls.cameras.get(camera_id)
-            else:
-                    print("不存在error")
-                    return None
+            return camera
        

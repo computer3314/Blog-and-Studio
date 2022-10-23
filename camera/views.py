@@ -8,7 +8,6 @@ def gen_display(camera: BaseCamera):
    影片生成器。
     """
     while True:
-        # 读取图片
         frame = camera.get_frame(None)
         if frame is not None:
             yield (b'--frame\r\n'
@@ -19,13 +18,10 @@ def gen_displayAdmin(camera: BaseCamera):
    影片生成器。
     """
     while True:
-        # 读取图片
         frame = camera.get_frame("admin")
         if frame is not None:
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
-
 def video(request):
     """
     影片流路由。將其放入img標記的src屬性中。
