@@ -131,7 +131,7 @@ class BaseCamera:
             check=self.timeSecond(self.moveNotice)
             if check is not None:
                 localtime = time.localtime()
-                result1 = time.strftime("%Y%m%d%H:%M:%S", localtime)
+                result1 = time.strftime("%Y%m%d%I%M%S%p", localtime)
                 if self.mail_check:           
                     self.send_mail(check,result1)
                 if self.scan_check: 
@@ -190,7 +190,7 @@ class BaseCamera:
             # thickness 文字外框線條粗細，預設 1
             # lineType 外框線條樣式，預設 cv2.LINE_8，設定 cv2.LINE_AA 可以反鋸齒   
         org = (10,30)
-        org1 = (580,30)
+        org1 = (1080,30)
         fontFace = cv2.FONT_HERSHEY_SIMPLEX
         fontScale = 1
         color = (0,0,255)
@@ -307,6 +307,6 @@ class CameraFactory:
         else:
             # 存在相機，直接返回
             print("已存在")
-            camera.set_defalut(camera_model)
+            #camera.set_defalut(camera_model)
             return camera
        
