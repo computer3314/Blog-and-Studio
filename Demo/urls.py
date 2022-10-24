@@ -18,12 +18,12 @@ from django.urls import path, re_path as url
 from post import views
 from camera.views import video,video_view,videoAdmin,videoAdmin_view
 from django .contrib.auth.decorators import login_required
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.aboutget),
     path('api/camera/', video),
     path('camera', video_view),
     path('api/cameraAdmin/', login_required(videoAdmin)),
-    path('cameraAdmin', login_required(videoAdmin_view)),
-                                                     
+    path('cameraAdmin', login_required(videoAdmin_view)),                                           
 ]

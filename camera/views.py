@@ -36,8 +36,11 @@ def gen_display(camera: BaseCamera,role):
         while True:
             frame = camera.get_frame(role)
             if frame is not None:
+               
                 yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            else:
+                 camera.cam.release()
 
 
 def video(request):
@@ -49,8 +52,6 @@ def video(request):
     camera_id = request.GET.get('camera_id')
     camera: BaseCamera = CameraFactory.get_camera(camera_id)
     #使用流傳輸傳輸影片流
-    if(camera is None):
-         return HttpResponse(content='該相機不存在或已經暫停！ ', status=200)
     return StreamingHttpResponse(gen_display(camera,"None"), content_type='multipart/x-mixed-replace; boundary=frame')
 def videoAdmin(request):
     """

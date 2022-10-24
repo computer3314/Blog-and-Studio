@@ -30,3 +30,18 @@ class Camera(models.Model):
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return self.title
+class Move(models.Model):
+    """A typical class defining a model, derived from the Model class."""
+    # Metadata
+    class Meta:
+        verbose_name = '移動偵測'
+        verbose_name_plural = '移動偵測'
+    camera_id = models.TextField('攝影機編號', max_length=100,blank=True,unique=True)
+    movetime= models.DateField('移動時間', blank=True)
+    photo = models.ImageField('移動截圖',blank=True,upload_to='static/my_output')
+    created_at = models.DateTimeField('新增時間',auto_now_add=True)
+
+        # Methods
+    def __str__(self):
+        """String for representing the MyModelName object (in Admin site etc.)."""
+        return self.id

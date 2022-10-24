@@ -78,6 +78,8 @@ class BaseCamera:
             # 打開失敗
             print("訪問失敗")
             raise CameraException("訪問失敗")
+    def __del__(self):
+        self.cam.release()
     def set_defalut(self,camera_model: Camera):
         #讀取基礎設定
         self.width=camera_model.width
@@ -92,6 +94,8 @@ class BaseCamera:
         self.title=camera_model.title
         if self.cam is not None:
             self.cam.set(cv2.CAP_PROP_FPS,self.fps) 
+            self.cam.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
+            self.cam.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
         if self.isOpened is False:
             self.cam=None
         
@@ -127,7 +131,7 @@ class BaseCamera:
             check=self.timeSecond(self.moveNotice)
             if check is not None:
                 localtime = time.localtime()
-                result1 = time.strftime("%Y%m%d%I%M%S%p", localtime)
+                result1 = time.strftime("%Y%m%d%H:%M:%S", localtime)
                 if self.mail_check:           
                     self.send_mail(check,result1)
                 if self.scan_check: 
@@ -154,10 +158,10 @@ class BaseCamera:
     #時間相減
     def timeSecond(self,Second):
         now_time=datetime.datetime.now()
-        now_time=now_time.strftime("%Y-%m-%d %I:%M:%S")
-        now_timer = datetime.datetime.strptime(now_time, r"%Y-%m-%d %I:%M:%S")
+        now_time=now_time.strftime("%Y-%m-%d %H:%M:%S")
+        now_timer = datetime.datetime.strptime(now_time, r"%Y-%m-%d %H:%M:%S")
         end_time= self.min
-        end_time = datetime.datetime.strptime(end_time, r"%Y-%m-%d %I:%M:%S")
+        end_time = datetime.datetime.strptime(end_time, r"%Y-%m-%d %H:%M:%S")
         diff = now_timer - end_time
         if(diff.total_seconds() > Second):
             self.min = now_time
@@ -185,10 +189,10 @@ class BaseCamera:
             # color 線條顏色，使用 BGR
             # thickness 文字外框線條粗細，預設 1
             # lineType 外框線條樣式，預設 cv2.LINE_8，設定 cv2.LINE_AA 可以反鋸齒   
-        org = (10,10)
-        org1 = (580,10)
+        org = (10,30)
+        org1 = (580,30)
         fontFace = cv2.FONT_HERSHEY_SIMPLEX
-        fontScale = 1/3
+        fontScale = 1
         color = (0,0,255)
         thickness = 1
         lineType = cv2.LINE_AA
@@ -199,10 +203,49 @@ class BaseCamera:
         else:
             self.counter +=1
         now_time=datetime.datetime.now()
-        now_time=now_time.strftime("%Y-%m-%d %I:%M:%S %p")
+        now_time=now_time.strftime("%Y-%m-%d %H:%M:%S")
         text = "FPS :"+str(self.fps)
         cv2.putText(image, now_time, org, fontFace, fontScale, color, thickness, lineType)
         cv2.putText(image, text, org1, fontFace, fontScale, color, thickness, lineType)
+    def get_move(self,img):
+        if self.cam is not None and self.cam.isOpened():
+            ret, frame = self.cam.read()
+            avg= cv2.blur(frame, (4, 4))
+            blur = cv2.blur(img, (4, 4))
+                # 計算目前影格與平均影像的差異值
+            diff = cv2.absdiff(avg, blur)
+                # 將圖片轉為灰階
+            gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
+                # 篩選出變動程度大於門檻值的區域
+            ret, thresh = cv2.threshold(gray, 25, 255, cv2.THRESH_BINARY)
+                # 使用型態轉換函數去除雜訊
+            kernel = np.ones((5, 5), np.uint8)
+            thresh = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=2)
+            thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel, iterations=2)
+                # 產生等高線
+            cnts, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            hasMotion = False
+            for c in cnts:
+                 # 忽略太小的區域
+                if cv2.contourArea(c) < self.fast:
+                     continue
+                    # 偵測到物體，可以自己加上處理的程式碼在這裡...
+                hasMotion = True
+                    # 計算等高線的外框範圍
+                    #(x, y, w, h) = cv2.boundingRect(c)
+
+                    # 畫出外框
+                    #cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)         
+            if hasMotion:
+                self.move_notice(frame)
+         # 儲存有變動的影像
+            # 畫出等高線（除錯用）
+            #cv2.drawContours(frame, cnts, -1, (0, 255, 255), 2)        
+
+            # 更新平均影像
+            #cv2.accumulateWeighted(blur, avg_float, 0.01)
+            #avg = cv2.convertScaleAbs(avg_float)
+            #avg_float = np.float32(avg) 
     def get_frame(self,admin):
         """
         獲取加工後的圖片，可以直接返回給前端顯示
@@ -211,56 +254,17 @@ class BaseCamera:
         if img is None or self.cam is None:
             return None
         else:          
-            ret, frame = self.cam.read()
-            if(self.cam is not None and self.cam.isOpened()):
-                avg= cv2.blur(frame, (4, 4))
-                avg_float = np.float32(avg) 
-            else:
-                return None
-            blur = cv2.blur(img, (4, 4))
-
-            # 計算目前影格與平均影像的差異值
-            diff = cv2.absdiff(avg, blur)
-
-            # 將圖片轉為灰階
-            gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
-
-            # 篩選出變動程度大於門檻值的區域
-            ret, thresh = cv2.threshold(gray, 25, 255, cv2.THRESH_BINARY)
-
-            # 使用型態轉換函數去除雜訊
-            kernel = np.ones((5, 5), np.uint8)
-            thresh = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=2)
-            thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel, iterations=2)
-
-            # 產生等高線
-            cnts, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            if self.cam  is None or self.cam.isOpened() is False:
+              return None
+        
             self.makefps(img)
-            hasMotion = False
-            for c in cnts:
-                # 忽略太小的區域
-                if cv2.contourArea(c) < self.fast:
-                 continue
-                # 偵測到物體，可以自己加上處理的程式碼在這裡...
-                hasMotion = True
-                # 計算等高線的外框範圍
-                #(x, y, w, h) = cv2.boundingRect(c)
-
-                # 畫出外框
-                #cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            
-            if hasMotion:
-                if admin is not None:
-                 self.move_notice(img)
-         # 儲存有變動的影像
-            # 畫出等高線（除錯用）
-            #cv2.drawContours(frame, cnts, -1, (0, 255, 255), 2)        
-
-            # 更新平均影像
-            #cv2.accumulateWeighted(blur, avg_float, 0.01)
-            #avg = cv2.convertScaleAbs(avg_float)
+            if admin is not 'None':
+                self.get_move(img)
+             # Breaking out of the loop
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                return None
             #壓縮圖片，否則圖片過大，編碼效率慢，視頻延遲過高
-            img = cv2.resize(img, (self.width, self.height), fx=0.25, fy=0.25)
+            #img = cv2.resize(img, (self.width, self.height), fx=0.25, fy=0.25)
             # 對圖片進行編碼
             ret, jpeg = cv2.imencode('.jpeg', img)
             return jpeg.tobytes()
@@ -280,11 +284,11 @@ class CameraFactory:
         # 通過ID取得相機
         camera = cls.cameras.get(camera_id)
         queue_image = queue.Queue(maxsize=10)
+        camera_model = Camera.objects.get(camera_id=camera_id)
         if camera is None:
             print("不存在cameras")
             # 查看像是否存在
             try:
-                camera_model = Camera.objects.get(camera_id=camera_id)
                 base_camera = BaseCamera(camera_model=camera_model,queue_image=queue_image)
                 if base_camera is not None:
                     cls.cameras.setdefault(camera_id, base_camera)
@@ -303,10 +307,6 @@ class CameraFactory:
         else:
             # 存在相機，直接返回
             print("已存在")
-            camera_model = Camera.objects.get(camera_id=camera_id)
-            if camera.cam is None:
-                base_camera = BaseCamera(camera_model=camera_model,queue_image=queue_image)
-                return base_camera
             camera.set_defalut(camera_model)
             return camera
        
