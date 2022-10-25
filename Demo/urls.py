@@ -14,9 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, re_path as url 
+from django.urls import path, re_path
 from post import views
-from camera.views import video,video_view,videoAdmin,videoAdmin_view
+from camera.views import video,video_view,videoAdmin,videoAdmin_view,bookhandle
 from django .contrib.auth.decorators import login_required
 
 urlpatterns = [
@@ -25,5 +25,6 @@ urlpatterns = [
     path('api/camera/', video),
     path('camera', video_view),
     path('api/cameraAdmin/', login_required(videoAdmin)),
-    path('cameraAdmin', login_required(videoAdmin_view)),                                           
+    path('cameraAdmin', login_required(videoAdmin_view)),  
+    re_path(r'^move', login_required(bookhandle), name="move")                                         
 ]

@@ -7,11 +7,13 @@ from PIL import Image,ImageSequence
 import numpy as np
 import cv2
 import time
+from .models import Move
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 def gen_display(camera: BaseCamera,role):
     """
    影片生成器。
     """
-    if camera is None or camera.cam is None:
+    if camera is None or camera.cam is None or (camera.isstop):
         ##沒讀到影片loding
         loadingPic="static/photo/loading.gif"
         img_list = []  
@@ -35,14 +37,10 @@ def gen_display(camera: BaseCamera,role):
     else:
         while True:
             frame = camera.get_frame(role)
-            if frame is not None:
-               
-                yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-            else:
-                 camera.cam.release()
-
-
+            if frame is not None:        
+                    yield (b'--frame\r\n'
+                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                
 def video(request):
     """
     影片流路由。將其放入img標記的src屬性中。
@@ -83,4 +81,17 @@ def videoAdmin_view(request):
         "camera_id": "1"
     }
     return render(request, 'camera.html', context)  
+
+# Create your views here.
+def bookhandle(request):
+    movedic = Move.objects.all().order_by('-movetime')
+    paginator=Paginator(movedic,10)    #每頁顯示2條
+    page=request.GET.get('page')        #前段請求的頁,比如點選'下一頁',該頁以變數'page'表示
+    try:
+      move_obj=paginator.page(page) #獲取前端請求的頁數
+    except PageNotAnInteger:
+        move_obj=paginator.page(1)   #如果前端輸入的不是數字,就返回第一頁
+    except EmptyPage:
+        move_obj=paginator.page(paginator.num_pages)   #如果前端請求的頁碼超出範圍,則顯示最後一頁.獲取總頁數,返回最後一頁.比如共10頁,則返回第10頁.
+    return render(request, 'move.html',{'move_list':move_obj})
     

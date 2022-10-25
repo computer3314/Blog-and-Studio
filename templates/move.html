@@ -1,0 +1,62 @@
+{% extends 'baseVideo.html' %} 
+{% block body %}
+<h3>偵測移動列表</h3>
+<div class="pagination">
+    <span class="step-links">
+        {% if move_list.has_previous %}                                     <!--如果有上一頁-->
+            <a href="?page={{ move_list.previous_page_number }}">上一頁</a>  <!--點選時超連結到上一頁-->
+        {% endif %}
+
+        <span class="current">
+             Page{{ move_list.number }} of {{ move_list.paginator.num_pages }}  <!--customers_list.number為當前頁碼,customers_list.paginator.num_pages為總頁碼數-->
+        </span>
+
+        {% if move_list.has_next %}    <!--如果有下一頁-->
+            <a href="?page={{ move_list.next_page_number }}">下一頁</a>    <!--點選時超連結到下一頁-->
+        {% endif %}
+    </span>
+</div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>相機名稱</th>
+                <th>移動時間</th>
+                <th>照片</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for foo in move_list %}
+            <tr>
+                <td>{{ foo.camera_api.title }}</td>
+                <td>{{ foo.movetime }}</td>
+                <td>
+                    <div class="wrap">
+                        <a href="{{ foo.photo }}" target="_blank">
+                            <img src="{{ foo.photo }}" alt=""
+                                style="width: 37rem;max-width: 100%;height: auto;vertical-align: 
+                                middle;border-style: none;">
+                        </a>
+                    </div>
+                  </td>
+                  
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+    <div class="pagination">
+        <span class="step-links">
+            {% if move_list.has_previous %}                                     <!--如果有上一頁-->
+                <a href="?page={{ move_list.previous_page_number }}">上一頁</a>  <!--點選時超連結到上一頁-->
+            {% endif %}
+    
+            <span class="current">
+                 Page{{ move_list.number }} of {{ move_list.paginator.num_pages }}  <!--customers_list.number為當前頁碼,customers_list.paginator.num_pages為總頁碼數-->
+            </span>
+    
+            {% if move_list.has_next %}    <!--如果有下一頁-->
+                <a href="?page={{ move_list.next_page_number }}">下一頁</a>    <!--點選時超連結到下一頁-->
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}
