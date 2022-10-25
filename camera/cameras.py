@@ -92,7 +92,7 @@ class BaseCamera:
         elif self.cam.isOpened():
             self.queue=queue_image
             # 相機打開成功
-            self.thread = threading.Thread(target=self._thread, daemon=True, args=())
+            self.thread = threading.Thread(target=self._thread, daemon=True)
             self.thread.start()
         else:
             # 打開失敗
@@ -118,9 +118,10 @@ class BaseCamera:
         self.title=camera_model.title
         self.Camera_id=camera_model.camera_id
         self.fpsms=1/self.fps
-        self.cam.set(cv2.CAP_PROP_FPS,self.fps)
-        self.cam.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
-        self.cam.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
+        if self.cam is not None:
+            self.cam.set(cv2.CAP_PROP_FPS,self.fps)
+            self.cam.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
+            self.cam.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
         if self.isOpened is False:
             self.cam=None
         
@@ -129,6 +130,8 @@ class BaseCamera:
       opencv讀取時會將信息存儲到緩存區裡，處理速度小於緩存區速度，會導致資源積累
         """
         # 線程一直讀取影片流，將最新的視頻流存在隊列中
+        if self.isOpened is False:
+            return None
         if self.cam is not None:
             while self.cam.isOpened() and (not self.isstop):
                 ret, img = self.cam.read()
@@ -328,6 +331,6 @@ class CameraFactory:
         else:
             # 存在相機，直接返回
             print("已存在")
-            #camera.set_defalut(camera_model)
+            camera.set_defalut(camera_model)
             return camera
        
