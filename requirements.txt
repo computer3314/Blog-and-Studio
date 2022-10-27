@@ -1,8 +1,8 @@
-Django                  4.1.2
-djangorestframework     3.14.0
+Django==3.2.16
+djangorestframework==3.14.0
 psycopg2==2.9.1
-opencv-python           4.6.0.66
-Pillow                  9.2.0
-pytz                    2022.5
+opencv-python==4.6.0.66
+Pillow==8.4.0
+pytz==2022.5
 django-apscheduler
-tzlocal            2.1
+tzlocal==2.1
