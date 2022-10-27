@@ -15,16 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
-from post import views
-from camera.views import video,video_view,videoAdmin,videoAdmin_view,bookhandle
+from post.views import aboutget
+from camera.views import video,video_view,videoAdmin_view,bookhandle
 from django .contrib.auth.decorators import login_required
-
+#引入排程包
+from task.views import job_add_task,job_del_task,job_pause_task,job_resume_task,job_list_task,delete_file
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.aboutget),
+    path('', aboutget),
     path('api/camera/', video),
     path('camera', video_view),
-    path('api/cameraAdmin/', login_required(videoAdmin)),
+    path('job/add/', job_add_task),
+    path('job/del/', job_del_task),
+    path('job/pause/', job_pause_task),
+    path('job/resume/', job_resume_task),
+    path('job/list', job_list_task),
+    path('delete', delete_file),
     path('cameraAdmin', login_required(videoAdmin_view)),  
     re_path(r'^move', login_required(bookhandle), name="move")                                         
 ]

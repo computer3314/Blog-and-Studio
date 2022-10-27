@@ -63,16 +63,17 @@ class BaseCamera:
 
     # 相機基礎類
     def __init__(self, camera_model: Camera,queue_image:queue):
-        
+        self.set_defalut(camera_model)
         self.cam = cv2.VideoCapture(camera_model.camera_api(),cv2.CAP_DSHOW)
         self.cam.set(cv2.CAP_PROP_BUFFERSIZE, 2)
         self.cam.set(cv2.CAP_PROP_FOURCC,cv2.VideoWriter_fourcc(*"MJPG"))
+        self.set_defalut1()
         if self.cam is None:
              # 打開失敗
-            print("找不到此相機")
-            raise CameraException("找不到此相機")
+            print("編號:" + self.Camera_id + " 找不到此相機")
+            raise CameraException("編號:" + self.Camera_id + " 找不到此相機")
         else:
-            self.set_defalut(camera_model)
+            self.set_defalut1
         self.outputFolder=self.outputBaseFolder+str(self.title)       
         # 自動建立目錄
         if not os.path.exists(self.outputFolder):
@@ -81,14 +82,14 @@ class BaseCamera:
          self._removeold()
         if self.cam is None:
               # 打開失敗
-            print("找不到此相機")
-            raise CameraException("找不到此相機")
+            print("編號:" + self.Camera_id + " 找不到此相機")
+            raise CameraException("編號:" + self.Camera_id + " 找不到此相機")
         elif self.isstop is True:
-             print("已經暫停")
-             raise CameraException("已經暫停")
+             print("編號:" + self.Camera_id + " 相機已經暫停")
+             raise CameraException("編號:" + self.Camera_id + " 已經暫停")
         elif self.isOpened is False:
-             print("已經關閉")
-             raise CameraException("已經關閉")
+             print("編號:" + self.Camera_id + " 相機已經關閉")
+             raise CameraException("編號:" + self.Camera_id + " 已經關閉")
         elif self.cam.isOpened():
             self.queue=queue_image
             # 相機打開成功
@@ -96,16 +97,18 @@ class BaseCamera:
             self.thread.start()
         else:
             # 打開失敗
-            print("訪問失敗")
-            raise CameraException("訪問失敗")
+            print("編號:" + self.Camera_id +" 訪問失敗")
+            raise CameraException("編號:" + self.Camera_id +"訪問失敗")
     def __del__(self):
-        self.cam.release()
+        if self.cam is not None:
+            self.cam.release()
     def stop(self):
 	# 記得要設計停止無限迴圈的開關。
         self.isstop = True
-        print('相機暫停!')
+        print("編號:" + self.Camera_id +' 相機暫停!')
     def set_defalut(self,camera_model: Camera):
         #讀取基礎設定
+        
         self.width=camera_model.width
         self.height=camera_model.heigth
         self.fast=camera_model.fast
@@ -118,13 +121,15 @@ class BaseCamera:
         self.title=camera_model.title
         self.Camera_id=camera_model.camera_id
         self.fpsms=1/self.fps
+        print("編號:" + self.Camera_id + "相機基礎設定")
+    def set_defalut1(self):
         if self.cam is not None:
+            print("編號:" + self.Camera_id + " 相機長寬fps設定")
             self.cam.set(cv2.CAP_PROP_FPS,self.fps)
             self.cam.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
             self.cam.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
-        if self.isOpened is False:
-            self.cam=None
-        
+            if self.isOpened is False:
+                self.cam=None
     def _thread(self):
         """
       opencv讀取時會將信息存儲到緩存區裡，處理速度小於緩存區速度，會導致資源積累
@@ -149,7 +154,7 @@ class BaseCamera:
                     else:
                         # 插入最後面
                         self.queue.put(img)
-            print("結束佇列")
+            print("編號:" + self.Camera_id +" 結束佇列")
             self.__del__()
     def move_notice(self,img):
        # 移動偵測
@@ -157,7 +162,6 @@ class BaseCamera:
             if check is not None:
                 localtime = time.localtime()
                 result1 = time.strftime("%Y%m%d%I%M%S%p", localtime)
-
                 if self.mail_check:      
                     url=settings.PRO_HOST + self.outputFolder + "/output_" + result1 + ".jpg"     
                     self.send_mail(check,url)
@@ -176,16 +180,16 @@ class BaseCamera:
            message="監視器:" + str(self.title) + "在 " + checkTime + "偵測到移動!! url:"+url
            from_email=settings.EMAIL_HOST_USER
            my_send_mail(subject, message,from_email, ['computer30422@gmail.com'])
-           print("成功發送信件")
+           print("編號:" + self.Camera_id + "成功發送信件")
         except:                 
-            print('發送信件失敗')
+            print("編號:" + self.Camera_id +' 發送信件失敗')
     def photo_scan(self,img,result1):
         #拍照
         try:                
            cv2.imwrite("%s/output_%s.jpg" % (self.outputFolder, result1), img)
-           print("成功儲存檔案")
+           print("編號:" + self.Camera_id + "成功儲存檔案")
         except:                 
-            print('儲存檔案失敗')
+            print("編號:" + self.Camera_id +' 儲存檔案失敗')
     #時間相減
     def timeSecond(self,Second):
         now_time=datetime.datetime.now()
@@ -240,11 +244,15 @@ class BaseCamera:
         cv2.putText(image, text, org1, fontFace, fontScale, color, thickness, lineType)
     def get_move(self,img):
         if self.cam is not None and self.cam.isOpened():
-            ret, frame = self.cam.read()
-            self.avg= cv2.blur(frame, (4, 4))
-            blur = cv2.blur(img, (4, 4))
-                # 計算目前影格與平均影像的差異值
-            diff = cv2.absdiff(self.avg, blur)
+            try:
+                ret, frame = self.cam.read()
+                self.avg= cv2.blur(frame, (4, 4))
+                blur = cv2.blur(img, (4, 4))
+                    # 計算目前影格與平均影像的差異值
+            
+                diff = cv2.absdiff(self.avg, blur)
+            except:
+                return None
                 # 將圖片轉為灰階
             gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
                 # 篩選出變動程度大於門檻值的區域
@@ -306,31 +314,30 @@ class CameraFactory:
     def get_camera(cls, camera_id: int):
         # 通過ID取得相機
         camera = cls.cameras.get(camera_id)
-        queue_image = queue.Queue(maxsize=10)
-        camera_model = Camera.objects.get(camera_id=camera_id)
+        queue_image = queue.Queue(maxsize=30)
+        isexit=False
         if camera is None:
-            print("不存在cameras")
-            # 查看像是否存在
+            print("相機不存在")
             try:
+                camera_model = Camera.objects.get(camera_id=camera_id)
                 base_camera = BaseCamera(camera_model=camera_model,queue_image=queue_image)
                 if base_camera is not None:
                     cls.cameras.setdefault(camera_id, base_camera)
-                    print("建立成功")
+                    print("編號:" + camera_id + " 相機建立成功")
                     return cls.cameras.get(camera_id)
                 else:
-                    print("不存在")
+                    print("編號:" + camera_id + " 相機建立失敗")
                     return None
             except Camera.DoesNotExist:
                 # 相機不存在
-                print("資料庫不存在此相機")
+                print("資料庫不存在此相機 編號:"+camera_id)
                 return None
             except CameraException:
                 # 相機實例失敗
-                print("相機實例化失敗")
+                print("編號:" + camera_id + " 相機實例化失敗")
                 return None
-        else:
+        else:      
             # 存在相機，直接返回
-            print("已存在")
-            camera.set_defalut(camera_model)
             return camera
-       
+
+        

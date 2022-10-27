@@ -40,9 +40,14 @@ INSTALLED_APPS = [
     'musics',
     'post',
     'camera',
+    'task',
+    'django_apscheduler',
 ]
+#Auth登入畫面
 LOGIN_URL='/admin/login'
-
+#排程使用參數
+APSCHEDULER_DATETIME_FORMAT =  "N j, Y, f:s a"  # Default
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -126,7 +131,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-PRO_HOST = 'https://happy.shengda.ga/'
+PRO_HOST = 'http://127.0.0.1:8000/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 

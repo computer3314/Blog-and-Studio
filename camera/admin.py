@@ -5,6 +5,9 @@ from .models import Move
 class CameraAdmin(admin.ModelAdmin):
     list_display = ('id','camera_id','camera_url', 'title','width')
     search_fields = ('id','camera_id','camera_url','title')
+    def save_model(self, request, obj, form, change):
+        print("修改Camera")
+        super().save_model(request, obj, form, change)
 class MoveAdmin(admin.ModelAdmin):
     list_display = ('id','camera_id','movetime', 'photo')
     search_fields = ('id','camera_id','movetime','photo')

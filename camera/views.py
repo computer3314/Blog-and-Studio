@@ -48,19 +48,12 @@ def video(request):
     """
     # 影片相機對象
     camera_id = request.GET.get('camera_id')
+    role = request.GET.get('role')
+    if role is None:
+        role="None"
     camera: BaseCamera = CameraFactory.get_camera(camera_id)
     #使用流傳輸傳輸影片流
-    return StreamingHttpResponse(gen_display(camera,"None"), content_type='multipart/x-mixed-replace; boundary=frame')
-def videoAdmin(request):
-    """
-    影片流路由。將其放入img標記的src屬性中。
-    例如：<img src='https://ip:port/uri' >
-    """
-    # 影片相機對象
-    camera_id = request.GET.get('camera_id')
-    camera: BaseCamera = CameraFactory.get_camera(camera_id)
-    #使用流傳輸傳輸影片流
-    return StreamingHttpResponse(gen_display(camera,"admin"), content_type='multipart/x-mixed-replace; boundary=frame')
+    return StreamingHttpResponse(gen_display(camera,role), content_type='multipart/x-mixed-replace; boundary=frame')
 def video_view(request):
     context = {
         "role": "user",
@@ -77,7 +70,7 @@ def videoAdmin_view(request):
         "website": {
             "domain": settings.PRO_HOST,
         },
-        "url" : settings.PRO_HOST+"api/cameraAdmin/?camera_id=1",
+        "url" : settings.PRO_HOST+"api/camera/?camera_id=1&role=admin",
         "camera_id": "1"
     }
     return render(request, 'camera.html', context)  

@@ -15,10 +15,13 @@ class MyEmailThread(threading.Thread):
 
     # 發送郵件
     def run(self):
-        mail = EmailMultiAlternatives(self.subject, self.body, self.from_email, self.recipient_list)
-        if self.html_message :
-            mail.attach_alternative(self.html_message, 'text/html')
-        return mail.send(self.fail_silently)
+        try:
+            mail = EmailMultiAlternatives(self.subject, self.body, self.from_email, self.recipient_list)
+            if self.html_message :
+                mail.attach_alternative(self.html_message, 'text/html')
+            return mail.send(self.fail_silently)
+        except:
+            print("寄送失敗")
 
 # 創建線程 start 啓動線程活動，會調用run方法
 def my_send_mail(subject, body, from_email, recipient_list, fail_silently=False, html_message=None, *args, **kwargs):
