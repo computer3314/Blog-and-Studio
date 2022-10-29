@@ -17,10 +17,12 @@ class Camera(models.Model):
     heigth = models.IntegerField('螢幕高度', default=720,blank=True)
     fps = models.IntegerField('預設幀數', default=30,blank=True)
     fast = models.IntegerField('移動偵測靈敏度', default=25,blank=True)
-    dday = models.IntegerField('固定刪除檔案時間(天數)', default=1,blank=True)
+    dday = models.IntegerField('固定刪除截圖檔案時間(天數)', default=7,blank=True)
+    videodday = models.IntegerField('固定刪除影片檔案時間(天數)', default=3,blank=True)
     moveNotice = models.IntegerField('移動偵測通知時間(秒數)', default=60,blank=True)
     mailCheck=models.BooleanField('是否移動發信',default=True)
     scancheck=models.BooleanField('是否移動截圖',default=True)
+    videocheck=models.BooleanField('是否連續錄製',default=True)
     isOpened=models.BooleanField('是否啟動',default=True)
     # Methods
     def camera_api(self):

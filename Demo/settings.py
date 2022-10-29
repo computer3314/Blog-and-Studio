@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'camera',
     'task',
     'django_apscheduler',
+    
 ]
 #Auth登入畫面
 LOGIN_URL='/admin/login'
@@ -131,7 +132,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-PRO_HOST = 'https://happy.shengda.ga/'
+PRO_HOST = 'http://127.0.0.1:8000/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
