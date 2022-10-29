@@ -8,7 +8,7 @@ import os
 import time
 from django.conf import settings
 from myemail import my_send_mail
-from PIL import Image,ImageSequence
+
 import datetime
 from camera.models import Camera
 from .models import Move
@@ -32,46 +32,35 @@ class BaseCamera:
     #相機名稱
     title =None
     Camera_id=None
-    #錄影機
-    output=None
     #解析度設定
     width = 1280
     height = 720
-    today=None
      # 輸出目錄
     outputBaseFolder = "static/my_output/"
-    #圖片截圖目錄
     outputFolder = None
-    #影片截圖目錄
-    outputVideoFolder=None
-    nowoutVideo=None
     #計算幀數
     counter = 0
     fps = 10
+    fpsms=0
     start_time=time.time()
     #計算目前秒數
     min = '2022-01-01 8:01:01'
      #靈敏度
     fast=4
-
+   #檔案超過多久刪除(天數)
+    Dday = 1
     #移動偵測通知時間(秒數)
     moveNotice = 60
     #是否開啟寄信
     mail_check=False
     #是否移動拍照
     scan_check=True
-     #是否連續錄製
-    video_check=True
     #是否啟動
     isOpened=True
-    #畫面平均值
+    isstop = False
     avg=0
     avg_float=0
-    #字體位置
-    #時間
-    org = (0,0)
-    #fps
-    org1 = (0,0)   
+
     # 相機基礎類
     def __init__(self, camera_model: Camera,queue_image:queue):
         self.set_defalut(camera_model)
@@ -83,74 +72,47 @@ class BaseCamera:
              # 打開失敗
             print("編號:" + self.Camera_id + " 找不到此相機")
             raise CameraException("編號:" + self.Camera_id + " 找不到此相機")
-        # 自動建立影像截圖目錄
+        else:
+            self.set_defalut1
         self.outputFolder=self.outputBaseFolder+str(self.title)       
+        # 自動建立目錄
         if not os.path.exists(self.outputFolder):
          os.makedirs(self.outputFolder)
-         # 自動建立影片目錄
-        self.outputVideoFolder=self.outputBaseFolder+str(self.title) +"video"     
-        if not os.path.exists(self.outputVideoFolder):
-         os.makedirs(self.outputVideoFolder)
+        else:
+         self._removeold()
         if self.cam is None:
               # 打開失敗
             print("編號:" + self.Camera_id + " 找不到此相機")
             raise CameraException("編號:" + self.Camera_id + " 找不到此相機")
+        elif self.isstop is True:
+             print("編號:" + self.Camera_id + " 相機已經暫停")
+             raise CameraException("編號:" + self.Camera_id + " 已經暫停")
         elif self.isOpened is False:
              print("編號:" + self.Camera_id + " 相機已經關閉")
              raise CameraException("編號:" + self.Camera_id + " 已經關閉")
         elif self.cam.isOpened():
             self.queue=queue_image
             # 相機打開成功
-              # 影片寫入
-            self.get_output_video()
-            self.thread = threading.Thread(target=self._thread,args=())
-            self.thread.daemon = True
+            self.thread = threading.Thread(target=self._thread, daemon=True)
             self.thread.start()
-            
         else:
             # 打開失敗
             print("編號:" + self.Camera_id +" 訪問失敗")
             raise CameraException("編號:" + self.Camera_id +"訪問失敗")
-    def  __del__(self):
+    def __del__(self):
         if self.cam is not None:
-            print("釋放相機")
             self.cam.release()
-            self.output.release()
-    def get_output_video(self):
-        if self.cam is not None and self.video_check:
-              self.nowoutVideo=self.getAviNameWithDate()
-              self.output= cv2.VideoWriter('%s' % (self.nowoutVideo), cv2.VideoWriter_fourcc(*'mp4v'), int(self.fps),(self.width,self.height))
-             
-    def getAviNameWithDate(self,nameIn="output.mp4"):
-        #計算當日影片是否重複
-        """Needs a file ending on .mp4, inserts _<date> before .mp4. 
-
-        If file exists, it appends a additional _number after the <date> 
-        ensuring filename uniqueness at this time."""
-        if not nameIn.endswith(".mp4"):
-            raise ValueError("filename must end on .mp4")
-
-        filename = self.outputVideoFolder+"/"+nameIn.replace(".mp4","_{0}.mp4").format(datetime.datetime.now().strftime("%Y-%m-%d"))
-        if os.path.isfile(filename):             # if already exists
-            fn2 = filename[0:-4]+'_{0}.mp4'          # modify pattern to include a number
-            count = 1
-            while os.path.isfile(fn2.format(count)): # increase number until file not exists
-                count += 1
-            print("寫入檔案:"+fn2.format(count))     
-            return fn2.format(count)                 # return file with number in it
-
-        else:          
-            print("寫入檔案:"+filename)                          # filename ok, return it
-            return filename
-
+    def stop(self):
+	# 記得要設計停止無限迴圈的開關。
+        self.isstop = True
+        print("編號:" + self.Camera_id +' 相機暫停!')
     def set_defalut(self,camera_model: Camera):
         #讀取基礎設定
-        self.today=time.strftime("%Y-%m-%d",time.localtime(time.time()))
+        
         self.width=camera_model.width
         self.height=camera_model.heigth
-        self.org = (10,int(self.height/24))
-        self.org1 = (int(self.width*0.8),int(self.height/24))
         self.fast=camera_model.fast
+        self.Dday=camera_model.dday
         self.moveNotice=camera_model.moveNotice
         self.mail_check=camera_model.mailCheck
         self.scan_check=camera_model.scancheck
@@ -158,12 +120,12 @@ class BaseCamera:
         self.isOpened=camera_model.isOpened
         self.title=camera_model.title
         self.Camera_id=camera_model.camera_id
-        self.video_check=camera_model.videocheck
-        print("編號:" + self.Camera_id + " 相機基礎設定")
+        self.fpsms=1/self.fps
+        print("編號:" + self.Camera_id + "相機基礎設定")
     def set_defalut1(self):
         if self.cam is not None:
             print("編號:" + self.Camera_id + " 相機長寬fps設定")
-            self.cam.set(cv2.CAP_PROP_FPS,int(self.fps))
+            self.cam.set(cv2.CAP_PROP_FPS,self.fps)
             self.cam.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
             self.cam.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
             if self.isOpened is False:
@@ -173,42 +135,27 @@ class BaseCamera:
       opencv讀取時會將信息存儲到緩存區裡，處理速度小於緩存區速度，會導致資源積累
         """
         # 線程一直讀取影片流，將最新的視頻流存在隊列中
-        isStop = False
         if self.isOpened is False:
-            isStop=True
             return None
         if self.cam is not None:
-                while True:
-                    if self.cam is None:
-                        print("編號:" + self.Camera_id + " 相機讀取相機失敗")
-                        isStop=True
-                        break
+            while self.cam.isOpened() and (not self.isstop):
+                ret, img = self.cam.read()
+                #time.sleep(self.fpsms)
+                if not ret or img is None:
+                    # 讀取失敗
+                    pass
+                else:
+                    # 讀取內容成功，將數據存放在緩存區
+                    if self.queue.full():
+                        # 對列滿了，出對
+                        self.queue.get()
+                        # 插入最後面
+                        self.queue.put(img)
                     else:
-                        isStop = False
-                    ret, img = self.cam.read()
-                    if not ret or img is None:
-                        print("編號:" + self.Camera_id + " 相機讀取相機圖片失敗")
-                        pass
-                    else:
-                        # 讀取內容成功，將數據存放在緩存區
-                        if self.queue.full():
-                            # 對列滿了，出對
-                            self.queue.get()
-                            # 插入最後面
-                            self.queue.put(img)
-                        else:
-                            # 插入最後面
-                            self.queue.put(img)
-        if isStop:
-            print("編號:" + self.Camera_id + " 相機暫停")
-            if self.queue.full():
-                            # 對列滿了，出對
-                            self.queue.get()
-                            # 插入最後面
-                            self.queue.put(isStop)
-            else:
-                            # 插入最後面
-                            self.queue.put(isStop)
+                        # 插入最後面
+                        self.queue.put(img)
+            print("編號:" + self.Camera_id +" 結束佇列")
+            self.__del__()
     def move_notice(self,img):
        # 移動偵測
             check=self.timeSecond(self.moveNotice)
@@ -233,16 +180,16 @@ class BaseCamera:
            message="監視器:" + str(self.title) + "在 " + checkTime + "偵測到移動!! url:"+url
            from_email=settings.EMAIL_HOST_USER
            my_send_mail(subject, message,from_email, ['computer30422@gmail.com'])
-           print("編號:" + self.Camera_id + "相機成功發送信件")
+           print("編號:" + self.Camera_id + "成功發送信件")
         except:                 
-            print("編號:" + self.Camera_id +' 相機發送信件失敗')
+            print("編號:" + self.Camera_id +' 發送信件失敗')
     def photo_scan(self,img,result1):
         #拍照
         try:                
            cv2.imwrite("%s/output_%s.jpg" % (self.outputFolder, result1), img)
-           print("編號:" + self.Camera_id + "相機成功儲存檔案")
+           print("編號:" + self.Camera_id + "成功儲存檔案")
         except:                 
-            print("編號:" + self.Camera_id +' 相機儲存檔案失敗')
+            print("編號:" + self.Camera_id +' 儲存檔案失敗')
     #時間相減
     def timeSecond(self,Second):
         now_time=datetime.datetime.now()
@@ -256,6 +203,17 @@ class BaseCamera:
             return now_time
         else:
             return None
+    #判斷過期檔案
+    def shouldkeep(self,file):
+     if datetime.datetime.fromtimestamp( os.path.getmtime(file) ) > \
+        datetime.datetime.now() - datetime.timedelta(self.Dday):
+        return True
+    #刪除檔案
+    def _removeold(self):
+        for i in os.walk(self.outputFolder):
+            for j in i[2]:
+                if not self.shouldkeep(os.path.join(i[0],j)):
+                 os.remove( os.path.join(i[0],j) )
       #製作fps/time
     def makefps(self,image):
             # img 來源影像
@@ -266,7 +224,8 @@ class BaseCamera:
             # color 線條顏色，使用 BGR
             # thickness 文字外框線條粗細，預設 1
             # lineType 外框線條樣式，預設 cv2.LINE_8，設定 cv2.LINE_AA 可以反鋸齒   
-        
+        org = (10,30)
+        org1 = (1080,30)
         fontFace = cv2.FONT_HERSHEY_SIMPLEX
         fontScale = 1
         color = (0,0,255)
@@ -281,8 +240,8 @@ class BaseCamera:
         now_time=datetime.datetime.now()
         now_time=now_time.strftime("%Y-%m-%d %H:%M:%S")
         text = "FPS :"+str(self.fps)
-        cv2.putText(image, now_time, self.org, fontFace, fontScale, color, thickness, lineType)
-        cv2.putText(image, text, self.org1, fontFace, fontScale, color, thickness, lineType)
+        cv2.putText(image, now_time, org, fontFace, fontScale, color, thickness, lineType)
+        cv2.putText(image, text, org1, fontFace, fontScale, color, thickness, lineType)
     def get_move(self,img):
         if self.cam is not None and self.cam.isOpened():
             try:
@@ -326,79 +285,25 @@ class BaseCamera:
             self.avg = cv2.convertScaleAbs(self.avg_float)
             self.avg_float = np.float32(self.avg) 
         # 直接讀取圖片
-    def writer_video(self,img):
-        if self.output is not None and self.video_check:
-            self.output.write(img)
     def get_frame(self,role):
         """
         取得畫面給前端看
         """
         
         img = self.queue.get()
-        if img is None or img is True:
+        if img is None:
             return None
-        else:                
+        else:
+                    
             self.makefps(img)
             if role == "admin":
                 self.get_move(img)
-                self.writer_video(img)
-            cv2.waitKey(1)
             #壓縮圖片，否則圖片過大，編碼效率慢，視頻延遲過高
-            shape = img.shape
-            shape = (int(shape[1]), int(shape[0]))
-            img = cv2.resize(img, shape, interpolation=cv2.INTER_CUBIC)
-            #img = cv2.resize(img, (self.width, self.height), fx=0.25, fy=0.25)
+            img = cv2.resize(img, (self.width, self.height), fx=0.25, fy=0.25)
             # 對圖片進行編碼
             ret, jpeg = cv2.imencode('.jpeg', img)
             #cv2.waitKey(self.fps)
             return jpeg.tobytes()
-class BaseVideo:
-    # 影片操作對象
-    video = None
-
-    videoUrl = None
-
-    # 獲取視頻寬度
-    frame_width = 0
-    # 獲取視頻高度
-    frame_height =0
-    #視頻平均幀率
-    fps = 20
-    # 獲取視頻幀數
-    frames = 0
-# 獲取視頻幀數
-    def __init__(self, video_url):
-        self.videoUrl=video_url
-        self.video = cv2.VideoCapture("static/my_output/HappyCamera1video/outputvideo_2022-10-24.avi")
-        if (self.video.isOpened() == False):
-            print("Error opening the video file")
-            # Read fps and frame count
-        else:
-            # 獲取視頻寬度
-            self.frame_width = int(self.video.get(cv2.CAP_PROP_FRAME_WIDTH))
-            # 獲取視頻高度
-            self.frame_height = int(self.video.get(cv2.CAP_PROP_FRAME_HEIGHT))
-            #視頻平均幀率
-            self.fps = self.video.get(cv2.CAP_PROP_FPS)
-            self.frames=int(self.video.get(cv2.CAP_PROP_FRAME_COUNT))
-            # Get frame rate information
-            print('Frames per second : ', self.fps,'FPS')
-
-            
-    def __del__(self):
-        print("例項物件:%s"%self.videoUrl,id(self))
-        print("python直譯器開始回收%s物件了" % self.videoUrl)    
-        self.video.release()
-    def get_frame(self):
-        ret, frame = self.video.read()
-        if ret is False:
-            return None
-        else:
-            src = cv2.resize(frame, (self.frame_width // 2, self.frame_height // 2), interpolation=cv2.INTER_CUBIC)  # 窗口大小
-            ret, jpeg = cv2.imencode('.jpeg', src)
-            key = cv2.waitKey(20)
-            return jpeg.tobytes()
-
 class CameraFactory:
     """
     相機工廠
@@ -409,12 +314,12 @@ class CameraFactory:
     def get_camera(cls, camera_id: int):
         # 通過ID取得相機
         camera = cls.cameras.get(camera_id)
-        
+        queue_image = queue.Queue(maxsize=30)
+        isexit=False
         if camera is None:
             print("相機不存在")
-            try:   
+            try:
                 camera_model = Camera.objects.get(camera_id=camera_id)
-                queue_image = queue.Queue(maxsize=10)
                 base_camera = BaseCamera(camera_model=camera_model,queue_image=queue_image)
                 if base_camera is not None:
                     cls.cameras.setdefault(camera_id, base_camera)
@@ -433,78 +338,6 @@ class CameraFactory:
                 return None
         else:      
             # 存在相機，直接返回
-            print("編號:" + camera_id + " 相機取得成功")
             return camera
-    @classmethod
-    def update_camera(cls, camera: Camera):
-            
-                camera_id=camera.camera_id
-                oldcamera = cls.cameras.get(camera_id)
-                if oldcamera is None:
-                    print("新增編號:" + camera_id + " 相機開始")
-                    try:
-                        queue_image = queue.Queue(maxsize=10)
-                        base_camera = BaseCamera(camera_model=camera,queue_image=queue_image)
-                        if base_camera is not None:
-                                cls.cameras.setdefault(camera_id, base_camera)
-                                print("編號:" + camera_id + " 相機建立成功")
-                        else:
-                                print("編號:" + camera_id + " 相機建立失敗")
-                    except Camera.DoesNotExist:
-                        # 相機不存在
-                      print("資料庫不存在此相機 編號:"+camera_id)
-                    except CameraException:
-                    # 相機實例失敗
-                        print("編號:" + camera_id + " 相機實例化失敗")  
-                    print("新增編號:" + camera_id + " 相機結束") 
-                else:
-                    print("更新編號:" + camera_id + " 相機開始")
-                    if oldcamera.cam is None:
-                        try:
-                            queue_image = queue.Queue(maxsize=10)
-                            base_camera = BaseCamera(camera_model=camera,queue_image=queue_image)
-                            if base_camera is not None:
-                                    cls.cameras.update({camera_id: base_camera})
-                                    print("編號:" + camera_id + " 相機建立成功")
-                            else:
-                                    print("編號:" + camera_id + " 相機建立失敗")
-                        except Camera.DoesNotExist:
-                        # 相機不存在
-                          print("資料庫不存在此相機 編號:"+camera_id)
-                        except CameraException:
-                         # 相機實例失敗
-                           print("編號:" + camera_id + " 相機實例化失敗")  
-                    else:
-                        oldcamera.set_defalut(camera)
-                        oldcamera.set_defalut1()
-                        oldcamera.get_output_video()
-                    print("更新編號:" + camera_id + " 相機結束")
-                    
+
         
-    @classmethod
-    def update_ALLcamera(cls):
-           cameras = Camera.objects.all()
-           print("啟動所有相機實例開始")
-           for camera in cameras:
-             cls.update_camera(camera)
-           print("啟動所有相機實例結束")
-    @classmethod
-    def loadingpic(cls):
-        loadingPic="static/photo/loading.gif"
-        img_list = []  
-        gif = Image.open(loadingPic)                # 讀取動畫圖檔   
-        gif.resize((30, 30), Image.ANTIALIAS)
-        for frame in ImageSequence.Iterator(gif):
-         frame = frame.convert('RGB')    
-         opencv_img = np.array(frame, dtype=np.uint8)   # 轉換成 numpy 陣列
-         opencv_img = cv2.cvtColor(opencv_img, cv2.COLOR_RGBA2BGRA)  # 顏色從 RGBA 轉換為 BGRA
-         cv2.rectangle(opencv_img,(100,120),(300,180),(0,0,0),-1)
-         img_list.append(opencv_img)                    # 利用串列儲存該圖片資訊
-        return img_list
-    @classmethod
-    def openFile(cls,fileUrl:str):
-        base_Video= BaseVideo(fileUrl)
-        if base_Video is not None:
-            return base_Video     
-        else:
-            return None

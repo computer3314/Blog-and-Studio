@@ -16,12 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from post.views import aboutget
-from camera.views import video,video_view,videoAdmin_view,bookhandle,get_video
+from camera.views import video,video_view,videoAdmin_view,bookhandle
 from django .contrib.auth.decorators import login_required
-from task.task import TaskFactory
-import sys
 #引入排程包
-from task.views import job_add_task,job_del_task,job_pause_task,job_resume_task,job_list_task
+from task.views import job_add_task,job_del_task,job_pause_task,job_resume_task,job_list_task,delete_file
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', aboutget),
@@ -32,14 +30,7 @@ urlpatterns = [
     path('job/pause/', job_pause_task),
     path('job/resume/', job_resume_task),
     path('job/list', job_list_task),
-    path('video', get_video),
+    path('delete', delete_file),
     path('cameraAdmin', login_required(videoAdmin_view)),  
     re_path(r'^move', login_required(bookhandle), name="move")                                         
 ]
-#這邊觸發Server執行後動作
-RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')
-if RUNNING_DEVSERVER:
- #排程服務器
- TaskFactory.get_scheduler()
- #Server啟動後執行
- #TaskFactory.init()
