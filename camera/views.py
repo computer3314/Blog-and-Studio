@@ -105,12 +105,7 @@ def bookhandle(request):
     except EmptyPage:
         move_obj=paginator.page(paginator.num_pages)   #如果前端請求的頁碼超出範圍,則顯示最後一頁.獲取總頁數,返回最後一頁.比如共10頁,則返回第10頁.
     return render(request, 'move.html',{'move_list':move_obj})
-    # Create your views here.
-
-def get_video(request):
-    return render(request, 'video.html')  
-
-    
+    # Create your views here.    
 def get_videoAviToMp4(request):
 
     isdecode=False   #是否已經解碼
