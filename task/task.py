@@ -8,6 +8,7 @@ from apscheduler.triggers.cron import CronTrigger
 from django.core import serializers
 import json
 from camera.cameras import CameraFactory, BaseCamera
+
 class TaskFactory:
     """
     任務工廠
@@ -106,6 +107,7 @@ class TaskFactory:
     def init(cls):
       print("啟動程式自動開啟")
       CameraFactory.update_ALLcamera()
+
     
       
 

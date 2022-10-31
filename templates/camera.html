@@ -6,8 +6,22 @@
         max-width: 800px;
     }
 </style>
-    <!-- 顯示影片 -->
+    <!-- 顯示影片-->
     <div align="center"><img src="{{ url }}" id="video"></div>
+   
+    <input type="hidden" id="urlbackground" name="variable" value=" {{ urlbackground }}">
 </body>
-
+<script>
+    //網頁背景執行，不容易斷線
+    var myVar = document.getElementById("urlbackground").value;
+   var xhr = new XMLHttpRequest();
+xhr.multipart = true; 
+xhr.open('GET', myVar);
+xhr.onreadystatechange = function(){
+    if (xhr.readyState == 4){
+         console.log(xhr.responseText);
+    }
+};
+xhr.send(null);
+</script>
 {% endblock %}
