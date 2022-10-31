@@ -442,7 +442,10 @@ class CameraFactory:
                         oldcamera.set_defalut(camera) #基本配置更新
                         oldcamera.set_defalut1() #基本配置更新           
                         oldcamera.get_output_video(False) #更新錄影檔案
-                        oldcamera.chanheVideoCode(oldcameraUrl)#舊檔案備份更換檔案
+                        thread=threading.Thread(target= oldcamera.chanheVideoCode,args=(oldcameraUrl,))#舊檔案備份更換檔案
+                        thread.daemon = True
+                        thread.start()
+
                     print("更新編號:" + camera_id + " 相機結束")
                     
         
@@ -451,7 +454,9 @@ class CameraFactory:
            cameras = Camera.objects.all()
            print("啟動所有相機實例開始")
            for camera in cameras:
-             cls.update_camera(camera)
+             thread=threading.Thread(target= cls.update_camera,args=(camera,))
+             thread.daemon = True
+             thread.start()
            print("啟動所有相機實例結束")
     @classmethod
     def loadingpic(cls):
@@ -467,7 +472,7 @@ class CameraFactory:
          img_list.append(opencv_img)                    # 利用串列儲存該圖片資訊
         return img_list
     @classmethod
-    def get_cameratoVideo(cls, camera_id: int,isStop:bool()):
+    def get_cameratoVideo(cls, camera_id: int,isStop:bool):
         # 通過ID取得相機
         camera = cls.cameras.get(camera_id)
         if camera is not None:
