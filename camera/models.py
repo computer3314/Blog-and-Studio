@@ -1,6 +1,6 @@
 import queue
 import threading
-
+from django.conf import settings
 import cv2
 from django.db import models
 
@@ -41,8 +41,11 @@ class Move(models.Model):
     camera_id = models.TextField('攝影機編號', max_length=100,blank=True)
     movetime= models.DateTimeField('移動時間',auto_now=True)
     photo = models.ImageField('移動截圖',blank=True,upload_to='static/my_output', null=True)
+    movie = models.URLField(verbose_name="查看錄影",max_length = 200,blank=True,null=True)
     created_at = models.DateTimeField('新增時間',auto_now_add=True)
         # Methods
+
+    list_display = ['image_tag',]
     def camera_api(self):
         """Returns the URL to access a particular instance of MyModelName."""
         camera_model = Camera.objects.get(camera_id=self.camera_id)

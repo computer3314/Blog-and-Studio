@@ -9,3 +9,7 @@ db.sqlite3
 *.pyc
 *.sqlite3
 Demo/settings.py
+*.mp4
+*.pyc
+*.pyc
+*.sqlite3
