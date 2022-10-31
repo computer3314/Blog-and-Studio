@@ -123,9 +123,9 @@ class BaseCamera:
             output = video.copy() #複製目前檔案
             fn2 = oldUrl[0:-4]+'_convert.mp4'     
             output.write_videofile(fn2,temp_audiofile="temp-audio.m4a", remove_temp=True, codec="libx264", audio_codec="aac") #重新編碼 讓瀏覽器可以看
-            print("編號:" + self.Camera_id + oldUrl +" 編碼轉換成功")
+            print("編號:" + str(self.Camera_id) + str(oldUrl) +" 編碼轉換成功")
           except Exception as e:    
-            print("編號:" + self.Camera_id + oldUrl + " 編碼轉換失敗")
+            print("編號:" + str(self.Camera_id) + str(oldUrl) + " 編碼轉換失敗")
             print(e)
        
 
@@ -242,9 +242,9 @@ class BaseCamera:
            message="監視器:" + str(self.title) + "在 " + checkTime + "偵測到移動!! url:"+url
            from_email=settings.EMAIL_HOST_USER
            my_send_mail(subject, message,from_email, ['computer30422@gmail.com'])
-           print("編號:" + self.Camera_id + "相機成功發送信件"+result1)
+           print("編號:" + self.Camera_id + "相機成功發送信件"+checkTime)
         except:                 
-            print("編號:" + self.Camera_id +' 相機發送信件失敗'+result1)
+            print("編號:" + self.Camera_id +' 相機發送信件失敗'+checkTime)
     def photo_scan(self,img,result1):
         #拍照
         try:                

@@ -132,7 +132,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-PRO_HOST = 'http://127.0.0.1:8000/'
+PRO_HOST = 'https://happy.shengda.ga/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
