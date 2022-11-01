@@ -179,37 +179,40 @@ def get_video_duration(filename):
 def get_moves(filename:str):
     #取得該影片偵測移動時間
     move_list=[]
-    file=File.objects.get(movie=filename)
-    if file is  None:
-        print("資料庫查無檔案:"+filename)
-    else:
-        moves=file.get_moves()
-        if moves is not None:
-            if file.starttime is None or file.endtime is None:
-                print(filename+"前後時間有問題 無法取得偵測時段")
-            else:
-                time=get_video_duration(filename)
-                print(filename+"影片時長"+str(time))
-                print(filename+"取得移動列表")
-                print(filename+"開始時間:")
-                print(file.starttime)
-                print(filename+"結束時間:")
-                print(file.endtime)
-                print(filename+"移動偵測列表:")
-                start_timer=str(file.starttime)
-                head,sep,tail=start_timer.partition('.')
-                start_timer = datetime.datetime.strptime(head, r"%Y-%m-%d %H:%M:%S")
-                for move in moves:
-                    end_time = str(move.movetime)
-                    headend,sep,tail=end_time.partition('.')
-                    end_time = datetime.datetime.strptime(headend, r"%Y-%m-%d %H:%M:%S")
-                    diff = end_time - start_timer
-                    move_list.append({
-                    "time": diff.total_seconds(),
-                    "text": str(end_time)
-                    })
+    try:
+        file=File.objects.get(movie=filename)
+        if file is  None:
+            print("資料庫查無檔案:"+filename)
         else:
-            print(filename+"無移動列表")
+            moves=file.get_moves()
+            if moves is not None:
+                if file.starttime is None or file.endtime is None:
+                    print(filename+"前後時間有問題 無法取得偵測時段")
+                else:
+                    time=get_video_duration(filename)
+                    print(filename+"影片時長"+str(time))
+                    print(filename+"取得移動列表")
+                    print(filename+"開始時間:")
+                    print(file.starttime)
+                    print(filename+"結束時間:")
+                    print(file.endtime)
+                    print(filename+"移動偵測列表:")
+                    start_timer=str(file.starttime)
+                    head,sep,tail=start_timer.partition('.')
+                    start_timer = datetime.datetime.strptime(head, r"%Y-%m-%d %H:%M:%S")
+                    for move in moves:
+                        end_time = str(move.movetime)
+                        headend,sep,tail=end_time.partition('.')
+                        end_time = datetime.datetime.strptime(headend, r"%Y-%m-%d %H:%M:%S")
+                        diff = end_time - start_timer
+                        move_list.append({
+                        "time": diff.total_seconds(),
+                        "text": str(end_time)
+                        })
+            else:
+                print(filename+"無移動列表")
+    except File.DoesNotExist:
+             file = None
     return move_list
 
 

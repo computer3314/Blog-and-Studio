@@ -53,7 +53,7 @@ class Move(models.Model):
         # Methods
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
-        return self.camera_id
+        return str(self.camera_id)
 class File(models.Model):
     """A typical class defining a model, derived from the Model class."""
     # Metadata
