@@ -130,6 +130,7 @@ def get_videoAviToMp4(request):
         }
         return render(request, 'video.html',context) 
     else:
+        video=None
         try:
             CameraFactory.get_cameratoVideo(camera_id, True)#先暫時關閉攝影機以便讀去影片
             video = VideoFileClip(videoUrl)    # 讀取影片     
@@ -145,7 +146,9 @@ def get_videoAviToMp4(request):
         except Exception as e:
             CameraFactory.get_cameratoVideo(camera_id, False)
             print(e)
-
+        finally:
+            if video is not None:
+                video.close()
     return render(request, 'video.html') 
 
 

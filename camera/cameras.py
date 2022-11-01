@@ -118,6 +118,7 @@ class BaseCamera:
         if self.output is not None:
             self.output.release()
     def chanheVideoCode(self,oldUrl:str):
+          video = None
           try:
             video = VideoFileClip(oldUrl)    # 讀取影片  
             output = video.copy() #複製目前檔案
@@ -127,6 +128,9 @@ class BaseCamera:
           except Exception as e:    
             print("編號:" + str(self.Camera_id) + str(oldUrl) + " 編碼轉換失敗")
             print(e)
+          finally:
+            if video is not None:
+                video.close()
        
 
     def get_output_video(self,isStop:bool):
