@@ -10,7 +10,7 @@ from django.conf import settings
 from myemail import my_send_mail
 from PIL import Image,ImageSequence
 import datetime
-from camera.models import Camera,Move
+from camera.models import Camera,Move,File
 class CameraException(Exception):
     message = None
 
@@ -25,6 +25,8 @@ class CameraException(Exception):
 class BaseCamera:
     #相機對象
     cam = None
+    #相機Modal
+    camera_model=None
     # 後台取幀數的線程
     thread = None
     queue = None
@@ -33,6 +35,9 @@ class BaseCamera:
     Camera_id=None
     #錄影機
     output=None
+    file_model=None
+    #偵測錄影第一張照片寫入
+    fileinsert=0
     #解析度設定
     width = 1280
     height = 720
@@ -45,9 +50,11 @@ class BaseCamera:
     outputVideoFolder=None
     #目前使用video
     nowoutVideo=None
+    videostart=None
     #計算幀數
     counter = 0
     fps = 10
+    tfps = 10
     start_time=time.time()
     #計算目前秒數
     min = '2022-01-01 8:01:01'
@@ -120,11 +127,23 @@ class BaseCamera:
         if self.cam is not None and self.video_check:
               if isStop is False:
                 self.nowoutVideo=self.getAviNameWithDate()
-              # 使用 XVID 編碼(‘M’, ‘P’, ‘4’, ‘2’)
+              # 使用 XVID 編碼(‘M’, ‘P’, ‘4’, ‘2’)(‘M’, ‘P’, ‘4’, ‘2’)
               fourcc = cv2.VideoWriter_fourcc(*'avc1')
+              #fourcc = 0x31637661
               #fourcc =cv2.VideoWriter_fourcc(*'XVID')
-              self.output= cv2.VideoWriter('%s' % (self.nowoutVideo), fourcc,15.0,(self.width,self.height))
-             
+              self.output= cv2.VideoWriter('%s' % (self.nowoutVideo), fourcc,6,(self.width,self.height))
+              self.camera_model.file.create(movie= self.nowoutVideo)
+              self.file_model=File.objects.select_for_update().filter(movie=self.nowoutVideo)
+              self.fileinsert=0
+    def close_file(self):
+        #更換影片檔時呼叫
+        if self.output is not None:
+            self.output=None
+            if self.file_model is not None: #沒圖片後 若有file就增加結束時間
+                    self.file_model.update(endtime=datetime.datetime.now())
+                    self.file_model=None #清空file物件  等等會建立新的
+
+
     def getAviNameWithDate(self,nameIn="output.mp4"):
         #計算當日影片是否重複
         """Needs a file ending on .avi, inserts _<date> before .avi. 
@@ -149,6 +168,7 @@ class BaseCamera:
 
     def set_defalut(self,camera_model: Camera):
         #讀取基礎設定
+        self.camera_model=camera_model
         self.today=time.strftime("%Y-%m-%d",time.localtime(time.time()))
         self.width=camera_model.width
         self.height=camera_model.heigth
@@ -159,6 +179,7 @@ class BaseCamera:
         self.mail_check=camera_model.mailCheck
         self.scan_check=camera_model.scancheck
         self.fps=camera_model.fps
+        self.tfps=int(1000/camera_model.fps)
         self.isOpened=camera_model.isOpened
         self.title=camera_model.title
         self.Camera_id=camera_model.camera_id
@@ -218,7 +239,7 @@ class BaseCamera:
                 if self.video_check:#確認是否錄影
                     nowvideo=self.nowoutVideo
                      #新增一筆紀錄到資料庫
-                Move.objects.create(camera_id=self.Camera_id,photo="%s/output_%s.jpg" % (self.outputFolder, result1),movie=nowvideo)
+                self.camera_model.move.create(photo="%s/output_%s.jpg" % (self.outputFolder, result1),movie=nowvideo)
                 print("編號:" + self.Camera_id + " 相機在"+result1+"偵測到移動傳入資料庫")
             
            
@@ -324,8 +345,12 @@ class BaseCamera:
         # 直接讀取圖片
     def writer_video(self,img):
         if self.output is not None and self.video_check:
-            self.output.write(img)
-       
+            if self.fileinsert == 0:
+                if self.file_model is not None: #若有檔案sql 就增加結束時間
+                    self.file_model.update(starttime=datetime.datetime.now())
+                    self.fileinsert+=1
+            self.output.write(img)#寫入影片
+            cv2.waitKey(self.tfps)
     def get_frame(self,role):
         """
         取得畫面給前端看
@@ -346,7 +371,7 @@ class BaseCamera:
             #img = cv2.resize(img, (self.width, self.height), fx=0.25, fy=0.25)
             # 對圖片進行編碼
             ret, jpeg = cv2.imencode('.jpeg', img)
-            cv2.waitKey(self.fps)
+            
             return jpeg.tobytes()
 
 class CameraFactory:
@@ -425,7 +450,7 @@ class CameraFactory:
                          # 相機實例失敗
                            print("編號:" + camera_id + " 相機實例化失敗")  
                     else:
-                        oldcameraUrl=oldcamera.nowoutVideo
+                        oldcamera.close_file()#停止錄影
                         oldcamera.set_defalut(camera) #基本配置更新
                         oldcamera.set_defalut1() #基本配置更新           
                         oldcamera.get_output_video(False) #更新錄影檔案
@@ -460,7 +485,7 @@ class CameraFactory:
         camera = cls.cameras.get(camera_id)
         if camera is not None:
             if isStop:
-                camera.output=None
+                camera.close_file()
             else:
                 camera.get_output_video(False)#重新抓取錄影video
         

@@ -1,13 +1,9 @@
+{% load static %}
 <head>
 
-  <link href="http://vjs.zencdn.net/6.6.3/video-js.css" rel="stylesheet">
-
- 
-
-  <!-- If you‘d like to support IE8 -->
-
-  <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
-
+  <link href="{% static '/node_modules/video.js/dist/video-js.min.css' %}" rel="stylesheet">
+  <script src="{% static 'node_modules/jquery/dist/jquery.min.js' %}"></script>
+  <link href="{% static '/node_modules/videojs-markers-plugin/dist/videojs.markers.plugin.css' %}" rel="stylesheet">
 </head>
 
 
@@ -15,22 +11,56 @@
 <h1>此檔案不存在或是已經刪除</h1>
 {% else %}
 <body>
-  {% load static %}
-    <video id="myVideo" class="video-js vjs-default-skin vjs-big-play-centered"   poster="{% static '/photo/voyager-assets.png' %}" controls preload="auto" data-setup='{}' style='width: 100%;height: 800px'>
-<source src="{{ videoUrl }}" type="video/mp4" />
+  <input type="hidden" id="fileurl" name="variable" value=" {{ videoUrl }}">
+  <input type="hidden" id="move_List" name="move_List" value=" {{ moveObj }}">
+    <video id="myVideo" class="video-js vjs-default-skin vjs-big-play-centered"   poster="{% static '/photo/voyager-assets.png' %}" controls preload="auto" data-setup='{}' style='width: 100%;height: 700px'>
+<source src="" type="video/mp4" />
 </video>
-  <script src="http://vjs.zencdn.net/6.6.3/video.js"></script>
+
+  <script src="{% static '/node_modules/video.js/dist/video.js' %}"></script>
+  <script src="{% static '/node_modules/videojs-markers-plugin/dist/videojs-markers-plugin.js' %}"></script>
+
 <script>
+
+    videojs.addLanguage('zh-TW', {
+  "Play": "播放",
+  "Pause": "暫停",
+  "Current Time": "目前時間",
+  // ...
+});
 var myVideo = videojs('myVideo', {
+       language: 'zh-TW', // 設定使用語系為 zh-TW
+       sources:[{ src: document.getElementById('fileurl').value}],
         bigPlayButton: true,
         textTrackDisplay: false,
         posterImage: false,
         errorDisplay: false,
-        playbackRates: [0.5,1,1.5,2,3], 
+        playbackRates: [0.1,0.5,1,1.5,2,3], 
         
     })
-	
-    myVideo.play()
+    move_List=JSON.parse(document.getElementById('move_List').value) 
+    console.log(move_List)
+    // for(let move of move_List)
+    //   alert(move)
+    myVideo.markers({
+     markerStyle: {
+      'width':'7px',
+      'border-radius': '30%',
+      'background-color': 'red'
+    },
+    markers: move_List,
+    markerTip:{
+    display: true,
+    text: function(marker) {
+    return "This is a break: " + marker.text;
+    console.log(marker.text)
+    }
+      },
+    onMarkerReached: function(marker) {
+    console.log("marker reached: " + marker.text )
+    },
+  });
+
 </script>
 </body>
 {% endif %}

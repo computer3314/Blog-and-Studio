@@ -28,8 +28,8 @@
         <tbody>
             {% for foo in move_list %}
             <tr>
-                <td>{{ foo.camera_api.title }}</td>
-                <td>{{ foo.movetime }}</td>
+                <td>{{ foo.camera.title }}</td>
+                <td>{{ foo.movetime|date:'Y-m-d H:i:s' }}</td>
                 <td>
                     <div class="wrap">
                         <a href="{{ foo.photo }}" target="_blank">

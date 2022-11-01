@@ -1,15 +1,8 @@
-db.sqlite3
-Demo/settings.py
-
-db.sqlite3
 /my_output/*
 *.jpg
 *.pyc
-*.pyc
-*.pyc
 *.sqlite3
-Demo/settings.py
 *.mp4
-*.pyc
-*.pyc
 *.sqlite3
+static/node_modules/*
+

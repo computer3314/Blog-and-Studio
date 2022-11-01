@@ -38,7 +38,7 @@ class Move(models.Model):
     class Meta:
         verbose_name = '移動偵測'
         verbose_name_plural = '移動偵測'
-    camera_id = models.TextField('攝影機編號', max_length=100,blank=True)
+    camera = models.ForeignKey(Camera, on_delete=models.CASCADE, related_name='move')
     movetime= models.DateTimeField('移動時間',auto_now=True)
     photo = models.ImageField('移動截圖',blank=True,upload_to='static/my_output', null=True)
     movie = models.URLField(verbose_name="查看錄影",max_length = 200,blank=True,null=True)
@@ -54,3 +54,22 @@ class Move(models.Model):
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return self.camera_id
+class File(models.Model):
+    """A typical class defining a model, derived from the Model class."""
+    # Metadata
+    class Meta:
+        verbose_name = '影片管理'
+        verbose_name_plural = '影片管理'
+    camera = models.ForeignKey(Camera, on_delete=models.CASCADE, related_name='file')
+    starttime= models.DateTimeField('影片起時',blank=True,null=True)
+    endtime= models.DateTimeField('影片迄時',blank=True,null=True)
+    movie = models.TextField("影片位置",max_length = 200,blank=True,null=True,unique=True)
+    created_at = models.DateTimeField('新增時間',auto_now_add=True)
+        # Methods
+
+    def get_moves(self):
+         return Move.objects.filter(movie=self.movie).order_by('-movetime')
+        # Methods
+    def __str__(self):
+        """String for representing the MyModelName object (in Admin site etc.)."""
+        return str(self.movie)

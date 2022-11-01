@@ -33,8 +33,6 @@ def delete_old_job_executions(max_age=604_800):
   """
   DjangoJobExecution.objects.delete_old_job_executions(max_age)
   print("刪除超過7天排程歷史作業資料")
-  Move.objects.filter(created_at__lte=datetime.now()-timedelta(days=7)).delete()
-  print("刪除超過7天移動偵測資料")
 
 class Command(BaseCommand):
   help = "Runs APScheduler."

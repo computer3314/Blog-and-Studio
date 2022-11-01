@@ -8,9 +8,11 @@ from PIL import Image,ImageSequence
 import numpy as np
 import cv2
 import time
-from .models import Move,Camera
+import datetime
+from .models import Move,Camera,File
 import os
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+import json
 import shutil
 def gen_display(camera: BaseCamera,role,background:bool):
     """
@@ -124,17 +126,19 @@ def get_videoAviToMp4(request):
             if os.path.isfile(fn2):  
                 videoUrl=fn2 
             time=get_video_duration(videoUrl)
-            print(videoUrl+"時長:"+str(time))
             if time != -1: #確認是否有長度
                 isdecode=True 
     except Exception as e:
         isdecode=False
         print(e)
     if isdecode:
+        moveObj=get_moves(videoUrl)
         context = {
             'videoUrl':videoUrl,
             'camera_id':camera_id,
              'action':True,
+             'moveObj':json.dumps(moveObj)
+
         }
         return render(request, 'video.html',context) 
     else:
@@ -152,10 +156,12 @@ def get_videoAviToMp4(request):
                 folder=static+"/"+str(current_user.id)+".mp4"
                 shutil.copyfile(videoUrl, folder)
                 CameraFactory.get_cameratoVideo(camera_id, False)#繼續錄製目前影片
+                moveObj=get_moves(videoUrl)
                 context = {
                         'videoUrl':folder,
                         'camera_id':camera_id,
                         'action':True,
+                        'moveObj':json.dumps(moveObj)
                 }
                 return render(request, 'video.html',context)  
         except Exception as e:
@@ -170,7 +176,41 @@ def get_video_duration(filename):
     duration = frame_num/rate
     return duration
   return -1
-
+def get_moves(filename:str):
+    #取得該影片偵測移動時間
+    move_list=[]
+    file=File.objects.get(movie=filename)
+    if file is  None:
+        print("資料庫查無檔案:"+filename)
+    else:
+        moves=file.get_moves()
+        if moves is not None:
+            if file.starttime is None or file.endtime is None:
+                print(filename+"前後時間有問題 無法取得偵測時段")
+            else:
+                time=get_video_duration(filename)
+                print(filename+"影片時長"+str(time))
+                print(filename+"取得移動列表")
+                print(filename+"開始時間:")
+                print(file.starttime)
+                print(filename+"結束時間:")
+                print(file.endtime)
+                print(filename+"移動偵測列表:")
+                start_timer=str(file.starttime)
+                head,sep,tail=start_timer.partition('.')
+                start_timer = datetime.datetime.strptime(head, r"%Y-%m-%d %H:%M:%S")
+                for move in moves:
+                    end_time = str(move.movetime)
+                    headend,sep,tail=end_time.partition('.')
+                    end_time = datetime.datetime.strptime(headend, r"%Y-%m-%d %H:%M:%S")
+                    diff = end_time - start_timer
+                    move_list.append({
+                    "time": diff.total_seconds(),
+                    "text": str(end_time)
+                    })
+        else:
+            print(filename+"無移動列表")
+    return move_list
 
 
  
