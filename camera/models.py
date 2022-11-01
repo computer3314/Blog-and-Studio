@@ -20,9 +20,9 @@ class Camera(models.Model):
     dday = models.IntegerField('固定刪除截圖檔案時間(天數)', default=7,blank=True)
     videodday = models.IntegerField('固定刪除影片檔案時間(天數)', default=3,blank=True)
     moveNotice = models.IntegerField('移動偵測通知時間(秒數)', default=60,blank=True)
-    mailCheck=models.BooleanField('是否移動發信',default=True)
-    scancheck=models.BooleanField('是否移動截圖',default=True)
-    videocheck=models.BooleanField('是否連續錄製',default=True)
+    mailCheck=models.BooleanField('是否移動發信',default=False)
+    scancheck=models.BooleanField('是否移動截圖',default=False)
+    videocheck=models.BooleanField('是否連續錄製',default=False)
     isOpened=models.BooleanField('是否啟動',default=True)
     # Methods
     def camera_api(self):

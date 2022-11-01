@@ -2,12 +2,15 @@ from django.contrib import admin
 from .models import Camera
 from .models import Move
 from camera.cameras import CameraFactory, BaseCamera
+import threading
 # Register your models here.
 class CameraAdmin(admin.ModelAdmin):
     list_display = ('id','camera_id','camera_url', 'title','width')
     search_fields = ('id','camera_id','camera_url','title')
     def save_model(self, request, obj, form, change):
-        CameraFactory.update_camera(obj)
+        thread=threading.Thread(target= CameraFactory.update_camera,args=(obj,))#舊檔案備份更換檔案
+        thread.daemon = True
+        thread.start()
         super().save_model(request, obj, form, change)
     def delete_queryset(self, request, queryset):
         print('==========================delete_queryset==========================')

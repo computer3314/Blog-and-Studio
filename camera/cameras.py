@@ -10,9 +10,7 @@ from django.conf import settings
 from myemail import my_send_mail
 from PIL import Image,ImageSequence
 import datetime
-from camera.models import Camera
-from .models import Move
-from moviepy.editor import *
+from camera.models import Camera,Move
 class CameraException(Exception):
     message = None
 
@@ -45,6 +43,7 @@ class BaseCamera:
     outputFolder = None
     #影片截圖目錄
     outputVideoFolder=None
+    #目前使用video
     nowoutVideo=None
     #計算幀數
     counter = 0
@@ -117,30 +116,14 @@ class BaseCamera:
             print("編號:" + self.Camera_id +" 釋放相機")
         if self.output is not None:
             self.output.release()
-    def chanheVideoCode(self,oldUrl:str):
-          video = None
-          try:
-            video = VideoFileClip(oldUrl)    # 讀取影片  
-            output = video.copy() #複製目前檔案
-            fn2 = oldUrl[0:-4]+'_convert.mp4'     
-            output.write_videofile(fn2,temp_audiofile="temp-audio.m4a", remove_temp=True, codec="libx264", audio_codec="aac") #重新編碼 讓瀏覽器可以看
-            print("編號:" + str(self.Camera_id) + str(oldUrl) +" 編碼轉換成功")
-          except Exception as e:    
-            print("編號:" + str(self.Camera_id) + str(oldUrl) + " 編碼轉換失敗")
-            print(e)
-          finally:
-            if video is not None:
-                video.close()
-       
-
     def get_output_video(self,isStop:bool):
         if self.cam is not None and self.video_check:
               if isStop is False:
                 self.nowoutVideo=self.getAviNameWithDate()
               # 使用 XVID 編碼(‘M’, ‘P’, ‘4’, ‘2’)
-              fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+              fourcc = cv2.VideoWriter_fourcc(*'avc1')
               #fourcc =cv2.VideoWriter_fourcc(*'XVID')
-              self.output= cv2.VideoWriter('%s' % (self.nowoutVideo), fourcc,int(self.fps/2),(self.width,self.height))
+              self.output= cv2.VideoWriter('%s' % (self.nowoutVideo), fourcc,15.0,(self.width,self.height))
              
     def getAviNameWithDate(self,nameIn="output.mp4"):
         #計算當日影片是否重複
@@ -446,10 +429,6 @@ class CameraFactory:
                         oldcamera.set_defalut(camera) #基本配置更新
                         oldcamera.set_defalut1() #基本配置更新           
                         oldcamera.get_output_video(False) #更新錄影檔案
-                        thread=threading.Thread(target= oldcamera.chanheVideoCode,args=(oldcameraUrl,))#舊檔案備份更換檔案
-                        thread.daemon = True
-                        thread.start()
-
                     print("更新編號:" + camera_id + " 相機結束")
                     
         
@@ -483,4 +462,14 @@ class CameraFactory:
             if isStop:
                 camera.output=None
             else:
-                camera.get_output_video(False)
+                camera.get_output_video(False)#重新抓取錄影video
+        
+    @classmethod
+    def get_cameranowVideo(cls, camera_id: int):
+        # 取得相機目前video
+        camera = cls.cameras.get(camera_id)
+        if camera is not None and camera.output is not None:
+                return camera.nowoutVideo #回傳目前使用的video
+        else:
+            return None
+

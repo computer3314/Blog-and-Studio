@@ -11,6 +11,9 @@
 </head>
 
 
+{% if action == False %}
+<h1>此檔案不存在或是已經刪除</h1>
+{% else %}
 <body>
   {% load static %}
     <video id="myVideo" class="video-js vjs-default-skin vjs-big-play-centered"   poster="{% static '/photo/voyager-assets.png' %}" controls preload="auto" data-setup='{}' style='width: 100%;height: 800px'>
@@ -30,3 +33,5 @@ var myVideo = videojs('myVideo', {
     myVideo.play()
 </script>
 </body>
+{% endif %}
+

@@ -11,7 +11,6 @@ import time
 from .models import Move,Camera
 import os
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
-from moviepy.editor import *
 import shutil
 def gen_display(camera: BaseCamera,role,background:bool):
     """
@@ -114,42 +113,64 @@ def get_videoAviToMp4(request):
     current_user = request.user
     if current_user is None:
          return render(request, 'video.html') 
+    context = {
+          'videoUrl':"",
+           'camera_id':camera_id,
+           'action':False,
+    }
     try:
-         if os.path.isfile(videoUrl):  
+         if os.path.isfile(videoUrl):
             fn2 = videoUrl[0:-4]+'_convert.mp4'   
             if os.path.isfile(fn2):  
-                videoUrl=fn2
-                isdecode=True   
+                videoUrl=fn2 
+            time=get_video_duration(videoUrl)
+            print(videoUrl+"時長:"+str(time))
+            if time != -1: #確認是否有長度
+                isdecode=True 
     except Exception as e:
-        print("尚未解碼")
         isdecode=False
+        print(e)
     if isdecode:
         context = {
             'videoUrl':videoUrl,
             'camera_id':camera_id,
+             'action':True,
         }
         return render(request, 'video.html',context) 
     else:
-        video=None
         try:
-            CameraFactory.get_cameratoVideo(camera_id, True)#先暫時關閉攝影機以便讀去影片
-            video = VideoFileClip(videoUrl)    # 讀取影片     
-            output = video.copy() #複製目前檔案
-            fn2 = videoUrl[0:-4]+'_convert.mp4'     
-            output.write_videofile(fn2,temp_audiofile="temp-audio.m4a", remove_temp=True, codec="libx264", audio_codec="aac") #重新編碼 讓瀏覽器可以看
-            context = {
-                    'videoUrl':fn2,
-                    'camera_id':camera_id,
-            }
-            CameraFactory.get_cameratoVideo(camera_id, False)#繼續錄製目前影片
-            return render(request, 'video.html',context)  
+            oldfile=CameraFactory.get_cameranowVideo(camera_id)
+            if oldfile is not None and oldfile != videoUrl:
+                os.remove(videoUrl)#不是運行中的檔案也沒有時長 所以刪除
+                print("已刪除"+videoUrl)
+            else:
+                CameraFactory.get_cameratoVideo(camera_id, True)#先暫時關閉攝影機以便讀去影片
+                static="static/my_output/intime" #專門放置及時觀看影片
+                # 自動建立目錄     
+                if not os.path.exists(static):
+                    os.makedirs(static)
+                folder=static+"/"+str(current_user.id)+".mp4"
+                shutil.copyfile(videoUrl, folder)
+                CameraFactory.get_cameratoVideo(camera_id, False)#繼續錄製目前影片
+                context = {
+                        'videoUrl':folder,
+                        'camera_id':camera_id,
+                        'action':True,
+                }
+                return render(request, 'video.html',context)  
         except Exception as e:
-            CameraFactory.get_cameratoVideo(camera_id, False)
             print(e)
-        finally:
-            if video is not None:
-                video.close()
-    return render(request, 'video.html') 
+    return render(request, 'video.html',context) 
+def get_video_duration(filename):
+    #判斷時長
+  cap = cv2.VideoCapture(filename)
+  if cap.isOpened():
+    rate = cap.get(5)
+    frame_num =cap.get(7)
+    duration = frame_num/rate
+    return duration
+  return -1
+
 
 
  
