@@ -27,11 +27,11 @@ urlpatterns = [
     path('', aboutget),
     path('api/camera/', video),
     path('camera', video_view),
-    path('job/add/', job_add_task),
-    path('job/del/', job_del_task),
-    path('job/pause/', job_pause_task),
-    path('job/resume/', job_resume_task),
-    path('job/list', job_list_task),
+    path('job/add/', login_required(job_add_task)),
+    path('job/del/', login_required(job_del_task)),
+    path('job/pause/', login_required(job_pause_task)),
+    path('job/resume/', login_required(job_resume_task)),
+    path('job/list', login_required(job_list_task)),
     path('getvideo', login_required(get_videoAviToMp4)),
 
 
