@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from post.views import aboutget
-from camera.views import video,video_view,videoAdmin_view,bookhandle,get_videoAviToMp4
+from camera.views import video,video_view,videoAdmin_view,bookhandle,get_videoAviToMp4,download_mp4
 from django .contrib.auth.decorators import login_required
 from task.task import TaskFactory
 import sys
@@ -33,8 +33,7 @@ urlpatterns = [
     path('job/resume/', login_required(job_resume_task)),
     path('job/list', login_required(job_list_task)),
     path('getvideo', login_required(get_videoAviToMp4)),
-
-
+    path('downloadmp4/', login_required(download_mp4)),
     path('cameraAdmin', login_required(videoAdmin_view)),  
     re_path(r'^move', login_required(bookhandle), name="move")                                         
 ]

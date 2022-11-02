@@ -11,10 +11,11 @@
 <h1>此檔案不存在或是已經刪除</h1>
 {% else %}
 <body>
-  <input type="hidden" id="fileurl" name="variable" value=" {{ videoUrl }}">
+ 
+  <input type="hidden" id="fileurl" name="variable" value="{{ videoUrl }}">
   <input type="hidden" id="move_List" name="move_List" value=" {{ moveObj }}">
     <video id="myVideo" class="video-js vjs-default-skin vjs-big-play-centered"   poster="{% static '/photo/voyager-assets.png' %}" controls preload="auto" data-setup='{}' style='width: 100%;height: 700px'>
-<source src="" type="video/mp4" />
+<source src="" type="video/mp4" size="720" />
 </video>
 
   <script src="{% static '/node_modules/video.js/dist/video.js' %}"></script>
@@ -28,9 +29,11 @@
   "Current Time": "目前時間",
   // ...
 });
-var myVideo = videojs('myVideo', {
+  //基礎設定
+   const fileurl=document.getElementById('fileurl').value
+   const myVideo = videojs('myVideo', {
        language: 'zh-TW', // 設定使用語系為 zh-TW
-       sources:[{ src: document.getElementById('fileurl').value}],
+       sources:[{ src: fileurl}],
         bigPlayButton: true,
         textTrackDisplay: false,
         posterImage: false,
@@ -40,8 +43,7 @@ var myVideo = videojs('myVideo', {
     })
     move_List=JSON.parse(document.getElementById('move_List').value) 
     console.log(move_List)
-    // for(let move of move_List)
-    //   alert(move)
+    //繪畫移動偵測
     myVideo.markers({
      markerStyle: {
       'width':'7px',
@@ -60,7 +62,15 @@ var myVideo = videojs('myVideo', {
     console.log("marker reached: " + marker.text )
     },
   });
-
+  //建立按鈕
+      var deleteapi="downloadmp4/?file_path="+fileurl
+      var myButton = myVideo.controlBar.addChild('button', {});
+      var fullscreen = myVideo.controlBar.getChild("FullscreenToggle")
+      var index = myVideo.controlBar.children().indexOf(fullscreen)
+      var myButton = myVideo.controlBar.addChild("button", {}, index);
+      var myButtonDom = myButton.el();
+      myButtonDom.innerHTML ='<img src="static/assets/img/download.jpg" alt="下載" title="下載" style="height: 15px;width: 15px">';
+      myButtonDom.onclick = function () { window.open(deleteapi) };
 </script>
 </body>
 {% endif %}

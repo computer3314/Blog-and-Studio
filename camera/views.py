@@ -1,8 +1,6 @@
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseNotFound,StreamingHttpResponse,JsonResponse
 from django.shortcuts import render
-from django.http import StreamingHttpResponse
 from .cameras import CameraFactory, BaseCamera
-from django.http import JsonResponse
 from django.conf import settings
 from PIL import Image,ImageSequence
 import numpy as np
@@ -215,5 +213,17 @@ def get_moves(filename:str):
              file = None
     return move_list
 
+def download_mp4(request):
+    file_path = request.GET.get('file_path')
+    print(file_path)
+    if os.path.exists(file_path):    
+        with open(file_path, 'rb') as fh:    
+            response = HttpResponse(fh.read(),  content_type="video/mp4")    
+          
+            response['Content-Disposition'] = \
+            "attachment; filename=\"%s\"; filename*=utf-8''%s" % \
+            (file_path, file_path)   
+            return response
+    return HttpResponseNotFound("查無此檔案")   
 
  
