@@ -11,10 +11,12 @@ from django_apscheduler.models import DjangoJobExecution
 from django_apscheduler import util
 from camera.models import Move
 from datetime import datetime, timedelta
-
+import logging
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 #開始排程服務(背景執行，最好是不會變動的排程在使用次Common  觸發方法python manage.py runaps)
 def my_job():
-  print("myjob")
+  logging.info("myjob")
   pass
 
 
@@ -32,7 +34,7 @@ def delete_old_job_executions(max_age=604_800):
                   默認為 7 天。
   """
   DjangoJobExecution.objects.delete_old_job_executions(max_age)
-  print("刪除超過7天排程歷史作業資料")
+  logging.info("刪除超過7天排程歷史作業資料")
 
 class Command(BaseCommand):
   help = "Runs APScheduler."

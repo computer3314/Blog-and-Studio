@@ -8,7 +8,9 @@ from apscheduler.triggers.cron import CronTrigger
 from django.core import serializers
 import json
 from camera.cameras import CameraFactory, BaseCamera
-
+import logging
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 class TaskFactory:
     """
     任務工廠
@@ -23,7 +25,7 @@ class TaskFactory:
         cls.scheduler.add_jobstore(DjangoJobStore(), "default")
         register_events(cls.scheduler)
         cls.scheduler.start()
-      print("取得排程物件")
+      logger.info("取得排程物件")
     @classmethod
     def getTasks(cls):
       if cls.scheduler is None:
@@ -39,7 +41,7 @@ class TaskFactory:
         newJob=dict({"job_id": str(job.id), "job_name": str(job.name), "job_trigger": str(job.trigger)
         , "job_isrun": str(isrun), "job_next_run_time ": str(job.next_run_time )}) 
         schedules.append(newJob)
-      print("取得排程列表")
+      logger.info("取得排程列表")
       return schedules
     
     @classmethod
@@ -57,10 +59,10 @@ class TaskFactory:
             max_instances=1,
             replace_existing=True,
           )
-            print("ID:"+ func_ID +" 新增成功")
+            logger.info("ID:"+ func_ID +" 新增成功")
             return True
         except Exception as e:
-            print("ID:"+ func_ID +" 新增失敗")
+            logger.error("ID:"+ func_ID +" 新增失敗")
             print(e)
             return None
     @classmethod
@@ -71,10 +73,10 @@ class TaskFactory:
              cls.get_scheduler()
 
             cls.scheduler.remove_job(func_ID)
-            print("ID:"+ func_ID +" 刪除成功")
+            logger.info("ID:"+ func_ID +" 刪除成功")
             return True
         except Exception as e:
-            print("ID:"+ func_ID +" 刪除失敗")
+            logger.error("ID:"+ func_ID +" 刪除失敗")
             print(e)
             return None
     @classmethod
@@ -84,10 +86,10 @@ class TaskFactory:
             if cls.scheduler is None:
              cls.get_scheduler()
             cls.scheduler.resume_job(func_ID)
-            print("ID:"+ func_ID +"恢復成功")
+            logger.info("ID:"+ func_ID +"恢復成功")
             return True
         except Exception as e:
-            print("ID:"+ func_ID +"恢復失敗")
+            logger.error("ID:"+ func_ID +"恢復失敗")
             print(e)
             return None
     @classmethod
@@ -97,15 +99,15 @@ class TaskFactory:
             if cls.scheduler is None:
              cls.get_scheduler()
             cls.scheduler.pause_job(func_ID)
-            print("ID:"+ func_ID +"  暫停成功")
+            logger.info("ID:"+ func_ID +"  暫停成功")
             return True
         except Exception as e:
-            print("ID:"+ func_ID +"  pause失敗")
+            logger.error("ID:"+ func_ID +"  pause失敗")
             print(e)
             return None
     @classmethod
     def init(cls):
-      print("啟動程式自動開啟")
+      logger.info("啟動程式自動開啟")
       CameraFactory.update_ALLcamera()
 
     

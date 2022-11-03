@@ -1,7 +1,9 @@
 from django.core.mail import send_mail as core_send_mail
 from django.core.mail import EmailMultiAlternatives
 import threading
-
+import logging
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 class MyEmailThread(threading.Thread):
     """多線程，發送郵件"""
     def __init__(self, subject, body, from_email, recipient_list, fail_silently, html_message):
@@ -21,7 +23,7 @@ class MyEmailThread(threading.Thread):
                 mail.attach_alternative(self.html_message, 'text/html')
             return mail.send(self.fail_silently)
         except:
-            print("寄送失敗")
+            logger.error("寄送失敗")
 
 # 創建線程 start 啓動線程活動，會調用run方法
 def my_send_mail(subject, body, from_email, recipient_list, fail_silently=False, html_message=None, *args, **kwargs):

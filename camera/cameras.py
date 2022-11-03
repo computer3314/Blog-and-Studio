@@ -11,6 +11,10 @@ from myemail import my_send_mail
 from PIL import Image,ImageSequence
 import datetime
 from camera.models import Camera,Move,File
+from dbcheck import db_retry
+import logging
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 class CameraException(Exception):
     message = None
 
@@ -87,7 +91,7 @@ class BaseCamera:
         self.set_defalut1()
         if self.cam is None:
              # 打開失敗
-            print("編號:" + self.Camera_id + " 找不到此相機")
+            logger.error("編號:" + self.Camera_id + " 找不到此相機")
             raise CameraException("編號:" + self.Camera_id + " 找不到此相機")
         # 自動建立影像截圖目錄
         self.outputFolder=self.outputBaseFolder+str(self.title)       
@@ -99,10 +103,10 @@ class BaseCamera:
          os.makedirs(self.outputVideoFolder)
         if self.cam is None:
               # 打開失敗
-            print("編號:" + self.Camera_id + " 找不到此相機")
+            logger.error("編號:" + self.Camera_id + " 找不到此相機")
             raise CameraException("編號:" + self.Camera_id + " 找不到此相機")
         elif self.isOpened is False:
-             print("編號:" + self.Camera_id + " 相機已經關閉")
+             logger.warn(msg)("編號:" + self.Camera_id + " 相機已經關閉")
              raise CameraException("編號:" + self.Camera_id + " 相機已經關閉")
         elif self.cam.isOpened():
             self.queue=queue_image
@@ -115,12 +119,12 @@ class BaseCamera:
             
         else:
             # 打開失敗
-            print("編號:" + self.Camera_id +" 相機訪問失敗")
+            logger.error("編號:" + self.Camera_id +" 相機訪問失敗")
             raise CameraException("編號:" + self.Camera_id +"相機訪問失敗")
     def  __del__(self):
         if self.cam is not None:
             self.cam.release()
-            print("編號:" + self.Camera_id +" 釋放相機")
+            logger.info("編號:" + self.Camera_id +" 釋放相機")
         if self.output is not None:
             self.output.release()
     def get_output_video(self,isStop:bool):
@@ -141,6 +145,10 @@ class BaseCamera:
             self.output=None
             if self.file_model is not None: #沒圖片後 若有file就增加結束時間
                     self.file_model.update(endtime=datetime.datetime.now())
+                    if self.file_model[0].starttime is None:
+                          os.remove(self.file_model[0].movie)#沒有時長  刪除檔案
+                          self.file_model.delete()
+                          logger.info("編號:" + self.Camera_id +" 刪除沒有時長的影片")
                     self.file_model=None #清空file物件  等等會建立新的
 
 
@@ -157,13 +165,15 @@ class BaseCamera:
         if os.path.isfile(filename):             # if already exists
             fn2 = filename[0:-4]+'_{0}.mp4'          # modify pattern to include a number
             count = 1
-            while os.path.isfile(fn2.format(count)): # increase number until file not exists
+            while True: # increase number until file not exists
+                if File.objects.filter(movie = fn2.format(count)).count() == 0:
+                    break
                 count += 1
-            print("寫入檔案:"+fn2.format(count))     
+            logger.info("寫入檔案:"+fn2.format(count))     
             return fn2.format(count)                 # return file with number in it
 
         else:          
-            print("寫入檔案:"+filename)                          # filename ok, return it
+            logger.info("寫入檔案:"+filename)                          # filename ok, return it
             return filename
 
     def set_defalut(self,camera_model: Camera):
@@ -184,10 +194,10 @@ class BaseCamera:
         self.title=camera_model.title
         self.Camera_id=camera_model.camera_id
         self.video_check=camera_model.videocheck
-        print("編號:" + self.Camera_id + " 相機基礎設定")
+        logger.info("編號:" + self.Camera_id + " 相機基礎設定")
     def set_defalut1(self):
         if self.cam is not None:
-            print("編號:" + self.Camera_id + " 相機長寬fps設定")
+            logger.info("編號:" + self.Camera_id + " 相機長寬fps設定")
             self.cam.set(cv2.CAP_PROP_FPS,int(self.fps))
             self.cam.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
             self.cam.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
@@ -203,14 +213,14 @@ class BaseCamera:
                 while True:
               
                     if self.cam is None:
-                        print("編號:" + self.Camera_id + " 相機讀取相機失敗")
+                        logger.error("編號:" + self.Camera_id + " 相機讀取相機失敗")
                         break
                     if self.isOpened is False:
-                        print("編號:" + self.Camera_id + " 相機已經關閉")
+                        logger.warn("編號:" + self.Camera_id + " 相機已經關閉")
                         break
                     ret, img = self.cam.read()
                     if not ret or img is None:
-                        print("編號:" + self.Camera_id + " 相機讀取相機圖片失敗")
+                        logger.warn("編號:" + self.Camera_id + " 相機讀取相機圖片失敗")
                         break
                         pass
                     else:
@@ -239,10 +249,11 @@ class BaseCamera:
                 if self.video_check:#確認是否錄影
                     nowvideo=self.nowoutVideo
                      #新增一筆紀錄到資料庫
-                self.camera_model.move.create(photo="%s/output_%s.jpg" % (self.outputFolder, result1),movie=nowvideo)
-                print("編號:" + self.Camera_id + " 相機在"+result1+"偵測到移動傳入資料庫")
-            
-           
+                db_retry(self.insertvalue(result1,nowvideo))
+                logger.info("編號:" + self.Camera_id + " 相機在"+result1+"偵測到移動傳入資料庫")
+    def insertvalue(self,result1,nowvideo):
+        move=self.camera_model.move.create(photo="%s/output_%s.jpg" % (self.outputFolder, result1),movie=nowvideo)
+        return move
     def send_mail(self,checkTime,url):
         #寄信
         try:             
@@ -250,16 +261,16 @@ class BaseCamera:
            message="監視器:" + str(self.title) + "在 " + checkTime + "偵測到移動!! url:"+url
            from_email=settings.EMAIL_HOST_USER
            my_send_mail(subject, message,from_email, ['computer30422@gmail.com'])
-           print("編號:" + self.Camera_id + "相機成功發送信件"+checkTime)
+           logger.info("編號:" + self.Camera_id + "相機成功發送信件"+checkTime)
         except:                 
-            print("編號:" + self.Camera_id +' 相機發送信件失敗'+checkTime)
+            logger.error("編號:" + self.Camera_id +' 相機發送信件失敗'+checkTime)
     def photo_scan(self,img,result1):
         #拍照
         try:                
            cv2.imwrite("%s/output_%s.jpg" % (self.outputFolder, result1), img)
-           print("編號:" + self.Camera_id + "相機成功儲存檔案"+result1)
+           logger.info("編號:" + self.Camera_id + "相機成功儲存檔案"+result1)
         except:                 
-            print("編號:" + self.Camera_id +' 相機儲存檔案失敗'+result1)
+            logger.error("編號:" + self.Camera_id +' 相機儲存檔案失敗'+result1)
     #時間相減
     def timeSecond(self,Second):
         now_time=datetime.datetime.now()
@@ -386,29 +397,29 @@ class CameraFactory:
         camera = cls.cameras.get(camera_id)
         
         if camera is None:
-            print("相機不存在")
+            logger.info("相機不存在")
             try:   
                 camera_model = Camera.objects.get(camera_id=camera_id)
                 queue_image = queue.Queue(maxsize=10)
                 base_camera = BaseCamera(camera_model=camera_model,queue_image=queue_image)
                 if base_camera is not None:
                     cls.cameras.setdefault(camera_id, base_camera)
-                    print("編號:" + camera_id + " 相機建立成功")
+                    logger.info("編號:" + camera_id + " 相機建立成功")
                     return cls.cameras.get(camera_id)
                 else:
-                    print("編號:" + camera_id + " 相機建立失敗")
+                    logger.warn("編號:" + camera_id + " 相機建立失敗")
                     return None
             except Camera.DoesNotExist:
                 # 相機不存在
-                print("資料庫不存在此相機 編號:"+camera_id)
+                logger.warn("資料庫不存在此相機 編號:"+camera_id)
                 return None
             except CameraException:
                 # 相機實例失敗
-                print("編號:" + camera_id + " 相機實例化失敗")
+                logger.error("編號:" + camera_id + " 相機實例化失敗")
                 return None
         else:      
             # 存在相機，直接返回
-            print("編號:" + camera_id + " 相機取得成功")
+            logger.info("編號:" + camera_id + " 相機取得成功")
             return camera
     @classmethod
     def update_camera(cls, camera: Camera):
@@ -416,56 +427,56 @@ class CameraFactory:
                 camera_id=camera.camera_id
                 oldcamera = cls.cameras.get(camera_id)
                 if oldcamera is None:
-                    print("新增編號:" + camera_id + " 相機開始")
+                    logger.info("新增編號:" + camera_id + " 相機開始")
                     try:
                         queue_image = queue.Queue(maxsize=10)
                         base_camera = BaseCamera(camera_model=camera,queue_image=queue_image)
                         if base_camera is not None:
                                 cls.cameras.setdefault(camera_id, base_camera)
-                                print("編號:" + camera_id + " 相機建立成功")
+                                logger.info("編號:" + camera_id + " 相機建立成功")
                         else:
-                                print("編號:" + camera_id + " 相機建立失敗")
+                                logger.error("編號:" + camera_id + " 相機建立失敗")
                     except Camera.DoesNotExist:
                         # 相機不存在
-                      print("資料庫不存在此相機 編號:"+camera_id)
+                      logger.warn=("資料庫不存在此相機 編號:"+camera_id)
                     except CameraException:
                     # 相機實例失敗
-                        print("編號:" + camera_id + " 相機實例化失敗")  
-                    print("新增編號:" + camera_id + " 相機結束") 
+                        logger.warn("編號:" + camera_id + " 相機實例化失敗")  
+                    logger.info("新增編號:" + camera_id + " 相機結束") 
                 else:
-                    print("更新編號:" + camera_id + " 相機開始")
+                    logger.info("更新編號:" + camera_id + " 相機開始")
                     if oldcamera.cam is None:
                         try:
                             queue_image = queue.Queue(maxsize=10)
                             base_camera = BaseCamera(camera_model=camera,queue_image=queue_image)
                             if base_camera is not None:
                                     cls.cameras.update({camera_id: base_camera})
-                                    print("編號:" + camera_id + " 相機建立成功")
+                                    logger.info("編號:" + camera_id + " 相機建立成功")
                             else:
-                                    print("編號:" + camera_id + " 相機建立失敗")
+                                    logger.error("編號:" + camera_id + " 相機建立失敗")
                         except Camera.DoesNotExist:
                         # 相機不存在
-                          print("資料庫不存在此相機 編號:"+camera_id)
+                          logger.warn("資料庫不存在此相機 編號:"+camera_id)
                         except CameraException:
                          # 相機實例失敗
-                           print("編號:" + camera_id + " 相機實例化失敗")  
+                           logger.error("編號:" + camera_id + " 相機實例化失敗")  
                     else:
                         oldcamera.close_file()#停止錄影
                         oldcamera.set_defalut(camera) #基本配置更新
                         oldcamera.set_defalut1() #基本配置更新           
                         oldcamera.get_output_video(False) #更新錄影檔案
-                    print("更新編號:" + camera_id + " 相機結束")
+                    logger.info("更新編號:" + camera_id + " 相機結束")
                     
         
     @classmethod
     def update_ALLcamera(cls):
            cameras = Camera.objects.all()
-           print("啟動所有相機實例開始")
+           logger.info("啟動所有相機實例開始")
            for camera in cameras:
              thread=threading.Thread(target= cls.update_camera,args=(camera,))
              thread.daemon = True
              thread.start()
-           print("啟動所有相機實例結束")
+           logger.info("啟動所有相機實例結束")
     @classmethod
     def loadingpic(cls):
         loadingPic="static/photo/loading.gif"

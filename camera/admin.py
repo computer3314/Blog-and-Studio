@@ -3,6 +3,9 @@ from .models import Camera,File
 from .models import Move
 from camera.cameras import CameraFactory, BaseCamera
 import threading
+import logging
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 # Register your models here.
 class CameraAdmin(admin.ModelAdmin):
     list_display = ('id','camera_id','camera_url', 'title','width')
@@ -13,8 +16,8 @@ class CameraAdmin(admin.ModelAdmin):
         thread.start()
         super().save_model(request, obj, form, change)
     def delete_queryset(self, request, queryset):
-        print('==========================delete_queryset==========================')
-        print(queryset)
+        logger.info('==========================delete_queryset==========================')
+        logger.info(queryset)
 
         """
         you can do anything here BEFORE deleting the object(s)
@@ -26,7 +29,7 @@ class CameraAdmin(admin.ModelAdmin):
         you can do anything here AFTER deleting the object(s)
         """
 
-        print('==========================delete_queryset==========================')
+        logger.onfo('==========================delete_queryset==========================')
 class MoveAdmin(admin.ModelAdmin):
     list_display = ('id','camera','movetime', 'photo','movie')
     search_fields = ('id','camera','movetime','photo','movie')

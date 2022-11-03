@@ -135,7 +135,7 @@ USE_L10N = True
 
 USE_TZ = False
 
-PRO_HOST = 'https://happy.shengda.ga/'
+PRO_HOST = 'http://127.0.0.1:8000/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -148,3 +148,60 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+# 給ADMINS發送郵件需要配置
+ADMINS = (
+ ('admin_name','compter30422@gmail.com'),
+)
+MANAGERS = ADMINS
+# 創建log文件的文件夾
+LOG_DIR = os.path.join(BASE_DIR, "logs")
+
+# 基本配置，可以復用的
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "formatters": { # 定義瞭兩種日志格式
+        "verbose": { # 標準
+            "format": "%(levelname)s %(asctime)s %(module)s "
+            "%(process)d %(thread)d %(message)s"
+        },
+        'simple': { # 簡單
+            'format': '[%(levelname)s][%(asctime)s][%(filename)s:%(lineno)d]%(message)s'
+        },
+    },
+    "handlers": { # 定義瞭三種日志處理方式
+        "mail_admins": { # 隻有debug=False且Error級別以上發郵件給admin
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+        'file': { # Info級別以上保存到日志文件
+            'level': 'INFO', 
+            'class': 'logging.handlers.RotatingFileHandler',  # 保存到文件，根據文件大小自動切
+            'filename': os.path.join(LOG_DIR,"info.log"),  # 日志文件
+            'maxBytes': 1024 * 1024 * 10,  # 日志大小 10M
+            'backupCount': 2,  # 備份數為 2
+            'formatter': 'simple', # 簡單格式
+            'encoding': 'utf-8',
+        },
+        "console": { # 打印到終端console
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "root": {"level": "INFO", "handlers": ["console"]},
+    "loggers": {
+        "django.request": { # Django的request發生error會自動記錄
+            "handlers": ["mail_admins"],
+            "level": "ERROR",
+            "propagate": True,  # 向不向更高級別的logger傳遞
+        },
+        "django.security.DisallowedHost": { # 對於不在 ALLOWED_HOSTS 中的請求不發送報錯郵件
+            "level": "ERROR",
+            "handlers": ["console", "mail_admins"],
+            "propagate": True,
+        },
+    },
+}

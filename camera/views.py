@@ -1,4 +1,7 @@
 from django.http import HttpResponse,HttpResponseNotFound,StreamingHttpResponse,JsonResponse
+import io
+import re
+import mimetypes
 from django.shortcuts import render
 from .cameras import CameraFactory, BaseCamera
 from django.conf import settings
@@ -6,12 +9,17 @@ from PIL import Image,ImageSequence
 import numpy as np
 import cv2
 import time
+import zipfile
 import datetime
 from .models import Move,Camera,File
 import os
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 import json
 import shutil
+from wsgiref.util import FileWrapper
+import logging
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 def gen_display(camera: BaseCamera,role,background:bool):
     """
    直播影片生成器。
@@ -27,6 +35,9 @@ def gen_display(camera: BaseCamera,role,background:bool):
                    b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n')
     else:
         while True:
+            if camera is None:
+                logger.info("影片")
+                break
             frame = camera.get_frame(role)
             if frame is not None:     
                 if background is True:
@@ -41,7 +52,7 @@ def gen_display(camera: BaseCamera,role,background:bool):
                 
             else:
                 break
-        print("影片播放完畢")
+        logger.info("影片播放完畢")
         while True:
              for i in img_list:
                     time.sleep(0.1)
@@ -144,7 +155,7 @@ def get_videoAviToMp4(request):
             oldfile=CameraFactory.get_cameranowVideo(camera_id)
             if oldfile is not None and oldfile != videoUrl:
                 os.remove(videoUrl)#不是運行中的檔案也沒有時長 所以刪除
-                print("已刪除"+videoUrl)
+                logger.info("已刪除"+videoUrl)
             else:
                 CameraFactory.get_cameratoVideo(camera_id, True)#先暫時關閉攝影機以便讀去影片
                 static="static/my_output/intime" #專門放置及時觀看影片
@@ -180,21 +191,21 @@ def get_moves(filename:str):
     try:
         file=File.objects.get(movie=filename)
         if file is  None:
-            print("資料庫查無檔案:"+filename)
+            logger.info("資料庫查無檔案:"+filename)
         else:
             moves=file.get_moves()
             if moves is not None:
                 if file.starttime is None or file.endtime is None:
-                    print(filename+"前後時間有問題 無法取得偵測時段")
+                    logger.info(filename+"前後時間有問題 無法取得偵測時段")
                 else:
                     time=get_video_duration(filename)
-                    print(filename+"影片時長"+str(time))
-                    print(filename+"取得移動列表")
-                    print(filename+"開始時間:")
-                    print(file.starttime)
-                    print(filename+"結束時間:")
-                    print(file.endtime)
-                    print(filename+"移動偵測列表:")
+                    logger.info(filename+"影片時長"+str(time))
+                    logger.info(filename+"取得移動列表")
+                    logger.info(filename+"開始時間:")
+                    logger.info(file.starttime)
+                    logger.info(filename+"結束時間:")
+                    logger.info(file.endtime)
+                    logger.info(filename+"移動偵測列表:")
                     start_timer=str(file.starttime)
                     head,sep,tail=start_timer.partition('.')
                     start_timer = datetime.datetime.strptime(head, r"%Y-%m-%d %H:%M:%S")
@@ -208,22 +219,82 @@ def get_moves(filename:str):
                         "text": str(end_time)
                         })
             else:
-                print(filename+"無移動列表")
+                logger.info(filename+"無移動列表")
     except File.DoesNotExist:
              file = None
     return move_list
 
 def download_mp4(request):
+    #解壓縮檔案提供下載
     file_path = request.GET.get('file_path')
-    print(file_path)
+    logger.info(file_path)
     if os.path.exists(file_path):    
-        with open(file_path, 'rb') as fh:    
-            response = HttpResponse(fh.read(),  content_type="video/mp4")    
+            basename = os.path.basename(file_path)
+        # with open(file_path, 'rb') as fh:    
+        #     response = HttpResponse(fh.read(),  content_type="video/mp4")    
           
-            response['Content-Disposition'] = \
-            "attachment; filename=\"%s\"; filename*=utf-8''%s" % \
-            (file_path, file_path)   
+        #     response['Content-Disposition'] = \
+        #     "attachment; filename=\"%s\"; filename*=utf-8''%s" % \
+        #     (file_path, file_path)  
+        #             return response 
+                # 创建BytesIO
+            s = io.BytesIO()
+            
+            # 使用BytesIO生成壓縮文件文件
+            zip = zipfile.ZipFile(s, 'w')
+            
+            # 把下载文件寫入壓縮檔
+            zip.write(file_path,arcname=basename,compress_type= zipfile.ZIP_DEFLATED,compresslevel=-1)
+            img1 = zip.getinfo(basename)
+            # 關閉文件
+            zip.close()
+            # 回到初始位置，若沒設定zip會壞掉
+            s.seek(0)
+            
+            wrapper = FileWrapper(s)
+            response = HttpResponse(wrapper, content_type='application/zip')
+            response['Content-Disposition'] = 'attachment; filename={}.zip'.format(datetime.datetime.now().strftime("%Y-%m-%d"))
             return response
     return HttpResponseNotFound("查無此檔案")   
+def stream_video(request):
+  """用響應式串流"""
+  path = request.GET.get('file_path')
+  logger.info(path)
+  range_header = request.META.get('HTTP_RANGE', '').strip()
+  range_re = re.compile(r'bytes\s*=\s*(\d+)\s*-\s*(\d*)', re.I)
+  range_match = range_re.match(range_header)
+  size = os.path.getsize(path)
+  content_type, encoding = mimetypes.guess_type(path)
+  content_type = content_type or 'application/octet-stream'
+ 
+  if range_match:
+    first_byte, last_byte = range_match.groups()
+    first_byte = int(first_byte) if first_byte else 0
+    last_byte = first_byte + 1024 * 1024 * 8    # 8M 每片,響應最大體積
+    if last_byte >= size:
+      last_byte = size - 1
+    length = last_byte - first_byte + 1
+    resp = StreamingHttpResponse(file_iterator(path, offset=first_byte, length=length), status=206, content_type=content_type)
+    resp['Content-Length'] = str(length)
+    resp['Content-Range'] = 'bytes %s-%s/%s' % (first_byte, last_byte, size)
+  else:
+
+    #不是以視訊劉方式的獲取時，已生成器返回文件，節省內存
+    resp = StreamingHttpResponse(FileWrapper(open(path, 'rb')), content_type=content_type)
+    resp['Content-Length'] = str(size)
+  resp['Accept-Ranges'] = 'bytes'
+  return resp
+def file_iterator(file_name, chunk_size=8192, offset=0, length=None):
+  with open(file_name, "rb") as f:
+    f.seek(offset, os.SEEK_SET)
+    remaining = length
+    while True:
+      bytes_length = chunk_size if remaining is None else min(remaining, chunk_size)
+      data = f.read(bytes_length)
+      if not data:
+        break
+      if remaining:
+        remaining -= len(data)
+      yield data
 
  

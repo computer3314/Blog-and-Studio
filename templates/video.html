@@ -31,9 +31,10 @@
 });
   //基礎設定
    const fileurl=document.getElementById('fileurl').value
+   const apifile="/stream_video/?file_path="+fileurl
    const myVideo = videojs('myVideo', {
        language: 'zh-TW', // 設定使用語系為 zh-TW
-       sources:[{ src: fileurl}],
+       sources:[{ src: apifile}],
         bigPlayButton: true,
         textTrackDisplay: false,
         posterImage: false,
