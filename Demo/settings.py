@@ -12,19 +12,25 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from .utils import load_env 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+get_env = os.environ.get
+
+load_env(BASE_DIR / "../.env") #here you indicate where your .env file is
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a4o=!-0s3&6bh+ox5l8+v)jxa%m3+87$pd*5vlyg6t62oa--59'
+SECRET_KEY =  get_env("DJANGO_SECRET_KEY", "secret")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG =  get_env("DEBUG", True)
+PRO_HOST = get_env("PRO_HOST", 'http://127.0.0.1:8000/')
+USE_TZ = get_env("USE_TZ", False)
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]','happy.shengda.ga']
 
 # Application definition
@@ -44,8 +50,7 @@ INSTALLED_APPS = [
     'django_apscheduler',
     
 ]
-#Auth登入畫面
-LOGIN_URL='/admin/login'
+LOGIN_REDIRECT_URL = "/camera"
 #排程使用參數
 APSCHEDULER_DATETIME_FORMAT =  "N j, Y, f:s a"  # Default
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
@@ -133,9 +138,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
 
-PRO_HOST = 'http://127.0.0.1:8000/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 

@@ -18,49 +18,78 @@ import json
 import shutil
 from wsgiref.util import FileWrapper
 import logging
+from .filewapper import stream
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
-def gen_display(camera: BaseCamera,role,background:bool):
-    """
-   直播影片生成器。
-    """
-    img_list=CameraFactory.loadingpic()
-    if (camera is None or camera.cam is None) and background is not True:
+def turn_makeFrame(camera: BaseCamera,role,background:bool,camera_id,loading=None,makeFrame=None):
         while True:
-         for i in img_list:
-            time.sleep(0.1)
-            img = cv2.resize(i, (0, 0), fx=0.25, fy=0.25)
-            ret, jpeg = cv2.imencode('.jpeg', img)
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n')
-    else:
-        while True:
-            if camera is None:
-                logger.info("影片")
+            if camera is None  or camera.cam is None:
+                logger.info("查無相機")
+                loading=True
+                makeFrame=False
                 break
             frame = camera.get_frame(role)
-            if frame is not None:     
+            if frame is not None:
                 if background is True:
                      #網頁背景執行，比較不會斷線
                     frame = str(time.time()).encode("utf-8")
+                    if camera is None or camera.cam is None:
+                        logger.info("相機已消失")
+                        loading=True
+                        makeFrame=False
+                        break
                     yield (b'--frame\r\n'
                                 b'Content-Type: text/plain;charset=utf-8\r\n\r\n' + frame + b'\r\n\r\n')  
                 else:
                      #網頁前端執行，http有時候會斷開
+                    if camera is None or camera.cam is None:
+                        logger.info("相機已消失")
+                        loading=True
+                        makeFrame=False
+                        break        
                     yield (b'--frame\r\n'
-                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-                
+                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')   
             else:
-                break
-        logger.info("影片播放完畢")
+                logger.info("讀取不到影片")
+        frame = str(time.time()).encode("utf-8")
+        yield (b'--frame\r\n'
+                                b'Content-Type: text/plain;charset=utf-8\r\n\r\n' + frame + b'\r\n\r\n') 
+def turn_loading(camera: BaseCamera,role,background:bool,camera_id,loading=None,makeFrame=None):
+        Nimg=CameraFactory.loadingpic()
+        logger.info("使用相機關閉中圖片")
         while True:
-             for i in img_list:
-                    time.sleep(0.1)
-                    img = cv2.resize(i, (0, 0), fx=0.25, fy=0.25)
-                    ret, jpeg = cv2.imencode('.jpeg', img)
-                    yield (b'--frame\r\n'
-                        b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n')
-                
+                truecamera = CameraFactory.check_camera(camera_id)
+                if truecamera is not None and truecamera.cam is not None:
+                    camera=truecamera
+                    makeFrame=True
+                    loading=False
+                    break
+                ret, jpeg = cv2.imencode('.jpeg', Nimg)
+                yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n')
+        frame = str(time.time()).encode("utf-8")
+        yield (b'--frame\r\n'
+                                b'Content-Type: text/plain;charset=utf-8\r\n\r\n' + frame + b'\r\n\r\n')
+def gen_display(camera: BaseCamera,role,background:bool,camera_id,loading=None,makeFrame=None):
+    """
+   直播影片生成器。
+    """
+    
+    logger.info("開始顯示直播")
+    truecamera: BaseCamera=None
+    loading=loading
+    makeFrame=makeFrame
+    if loading is None and makeFrame is None:
+        if camera is None or camera.cam is None:
+            loading=True
+            makeFrame=False
+        else:
+            makeFrame=True
+            loading=False
+    if loading is True:
+       return turn_loading(camera,role,background,camera_id)
+    if makeFrame is True:
+       return turn_makeFrame(camera,role,background,camera_id)
 def video(request):
     """
     影片流路由。將其放入img標記的src屬性中。
@@ -78,7 +107,7 @@ def video(request):
         background=True
     camera: BaseCamera = CameraFactory.get_camera(camera_id)
     #使用流傳輸傳輸影片流
-    reponse=StreamingHttpResponse(gen_display(camera,role,background), content_type='multipart/x-mixed-replace; boundary=frame')
+    reponse=StreamingHttpResponse(gen_display(camera,role,background,camera_id), content_type='multipart/x-mixed-replace; boundary=frame')
     reponse['Cache-Control'] = 'no-cache'
     return reponse
 def video_view(request):
@@ -244,7 +273,7 @@ def download_mp4(request):
             zip = zipfile.ZipFile(s, 'w')
             
             # 把下载文件寫入壓縮檔
-            zip.write(file_path,arcname=basename,compress_type= zipfile.ZIP_DEFLATED,compresslevel=-1)
+            zip.write(file_path,arcname=basename,compress_type= zipfile.ZIP_DEFLATED)
             img1 = zip.getinfo(basename)
             # 關閉文件
             zip.close()
@@ -260,41 +289,7 @@ def stream_video(request):
   """用響應式串流"""
   path = request.GET.get('file_path')
   logger.info(path)
-  range_header = request.META.get('HTTP_RANGE', '').strip()
-  range_re = re.compile(r'bytes\s*=\s*(\d+)\s*-\s*(\d*)', re.I)
-  range_match = range_re.match(range_header)
-  size = os.path.getsize(path)
-  content_type, encoding = mimetypes.guess_type(path)
-  content_type = content_type or 'application/octet-stream'
- 
-  if range_match:
-    first_byte, last_byte = range_match.groups()
-    first_byte = int(first_byte) if first_byte else 0
-    last_byte = first_byte + 1024 * 1024 * 8    # 8M 每片,響應最大體積
-    if last_byte >= size:
-      last_byte = size - 1
-    length = last_byte - first_byte + 1
-    resp = StreamingHttpResponse(file_iterator(path, offset=first_byte, length=length), status=206, content_type=content_type)
-    resp['Content-Length'] = str(length)
-    resp['Content-Range'] = 'bytes %s-%s/%s' % (first_byte, last_byte, size)
-  else:
+  return stream(request,path)
 
-    #不是以視訊劉方式的獲取時，已生成器返回文件，節省內存
-    resp = StreamingHttpResponse(FileWrapper(open(path, 'rb')), content_type=content_type)
-    resp['Content-Length'] = str(size)
-  resp['Accept-Ranges'] = 'bytes'
-  return resp
-def file_iterator(file_name, chunk_size=8192, offset=0, length=None):
-  with open(file_name, "rb") as f:
-    f.seek(offset, os.SEEK_SET)
-    remaining = length
-    while True:
-      bytes_length = chunk_size if remaining is None else min(remaining, chunk_size)
-      data = f.read(bytes_length)
-      if not data:
-        break
-      if remaining:
-        remaining -= len(data)
-      yield data
 
  

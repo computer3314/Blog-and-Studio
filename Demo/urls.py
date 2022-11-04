@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
+from django.conf.urls import include
 from post.views import aboutget
 from camera.views import video,video_view,videoAdmin_view,bookhandle,get_videoAviToMp4,download_mp4,stream_video
 from django .contrib.auth.decorators import login_required
 from task.task import TaskFactory
 import sys
+from django.contrib.auth import views
 #引入排程包
 from task.views import job_add_task,job_del_task,job_pause_task,job_resume_task,job_list_task
 urlpatterns = [
@@ -36,7 +38,9 @@ urlpatterns = [
     path('downloadmp4/', login_required(download_mp4)),
     path('cameraAdmin', login_required(videoAdmin_view)),  
     path('stream_video/', login_required(stream_video)),
-    
+    path('accounts/login/', views.LoginView.as_view()),
+    path('accounts/logout/', views.LogoutView.as_view(template_name='registration/logout.html')),
+    path('accounts/', include(('django.contrib.auth.urls', 'django.contrib.auth'), namespace='login')),
     re_path(r'^move', login_required(bookhandle), name="move")                                         
 ]
 #這邊觸發Server執行後動作

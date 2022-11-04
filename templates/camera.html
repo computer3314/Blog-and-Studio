@@ -8,25 +8,35 @@
 </style>
     <!-- 顯示影片-->
     <div align="center"><img src="{{ url }}" id="video"></div>
-   
+    <input type="hidden" id="clientground" name="variable" value="{{ url }}">
     <input type="hidden" id="urlbackground" name="variable" value="{{ urlbackground }}">
 </body>
 <script>
     //網頁背景執行，不容易斷線
-    var myVar = document.getElementById("urlbackground").value;
-    if(myVar!=""){
-    
+    var clientground = document.getElementById("clientground").value;
+    var urlbackground = document.getElementById("urlbackground").value;
+    if(clientground!=""){
         var xhr = new XMLHttpRequest();
         xhr.multipart = true; 
-        xhr.open('GET', myVar);
+        xhr.open('GET', clientground);
         xhr.onreadystatechange = function(){
             if (xhr.readyState == 4){
-                console.log(xhr.responseText);
+                console.log("狀態已轉換，重整頁面")
                 window.location.replace(location.href)
             }
         };
         xhr.send(null);
     }
-   
+    if(urlbackground!=""){
+        var xhr = new XMLHttpRequest();
+        xhr.multipart = true; 
+        xhr.open('GET', urlbackground);
+        xhr.onreadystatechange = function(){
+            if (xhr.readyState == 4){
+                console.log("狀態已轉換")
+            }
+        };
+        xhr.send(null);
+    }
 </script>
 {% endblock %}

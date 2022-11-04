@@ -58,7 +58,6 @@ class BaseCamera:
     #計算幀數
     counter = 0
     fps = 10
-    tfps = 10
     start_time=time.time()
     #計算目前秒數
     min = '2022-01-01 8:01:01'
@@ -78,11 +77,14 @@ class BaseCamera:
     #畫面平均值
     avg=0
     avg_float=0
-    #字體位置
+    #直播中字體位置
     #時間
     org = (0,0)
     #fps
     org1 = (0,0)   
+    #錄影中
+    org2 = (0,0) 
+    recording=False
     # 相機基礎類
     def __init__(self, camera_model: Camera,queue_image:queue):
         self.set_defalut(camera_model)
@@ -184,12 +186,12 @@ class BaseCamera:
         self.height=camera_model.heigth
         self.org = (10,int(self.height/24))
         self.org1 = (int(self.width*0.8),int(self.height/24))
+        self.org2 = (1200,int(self.height/24))
         self.fast=camera_model.fast
         self.moveNotice=camera_model.moveNotice
         self.mail_check=camera_model.mailCheck
         self.scan_check=camera_model.scancheck
         self.fps=camera_model.fps
-        self.tfps=int(1000/camera_model.fps)
         self.isOpened=camera_model.isOpened
         self.title=camera_model.title
         self.Camera_id=camera_model.camera_id
@@ -233,7 +235,7 @@ class BaseCamera:
                         else:
                             # 插入最後面
                             self.queue.put(img)
-
+                
     def move_notice(self,img):
        # 移動偵測
             check=self.timeSecond(self.moveNotice)#確認是否達到偵測時間
@@ -309,8 +311,11 @@ class BaseCamera:
         now_time=datetime.datetime.now()
         now_time=now_time.strftime("%Y-%m-%d %H:%M:%S")
         text = "FPS :"+str(self.fps)
+        recording="REC"
         cv2.putText(image, now_time, self.org, fontFace, fontScale, color, thickness, lineType)
         cv2.putText(image, text, self.org1, fontFace, fontScale, color, thickness, lineType)
+        if self.recording:
+            cv2.putText(image, recording, self.org2, fontFace, fontScale, color, thickness, lineType)
     def get_move(self,img):
         if self.cam is not None and self.cam.isOpened():
             try:
@@ -360,8 +365,8 @@ class BaseCamera:
                 if self.file_model is not None: #若有檔案sql 就增加結束時間
                     self.file_model.update(starttime=datetime.datetime.now())
                     self.fileinsert+=1
+            self.recording=True
             self.output.write(img)#寫入影片
-            cv2.waitKey(self.tfps)
     def get_frame(self,role):
         """
         取得畫面給前端看
@@ -372,6 +377,7 @@ class BaseCamera:
             return None
         else:                
             self.makefps(img)
+            self.recording=False
             if role == "admin":
                 self.get_move(img)
                 self.writer_video(img)
@@ -404,7 +410,7 @@ class CameraFactory:
                 base_camera = BaseCamera(camera_model=camera_model,queue_image=queue_image)
                 if base_camera is not None:
                     cls.cameras.setdefault(camera_id, base_camera)
-                    logger.info("編號:" + camera_id + " 相機建立成功")
+                    logger.info("編號:"  + camera_id + " 相機建立成功")
                     return cls.cameras.get(camera_id)
                 else:
                     logger.warn("編號:" + camera_id + " 相機建立失敗")
@@ -421,6 +427,14 @@ class CameraFactory:
             # 存在相機，直接返回
             logger.info("編號:" + camera_id + " 相機取得成功")
             return camera
+    @classmethod 
+    def check_camera(cls, camera_id: int):
+         # 通過ID取得相機    #檢查相機是否存在
+        camera = cls.cameras.get(camera_id)
+        if camera is None:
+            return None
+        else:
+             return camera
     @classmethod
     def update_camera(cls, camera: Camera):
             
@@ -479,24 +493,16 @@ class CameraFactory:
            logger.info("啟動所有相機實例結束")
     @classmethod
     def loadingpic(cls):
-        loadingPic="static/photo/loading.gif"
-        img_list = []  
-        gif = Image.open(loadingPic)                # 讀取動畫圖檔   
-        gif.resize((30, 30), Image.ANTIALIAS)
-        for frame in ImageSequence.Iterator(gif):
-         frame = frame.convert('RGB')    
-         opencv_img = np.array(frame, dtype=np.uint8)   # 轉換成 numpy 陣列
-         opencv_img = cv2.cvtColor(opencv_img, cv2.COLOR_RGBA2BGRA)  # 顏色從 RGBA 轉換為 BGRA
-         cv2.rectangle(opencv_img,(100,120),(300,180),(0,0,0),-1)
-         img_list.append(opencv_img)                    # 利用串列儲存該圖片資訊
-        return img_list
+        loadingPic="static/assets/img/close.png"
+        im = cv2.imread(loadingPic, cv2.IMREAD_UNCHANGED)
+        return im
     @classmethod
     def get_cameratoVideo(cls, camera_id: int,isStop:bool):
         # 通過ID取得相機
         camera = cls.cameras.get(camera_id)
         if camera is not None:
             if isStop:
-                camera.close_file()
+                camera.close_file()#關閉目前錄影
             else:
                 camera.get_output_video(False)#重新抓取錄影video
         

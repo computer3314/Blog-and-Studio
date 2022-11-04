@@ -1,5 +1,4 @@
-/my_output/*
-*.jpg
+static/my_output/*
 *.pyc
 *.sqlite3
 *.mp4
