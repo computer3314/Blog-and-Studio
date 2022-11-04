@@ -39,21 +39,21 @@
                 </ul>
                 
             </div>
-            <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav mr-auto">
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav">
       {% if user.is_authenticated %}
       
       <li class="nav-item">
-        <a class="nav-link" href="/accounts/logout">Logout</a>
+        <a class="nav-link js-scroll-trigger" href="/accounts/logout">Logout</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Welcome, {{user.username}}</a>
+        <a class="nav-link js-scroll-trigger" href="#">Welcome, {{user.username}}</a>
       </li>
 
       {% else %}
 
       <li class="nav-item">
-        <a class="nav-link" href="/accounts/login">Login</a>
+        <a class="nav-link js-scroll-trigger" href="/accounts/login">Login</a>
       </li>
 
       {% endif %}
@@ -61,7 +61,10 @@
   </div>
         </nav>
         <!-- Page Content-->
-           {% block body %}{% endblock %}
+        <div style="margin-top: 25px;">
+          {% block body %}{% endblock %}
+        </div>
+          
     </body>
 
         <!-- Bootstrap core JS-->

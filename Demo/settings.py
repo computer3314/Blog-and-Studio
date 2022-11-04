@@ -12,25 +12,18 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-from .utils import load_env 
+from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-get_env = os.environ.get
-
-load_env(BASE_DIR / "../.env") #here you indicate where your .env file is
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY =  get_env("DJANGO_SECRET_KEY", "secret")
+SECRET_KEY =  os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =  get_env("DEBUG", True)
-PRO_HOST = get_env("PRO_HOST", 'http://127.0.0.1:8000/')
-USE_TZ = get_env("USE_TZ", False)
+DEBUG =  bool(os.environ.get("DEBUG"))
+
+PRO_HOST = os.environ.get("PRO_HOST")
+
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]','happy.shengda.ga']
 
 # Application definition
@@ -138,6 +131,7 @@ USE_I18N = True
 
 USE_L10N = True
 
+USE_TZ = bool(os.environ.get("USE_TZ"))
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

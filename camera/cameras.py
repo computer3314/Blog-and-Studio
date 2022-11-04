@@ -57,6 +57,9 @@ class BaseCamera:
     videostart=None
     #計算幀數
     counter = 0
+    #錄影圖樣顯示頻率
+    recordcount=0
+    recordLimit=10
     fps = 10
     start_time=time.time()
     #計算目前秒數
@@ -365,7 +368,11 @@ class BaseCamera:
                 if self.file_model is not None: #若有檔案sql 就增加結束時間
                     self.file_model.update(starttime=datetime.datetime.now())
                     self.fileinsert+=1
-            self.recording=True
+            if self.recordcount == self.recordLimit:
+                self.recording=True
+                self.recordcount=0
+            else:
+                self.recordcount+=1
             self.output.write(img)#寫入影片
     def get_frame(self,role):
         """
