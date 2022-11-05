@@ -290,7 +290,6 @@ def download_mp4(request):
 def stream_video(request):
   """用響應式串流"""
   path = request.GET.get('file_path')
-  logger.info(path)
   return stream(request,path)
 def get_cameras(request):
   """用響應式串流"""

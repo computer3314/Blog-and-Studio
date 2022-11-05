@@ -14,6 +14,9 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from distutils.util import strtobool
+# Suppress broken pipe errors
+from django.core.servers.basehttp import WSGIServer
+WSGIServer.handle_error = lambda *args, **kwargs: None
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, '.env'))
@@ -25,7 +28,7 @@ DEBUG =  bool(strtobool(os.environ.get('DEBUG', 'True')))
 
 PRO_HOST = os.environ.get("PRO_HOST")
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]','happy.shengda.ga','192.168.18.18']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','192.168.18.9', '[::1]','happy.shengda.ga','192.168.18.18']
 
 # Application definition
 
@@ -168,9 +171,17 @@ LOGGING = {
         },
         'collect': {
             'format': '%(message)s'
+        },
+         'django.server': {
+            '()': 'django.utils.log.ServerFormatter',
+            'format': '[{server_time}] {message}',
+            'style': '{',
         }
     },
     'filters': {
+         'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
@@ -217,17 +228,28 @@ LOGGING = {
             'backupCount': 5,
             'formatter': 'collect',
             'encoding': "utf-8"
+        },
+        'django.server': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'django.server',
         }
     },
     'loggers': {
         '': {  # 默認的logger應用如下配置
-            'handlers': ['SF', 'console', 'error'],  # 上線之後可以把'console'移除
+            'handlers': ['SF', 'error'],  # 上線之後可以把'console'移除
             'level': 'DEBUG',
             'propagate': True,
         },
         'collect': { # 名為 'collect'的logger還單獨處理
             'handlers': ['console', 'collect'],
             'level': 'INFO',
-        }
+        },
+        'django.server': {
+            'handlers': ['django.server'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        
     },
 }
