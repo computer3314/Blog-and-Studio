@@ -5,3 +5,4 @@ static/my_output/*
 *.sqlite3
 static/node_modules/*
 
+.env
