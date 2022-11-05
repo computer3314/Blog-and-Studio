@@ -142,15 +142,17 @@ def bookhandle(request):
              movedic=Move.objects.get(camera=camera_model).order_by('-movetime')
         except:
              movedic = Move.objects.all().order_by('-movetime')
-    paginator=Paginator(movedic,10)    #每頁顯示2條
+    paginator=Paginator(movedic,20)    #每頁顯示10條
     page=request.GET.get('page')        #前段請求的頁,比如點選'下一頁',該頁以變數'page'表示
    
     try:
       move_obj=paginator.page(page) #獲取前端請求的頁數
+      move_obj.adjusted_elided_pages = paginator.get_elided_page_range(page)
     except PageNotAnInteger:
         move_obj=paginator.page(1)   #如果前端輸入的不是數字,就返回第一頁
     except EmptyPage:
         move_obj=paginator.page(paginator.num_pages)   #如果前端請求的頁碼超出範圍,則顯示最後一頁.獲取總頁數,返回最後一頁.比如共10頁,則返回第10頁.
+    
     return render(request, 'move.html',{'move_list':move_obj})
     # Create your views here.    
 def get_videoAviToMp4(request):

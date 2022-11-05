@@ -154,10 +154,10 @@ class BaseCamera:
                     self.file_model.update(endtime=datetime.datetime.now())
                     self.output.release()
                     self.output=None
-                    if self.file_model[0].starttime is None:
-                          os.remove(self.file_model[0].movie)#沒有時長  刪除檔案
-                          self.file_model.delete()
-                          logger.info("編號:" + self.Camera_id +" 刪除沒有時長的影片")
+                    # if self.file_model[0].starttime is None:
+                    #       os.remove(self.file_model[0].movie)#沒有時長  刪除檔案
+                    #       self.file_model.delete()
+                    #       logger.info("編號:" + self.Camera_id +" 刪除沒有時長的影片")
                     self.file_model=None #清空file物件  等等會建立新的
                        
 
@@ -177,7 +177,8 @@ class BaseCamera:
             count = 1
             while True: # increase number until file not exists
                 if db_retry(File.objects.filter(movie = fn2.format(count)).count()) == 0:
-                    break
+                    if(os.path.isfile(fn2.format(count)) is False):
+                      break
                 count += 1
             logger.info("寫入檔案:"+fn2.format(count))     
             return fn2.format(count)                 # return file with number in it
