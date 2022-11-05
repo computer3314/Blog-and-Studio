@@ -1,0 +1,1 @@
+[2022-11-05 20:35:22,125][Thread-6 (process_request_thread):46660][task_id:camera.views][views.py:206][ERROR][[WinError 2] 系統找不到指定的檔案。: 'static/my_output/Happy2video/output_2022-11-05_101.mp4']

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from distutils.util import strtobool
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, '.env'))
@@ -20,11 +21,11 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY =  os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =  bool(os.environ.get("DEBUG"))
+DEBUG =  bool(strtobool(os.environ.get('DEBUG', 'True')))
 
 PRO_HOST = os.environ.get("PRO_HOST")
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]','happy.shengda.ga']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]','happy.shengda.ga','192.168.18.18']
 
 # Application definition
 
@@ -131,7 +132,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = bool(os.environ.get("USE_TZ"))
+USE_TZ =  bool(strtobool(os.environ.get('USE_TZ', 'True')))
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -151,54 +152,82 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 # 創建log文件的文件夾
-LOG_DIR = os.path.join(BASE_DIR, "logs")
+BASE_LOG_DIR = os.path.join(BASE_DIR, "logs")
 
 # 基本配置，可以復用的
 LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
-    "formatters": { # 定義瞭兩種日志格式
-        "verbose": { # 標準
-            "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '[%(asctime)s][%(threadName)s:%(thread)d][task_id:%(name)s][%(filename)s:%(lineno)d]'
+                      '[%(levelname)s][%(message)s]'
         },
-        'simple': { # 簡單
+        'simple': {
             'format': '[%(levelname)s][%(asctime)s][%(filename)s:%(lineno)d]%(message)s'
         },
+        'collect': {
+            'format': '%(message)s'
+        }
     },
-    "handlers": { # 定義瞭三種日志處理方式
-        "mail_admins": { # 隻有debug=False且Error級別以上發郵件給admin
-            "level": "ERROR",
-            "filters": ["require_debug_false"],
-            "class": "django.utils.log.AdminEmailHandler",
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
         },
-        'file': { # Info級別以上保存到日志文件
-            'level': 'INFO', 
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],  # 只有在Django debug為True時才在屏幕打印日誌
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'SF': {
+            'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',  # 保存到文件，根據文件大小自動切
-            'filename': os.path.join(LOG_DIR,"info.log"),  # 日志文件
-            'maxBytes': 1024 * 1024 * 10,  # 日志大小 10M
-            'backupCount': 2,  # 備份數為 2
-            'formatter': 'simple', # 簡單格式
+            'filename': os.path.join(BASE_LOG_DIR, "SF_info.log"),  # 日志文件
+            'maxBytes': 1024 * 1024 * 50,  # 日志大小 50M
+            'backupCount': 3,  # 備份為3  xx.log --> xx.log.1 --> xx.log.2 --> xx.log.3
+            'formatter': 'standard',
             'encoding': 'utf-8',
         },
-        "console": { # 打印到終端console
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "verbose",
+        'TF': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',  
+            'filename': os.path.join(BASE_LOG_DIR, "TF_info.log"),  # 日志文件
+            'backupCount': 3,  # 備份為3  xx.log --> xx.log.2018-08-23_00-00-00 --> xx.log.2018-08-24_00-00-00 --> ...
+            'when': 'D',  #每天一切， 可選值有S/秒 M/分 H/小時 D/天 W0-W6/週(0=週一) midnight/如果沒指定時間就默認在午夜
+            'formatter': 'standard',
+            'encoding': 'utf-8',
         },
+        'error': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',  # 保存到文件，自動切
+            'filename': os.path.join(BASE_LOG_DIR, "error_err.log"),  # 日志文件
+            'maxBytes': 1024 * 1024 * 5,  # 日志大小 50M
+            'backupCount': 5,
+            'formatter': 'standard',
+            'encoding': 'utf-8',
+        },
+        'collect': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',  # 保存到文件，自動切
+            'filename': os.path.join(BASE_LOG_DIR, "collect_collect.log"),
+            'maxBytes': 1024 * 1024 * 50,  # 日志大小 50M
+            'backupCount': 5,
+            'formatter': 'collect',
+            'encoding': "utf-8"
+        }
     },
-    "root": {"level": "INFO", "handlers": ["console"]},
-    "loggers": {
-        "django.request": { # Django的request發生error會自動記錄
-            "handlers": ["mail_admins"],
-            "level": "ERROR",
-            "propagate": True,  # 向不向更高級別的logger傳遞
+    'loggers': {
+        '': {  # 默認的logger應用如下配置
+            'handlers': ['SF', 'console', 'error'],  # 上線之後可以把'console'移除
+            'level': 'DEBUG',
+            'propagate': True,
         },
-        "django.security.DisallowedHost": { # 對於不在 ALLOWED_HOSTS 中的請求不發送報錯郵件
-            "level": "ERROR",
-            "handlers": ["console", "mail_admins"],
-            "propagate": True,
-        },
+        'collect': { # 名為 'collect'的logger還單獨處理
+            'handlers': ['console', 'collect'],
+            'level': 'INFO',
+        }
     },
 }

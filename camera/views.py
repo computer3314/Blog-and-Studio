@@ -14,6 +14,7 @@ import datetime
 from .models import Move,Camera,File
 import os
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from django.core import serializers
 import json
 import shutil
 from wsgiref.util import FileWrapper
@@ -51,6 +52,7 @@ def turn_makeFrame(camera: BaseCamera,role,background:bool,camera_id,loading=Non
                         b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')   
             else:
                 logger.info("讀取不到影片")
+                break
         frame = str(time.time()).encode("utf-8")
         yield (b'--frame\r\n'
                                 b'Content-Type: text/plain;charset=utf-8\r\n\r\n' + frame + b'\r\n\r\n') 
@@ -111,32 +113,38 @@ def video(request):
     reponse['Cache-Control'] = 'no-cache'
     return reponse
 def video_view(request):
+
+    camera_list=Camera.objects.filter(isOpened=True).order_by('camera_id')
     context = {
         "role": "user",
-        "website": {
-            "domain": settings.PRO_HOST,
-        },
-        "url" : settings.PRO_HOST+"api/camera/?camera_id=1",
-        "camera_id": "1"
+        "camera_list" : camera_list,
     }
     return render(request, 'camera.html', context)
 def videoAdmin_view(request):
+    camera_list=Camera.objects.all().order_by('camera_id')
+    camerabackground_list = serializers.serialize("json", camera_list)
     context = {
         "role": "admin",
-        "website": {
-            "domain": settings.PRO_HOST,
-        },
-        "url" : settings.PRO_HOST+"api/camera/?camera_id=1",
-        "urlbackground" : settings.PRO_HOST+"api/camera/?camera_id=1&role=admin&background=True",
-        "camera_id": "1"
+        "camera_list" : camera_list,
+        "camerabackground_list" : camerabackground_list,
     }
     return render(request, 'camera.html', context)  
 
 # Create your views here.
 def bookhandle(request):
-    movedic = Move.objects.all().order_by('-movetime')
+    camera_id=request.GET.get('camera_id')        #尋找某一個相機資料
+    movedic=None
+    if camera_id is None:
+        movedic = Move.objects.all().order_by('-movetime')
+    else:
+        try:
+             camera_model = Camera.objects.get(camera_id=camera_id)
+             movedic=Move.objects.get(camera=camera_model).order_by('-movetime')
+        except:
+             movedic = Move.objects.all().order_by('-movetime')
     paginator=Paginator(movedic,10)    #每頁顯示2條
     page=request.GET.get('page')        #前段請求的頁,比如點選'下一頁',該頁以變數'page'表示
+   
     try:
       move_obj=paginator.page(page) #獲取前端請求的頁數
     except PageNotAnInteger:
@@ -153,22 +161,14 @@ def get_videoAviToMp4(request):
     current_user = request.user
     if current_user is None:
          return render(request, 'video.html') 
-    context = {
-          'videoUrl':"",
-           'camera_id':camera_id,
-           'action':False,
-    }
     try:
          if os.path.isfile(videoUrl):
-            fn2 = videoUrl[0:-4]+'_convert.mp4'   
-            if os.path.isfile(fn2):  
-                videoUrl=fn2 
             time=get_video_duration(videoUrl)
             if time != -1: #確認是否有長度
                 isdecode=True 
     except Exception as e:
         isdecode=False
-        print(e)
+        logger.error("判斷MP4檔案發生錯誤")
     if isdecode:
         moveObj=get_moves(videoUrl)
         context = {
@@ -184,7 +184,7 @@ def get_videoAviToMp4(request):
             oldfile=CameraFactory.get_cameranowVideo(camera_id)
             if oldfile is not None and oldfile != videoUrl:
                 os.remove(videoUrl)#不是運行中的檔案也沒有時長 所以刪除
-                logger.info("已刪除"+videoUrl)
+                logger.info("不是運行中的檔案也沒有時長所以刪除"+videoUrl)
             else:
                 CameraFactory.get_cameratoVideo(camera_id, True)#先暫時關閉攝影機以便讀去影片
                 static="static/my_output/intime" #專門放置及時觀看影片
@@ -203,8 +203,8 @@ def get_videoAviToMp4(request):
                 }
                 return render(request, 'video.html',context)  
         except Exception as e:
-            print(e)
-    return render(request, 'video.html',context) 
+            logger.error(e)
+    return render(request, 'video.html') 
 def get_video_duration(filename):
     #判斷時長
   cap = cv2.VideoCapture(filename)
@@ -273,7 +273,7 @@ def download_mp4(request):
             zip = zipfile.ZipFile(s, 'w')
             
             # 把下载文件寫入壓縮檔
-            zip.write(file_path,arcname=basename,compress_type= zipfile.ZIP_DEFLATED)
+            zip.write(file_path,arcname=basename)
             img1 = zip.getinfo(basename)
             # 關閉文件
             zip.close()
@@ -290,6 +290,11 @@ def stream_video(request):
   path = request.GET.get('file_path')
   logger.info(path)
   return stream(request,path)
+def get_cameras(request):
+  """用響應式串流"""
+  count = CameraFactory.returnCameraIndexes()
+  print(count)
+  return JsonResponse(True, safe=False)
 
 
  

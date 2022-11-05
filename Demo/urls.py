@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.conf.urls import include
 from post.views import aboutget
-from camera.views import video,video_view,videoAdmin_view,bookhandle,get_videoAviToMp4,download_mp4,stream_video
+from camera.views import video,video_view,videoAdmin_view,bookhandle,get_videoAviToMp4,download_mp4,stream_video,get_cameras
 from django .contrib.auth.decorators import login_required
 from task.task import TaskFactory
 import sys
@@ -29,6 +29,7 @@ urlpatterns = [
     path('', aboutget),
     path('api/camera/', video),
     path('camera', video_view),
+    path('cameralist', get_cameras),#查看相機列表
     path('job/add/', login_required(job_add_task)),
     path('job/del/', login_required(job_del_task)),
     path('job/pause/', login_required(job_pause_task)),

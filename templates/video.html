@@ -4,8 +4,13 @@
   <link href="{% static '/node_modules/video.js/dist/video-js.min.css' %}" rel="stylesheet">
   <script src="{% static 'node_modules/jquery/dist/jquery.min.js' %}"></script>
   <link href="{% static '/node_modules/videojs-markers-plugin/dist/videojs.markers.plugin.css' %}" rel="stylesheet">
+  
 </head>
-
+<style>
+      .vjs-marker {
+        height: 13px !important;
+    }
+</style>
 
 {% if action == False %}
 <h1>此檔案不存在或是已經刪除</h1>
@@ -18,9 +23,10 @@
 <source src="" type="video/mp4" size="720" />
 </video>
 
-  <script src="{% static '/node_modules/video.js/dist/video.js' %}"></script>
+  <script src="{% static '/node_modules/video.js/dist/video.min.js' %}"></script>
   <script src="{% static '/node_modules/videojs-markers-plugin/dist/videojs-markers-plugin.js' %}"></script>
-
+   <script src="{% static '/node_modules/videojs-landscape-fullscreen/dist/videojs-landscape-fullscreen.min.js' %}"></script>
+ 
 <script>
 
     videojs.addLanguage('zh-TW', {
@@ -42,25 +48,27 @@
         playbackRates: [0.1,0.5,1,1.5,2,3], 
         
     })
+    myVideo.landscapeFullscreen();
     move_List=JSON.parse(document.getElementById('move_List').value) 
     console.log(move_List)
     //繪畫移動偵測
     myVideo.markers({
      markerStyle: {
       'width':'7px',
-      'border-radius': '30%',
+      
+      'border-radius': '70%',
       'background-color': 'red'
     },
     markers: move_List,
     markerTip:{
     display: true,
     text: function(marker) {
-    return "This is a break: " + marker.text;
+    return "時間: " + marker.text;
     console.log(marker.text)
     }
       },
     onMarkerReached: function(marker) {
-    console.log("marker reached: " + marker.text )
+    console.log("移動到: " + marker.text )
     },
   });
   //建立按鈕

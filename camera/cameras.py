@@ -45,6 +45,9 @@ class BaseCamera:
     #解析度設定
     width = 1280
     height = 720
+    #實際上相機尺寸
+    trueHeight=1280
+    trueWidth=720
     today=None
      # 輸出目錄
     outputBaseFolder = "static/my_output/"
@@ -89,10 +92,11 @@ class BaseCamera:
     org2 = (0,0) 
     recording=False
     # 相機基礎類
-    def __init__(self, camera_model: Camera,queue_image:queue):
+    def __init__(self, camera_model: Camera):
         self.set_defalut(camera_model)
         self.cam = cv2.VideoCapture(camera_model.camera_api(),cv2.CAP_DSHOW)
         self.cam.set(cv2.CAP_PROP_BUFFERSIZE, 2)
+        
         self.set_defalut1()
         if self.cam is None:
              # 打開失敗
@@ -114,7 +118,6 @@ class BaseCamera:
              logger.warn(msg)("編號:" + self.Camera_id + " 相機已經關閉")
              raise CameraException("編號:" + self.Camera_id + " 相機已經關閉")
         elif self.cam.isOpened():
-            self.queue=queue_image
             # 相機打開成功
               # 影片寫入
             self.get_output_video(False)
@@ -140,21 +143,23 @@ class BaseCamera:
               fourcc = cv2.VideoWriter_fourcc(*'avc1')
               #fourcc = 0x31637661
               #fourcc =cv2.VideoWriter_fourcc(*'XVID')
-              self.output= cv2.VideoWriter('%s' % (self.nowoutVideo), fourcc,6,(self.width,self.height))
+              self.output= cv2.VideoWriter('%s' % (self.nowoutVideo), fourcc,6,(self.trueWidth,self.trueHeight))
               self.camera_model.file.create(movie= self.nowoutVideo)
               self.file_model=File.objects.select_for_update().filter(movie=self.nowoutVideo)
               self.fileinsert=0
     def close_file(self):
         #更換影片檔時呼叫
         if self.output is not None:
-            self.output=None
             if self.file_model is not None: #沒圖片後 若有file就增加結束時間
                     self.file_model.update(endtime=datetime.datetime.now())
+                    self.output.release()
+                    self.output=None
                     if self.file_model[0].starttime is None:
                           os.remove(self.file_model[0].movie)#沒有時長  刪除檔案
                           self.file_model.delete()
                           logger.info("編號:" + self.Camera_id +" 刪除沒有時長的影片")
                     self.file_model=None #清空file物件  等等會建立新的
+                       
 
 
     def getAviNameWithDate(self,nameIn="output.mp4"):
@@ -171,7 +176,7 @@ class BaseCamera:
             fn2 = filename[0:-4]+'_{0}.mp4'          # modify pattern to include a number
             count = 1
             while True: # increase number until file not exists
-                if File.objects.filter(movie = fn2.format(count)).count() == 0:
+                if db_retry(File.objects.filter(movie = fn2.format(count)).count()) == 0:
                     break
                 count += 1
             logger.info("寫入檔案:"+fn2.format(count))     
@@ -187,9 +192,6 @@ class BaseCamera:
         self.today=time.strftime("%Y-%m-%d",time.localtime(time.time()))
         self.width=camera_model.width
         self.height=camera_model.heigth
-        self.org = (10,int(self.height/24))
-        self.org1 = (int(self.width*0.8),int(self.height/24))
-        self.org2 = (1200,int(self.height/24))
         self.fast=camera_model.fast
         self.moveNotice=camera_model.moveNotice
         self.mail_check=camera_model.mailCheck
@@ -206,6 +208,11 @@ class BaseCamera:
             self.cam.set(cv2.CAP_PROP_FPS,int(self.fps))
             self.cam.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
             self.cam.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
+            self.trueHeight=int(self.cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            self.trueWidth=int(self.cam.get(cv2.CAP_PROP_FRAME_WIDTH))
+            self.org = (10,int(self.cam.get(cv2.CAP_PROP_FRAME_HEIGHT)/24))
+            self.org1 = (int(self.cam.get(cv2.CAP_PROP_FRAME_WIDTH)*0.8),int(self.cam.get(cv2.CAP_PROP_FRAME_HEIGHT)/24))
+            self.org2 = (int(self.cam.get(cv2.CAP_PROP_FRAME_WIDTH)*0.9),int(self.cam.get(cv2.CAP_PROP_FRAME_HEIGHT)/24))
             if self.isOpened is False:
                 self.cam=None
     def _thread(self):
@@ -215,6 +222,7 @@ class BaseCamera:
         # 線程一直讀取影片流，將最新的視頻流存在隊列中
 
         if self.cam is not None:
+                self.queue =queue.Queue(maxsize=10)
                 while True:
               
                     if self.cam is None:
@@ -225,8 +233,6 @@ class BaseCamera:
                         break
                     ret, img = self.cam.read()
                     if not ret or img is None:
-                        logger.warn("編號:" + self.Camera_id + " 相機讀取相機圖片失敗")
-                        break
                         pass
                     else:
                         # 讀取內容成功，將數據存放在緩存區
@@ -378,8 +384,8 @@ class BaseCamera:
         """
         取得畫面給前端看
         """
-        
         img = self.queue.get()
+        # ret, img = self.cam.read()
         if img is None:
             return None
         else:                
@@ -411,25 +417,7 @@ class CameraFactory:
         
         if camera is None:
             logger.info("相機不存在")
-            try:   
-                camera_model = Camera.objects.get(camera_id=camera_id)
-                queue_image = queue.Queue(maxsize=10)
-                base_camera = BaseCamera(camera_model=camera_model,queue_image=queue_image)
-                if base_camera is not None:
-                    cls.cameras.setdefault(camera_id, base_camera)
-                    logger.info("編號:"  + camera_id + " 相機建立成功")
-                    return cls.cameras.get(camera_id)
-                else:
-                    logger.warn("編號:" + camera_id + " 相機建立失敗")
-                    return None
-            except Camera.DoesNotExist:
-                # 相機不存在
-                logger.warn("資料庫不存在此相機 編號:"+camera_id)
-                return None
-            except CameraException:
-                # 相機實例失敗
-                logger.error("編號:" + camera_id + " 相機實例化失敗")
-                return None
+            return None
         else:      
             # 存在相機，直接返回
             logger.info("編號:" + camera_id + " 相機取得成功")
@@ -450,8 +438,7 @@ class CameraFactory:
                 if oldcamera is None:
                     logger.info("新增編號:" + camera_id + " 相機開始")
                     try:
-                        queue_image = queue.Queue(maxsize=10)
-                        base_camera = BaseCamera(camera_model=camera,queue_image=queue_image)
+                        base_camera = BaseCamera(camera_model=camera)
                         if base_camera is not None:
                                 cls.cameras.setdefault(camera_id, base_camera)
                                 logger.info("編號:" + camera_id + " 相機建立成功")
@@ -466,26 +453,26 @@ class CameraFactory:
                     logger.info("新增編號:" + camera_id + " 相機結束") 
                 else:
                     logger.info("更新編號:" + camera_id + " 相機開始")
-                    if oldcamera.cam is None:
-                        try:
-                            queue_image = queue.Queue(maxsize=10)
-                            base_camera = BaseCamera(camera_model=camera,queue_image=queue_image)
+                    # if oldcamera.cam is None:
+                    try:
+                            oldcamera.close_file()#停止錄影
+                            base_camera = BaseCamera(camera_model=camera)
                             if base_camera is not None:
                                     cls.cameras.update({camera_id: base_camera})
                                     logger.info("編號:" + camera_id + " 相機建立成功")
                             else:
                                     logger.error("編號:" + camera_id + " 相機建立失敗")
-                        except Camera.DoesNotExist:
+                    except Camera.DoesNotExist:
                         # 相機不存在
                           logger.warn("資料庫不存在此相機 編號:"+camera_id)
-                        except CameraException:
+                    except CameraException:
                          # 相機實例失敗
                            logger.error("編號:" + camera_id + " 相機實例化失敗")  
-                    else:
-                        oldcamera.close_file()#停止錄影
-                        oldcamera.set_defalut(camera) #基本配置更新
-                        oldcamera.set_defalut1() #基本配置更新           
-                        oldcamera.get_output_video(False) #更新錄影檔案
+                    # else:
+                    #     oldcamera.close_file()#停止錄影
+                    #     oldcamera.set_defalut(camera) #基本配置更新
+                    #     oldcamera.set_defalut1() #基本配置更新           
+                    #     oldcamera.get_output_video(False) #更新錄影檔案
                     logger.info("更新編號:" + camera_id + " 相機結束")
                     
         
@@ -494,9 +481,7 @@ class CameraFactory:
            cameras = Camera.objects.all()
            logger.info("啟動所有相機實例開始")
            for camera in cameras:
-             thread=threading.Thread(target= cls.update_camera,args=(camera,))
-             thread.daemon = True
-             thread.start()
+             cls.update_camera(camera)
            logger.info("啟動所有相機實例結束")
     @classmethod
     def loadingpic(cls):
@@ -521,4 +506,19 @@ class CameraFactory:
                 return camera.nowoutVideo #回傳目前使用的video
         else:
             return None
+    @classmethod
+    def returnCameraIndexes(cls):
+    # 取得相機index
+        index = 0
+        arr = []
+        while True:
+            cap = cv2.VideoCapture(index)
+            try:
+                if cap.getBackendName()=="MSMF":
+                    arr.append(index)
+            except:
+                break
+            cap.release()
+            index += 1
+        return arr
 
