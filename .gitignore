@@ -4,5 +4,6 @@ static/my_output/*
 *.mp4
 *.sqlite3
 static/node_modules/*
-
 .env
+*.log
+logs/*
