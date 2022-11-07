@@ -237,7 +237,7 @@ LOGGING = {
     },
     'loggers': {
         '': {  # 默認的logger應用如下配置
-            'handlers': ['SF', 'error'],  # 上線之後可以把'console'移除
+            'handlers': ['error','console','TF'],  # 上線之後可以把'console'移除
             'level': 'DEBUG',
             'propagate': True,
         },

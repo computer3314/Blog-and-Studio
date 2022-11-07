@@ -143,7 +143,7 @@ class BaseCamera:
               fourcc = cv2.VideoWriter_fourcc(*'avc1')
               #fourcc = 0x31637661
               #fourcc =cv2.VideoWriter_fourcc(*'XVID')
-              self.output= cv2.VideoWriter('%s' % (self.nowoutVideo), fourcc,6,(self.trueWidth,self.trueHeight))
+              self.output= cv2.VideoWriter('%s' % (self.nowoutVideo), fourcc,6.0,(self.trueWidth,self.trueHeight))
               self.camera_model.file.create(movie= self.nowoutVideo)
               self.file_model=File.objects.select_for_update().filter(movie=self.nowoutVideo)
               self.fileinsert=0
