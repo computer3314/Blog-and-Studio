@@ -454,26 +454,25 @@ class CameraFactory:
                     logger.info("新增編號:" + camera_id + " 相機結束") 
                 else:
                     logger.info("更新編號:" + camera_id + " 相機開始")
-                    # if oldcamera.cam is None:
-                    try:
-                            oldcamera.close_file()#停止錄影
-                            base_camera = BaseCamera(camera_model=camera)
-                            if base_camera is not None:
-                                    cls.cameras.update({camera_id: base_camera})
-                                    logger.info("編號:" + camera_id + " 相機建立成功")
-                            else:
-                                    logger.error("編號:" + camera_id + " 相機建立失敗")
-                    except Camera.DoesNotExist:
-                        # 相機不存在
-                          logger.warn("資料庫不存在此相機 編號:"+camera_id)
-                    except CameraException:
-                         # 相機實例失敗
-                           logger.error("編號:" + camera_id + " 相機實例化失敗")  
-                    # else:
-                    #     oldcamera.close_file()#停止錄影
-                    #     oldcamera.set_defalut(camera) #基本配置更新
-                    #     oldcamera.set_defalut1() #基本配置更新           
-                    #     oldcamera.get_output_video(False) #更新錄影檔案
+                    if oldcamera.cam is None:
+                        try:
+                                base_camera = BaseCamera(camera_model=camera)
+                                if base_camera is not None:
+                                        cls.cameras.update({camera_id: base_camera})
+                                        logger.info("編號:" + camera_id + " 相機建立成功")
+                                else:
+                                        logger.error("編號:" + camera_id + " 相機建立失敗")
+                        except Camera.DoesNotExist:
+                            # 相機不存在
+                            logger.warn("資料庫不存在此相機 編號:"+camera_id)
+                        except CameraException:
+                            # 相機實例失敗
+                            logger.error("編號:" + camera_id + " 相機實例化失敗")  
+                    else:
+                        oldcamera.close_file()#停止錄影
+                        oldcamera.set_defalut(camera) #基本配置更新
+                        oldcamera.set_defalut1() #基本配置更新           
+                        oldcamera.get_output_video(False) #更新錄影檔案
                     logger.info("更新編號:" + camera_id + " 相機結束")
                     
         
