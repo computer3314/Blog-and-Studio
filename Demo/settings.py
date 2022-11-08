@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'musics',
     'post',
     'camera',
     'task',
@@ -222,7 +221,7 @@ LOGGING = {
             'class': 'logging.handlers.TimedRotatingFileHandler',  
             'filename': os.path.join(BASE_LOG_DIR, "TF_info.log"),  # 日志文件
             'backupCount': 3,  # 備份為3  xx.log --> xx.log.2018-08-23_00-00-00 --> xx.log.2018-08-24_00-00-00 --> ...
-            'when': 'D',  #每天一切， 可選值有S/秒 M/分 H/小時 D/天 W0-W6/週(0=週一) midnight/如果沒指定時間就默認在午夜
+            'when': 'midnight',  #每天一切， 可選值有S/秒 M/分 H/小時 D/天 W0-W6/週(0=週一) midnight/如果沒指定時間就默認在午夜
             'formatter': 'standard',
             'encoding': 'utf-8',
         },

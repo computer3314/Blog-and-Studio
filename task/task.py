@@ -9,6 +9,7 @@ from django.core import serializers
 import json
 from camera.cameras import CameraFactory, BaseCamera
 import logging
+import datetime
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 class TaskFactory:
@@ -106,12 +107,23 @@ class TaskFactory:
             print(e)
             return None
     @classmethod
+    def run_once(cls,func,func_ID):
+      #恢復執行一次
+        try:
+            if cls.scheduler is None:
+             cls.get_scheduler()
+            cls.scheduler.add_job(func,'date', run_date=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            logger.info("ID:"+ func_ID +"執行成功")
+            return True
+        except Exception as e:
+            logger.error("ID:"+ func_ID +"執行失敗")
+            print(e)
+            return None
+    @classmethod
     def init(cls):
       logger.info("啟動程式自動開啟")
       CameraFactory.update_ALLcamera()
 
-    
-      
 
 
         

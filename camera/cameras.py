@@ -64,6 +64,7 @@ class BaseCamera:
     recordcount=0
     recordLimit=10
     fps = 10
+    truefps=10
     start_time=time.time()
     #計算目前秒數
     min = '2022-01-01 8:01:01'
@@ -143,7 +144,7 @@ class BaseCamera:
               fourcc = cv2.VideoWriter_fourcc(*'avc1')
               #fourcc = 0x31637661
               #fourcc =cv2.VideoWriter_fourcc(*'XVID')
-              self.output= cv2.VideoWriter('%s' % (self.nowoutVideo), fourcc,6.0,(self.trueWidth,self.trueHeight))
+              self.output= cv2.VideoWriter('%s' % (self.nowoutVideo), fourcc,float(self.truefps/5.1),(self.trueWidth,self.trueHeight))
               self.camera_model.file.create(movie= self.nowoutVideo)
               self.file_model=File.objects.select_for_update().filter(movie=self.nowoutVideo)
               self.fileinsert=0
@@ -209,6 +210,7 @@ class BaseCamera:
             self.cam.set(cv2.CAP_PROP_FPS,int(self.fps))
             self.cam.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
             self.cam.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
+            self.truefps= self.cam.get(cv2.CAP_PROP_FPS)
             self.trueHeight=int(self.cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
             self.trueWidth=int(self.cam.get(cv2.CAP_PROP_FRAME_WIDTH))
             self.org = (10,int(self.cam.get(cv2.CAP_PROP_FRAME_HEIGHT)/24))

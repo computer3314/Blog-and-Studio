@@ -32,6 +32,15 @@ def job_resume_task(request):
     #恢復job
     job_id=request.GET.get('job_id')
     return JsonResponse(TaskFactory.resume_task(job_id), safe=False)
+def job_run_once(request):
+    #執行一次job
+    job_id=request.GET.get('job_id')
+    function_string = job_id
+    mod_name, func_name = function_string.rsplit('.',1)
+    mod = importlib.import_module(mod_name)
+    func = getattr(mod, func_name)
+    return JsonResponse(TaskFactory.run_once(func,job_id), safe=False)
+    
 def job_list_task(request):
     #job列表
     return JsonResponse(TaskFactory.getTasks(), safe=False)

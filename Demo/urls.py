@@ -22,20 +22,15 @@ from django .contrib.auth.decorators import login_required
 from task.task import TaskFactory
 import sys
 from django.contrib.auth import views
-#引入排程包
-from task.views import job_add_task,job_del_task,job_pause_task,job_resume_task,job_list_task
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', aboutget),
     path('chat/', include('chat.urls')),
+    path('job/', include('task.urls')),
     path('api/camera/', video),
     path('camera', video_view),
     path('cameralist', get_cameras),#查看相機列表
-    path('job/add/', login_required(job_add_task)),
-    path('job/del/', login_required(job_del_task)),
-    path('job/pause/', login_required(job_pause_task)),
-    path('job/resume/', login_required(job_resume_task)),
-    path('job/list', login_required(job_list_task)),
     path('getvideo', login_required(get_videoAviToMp4)),
     path('downloadmp4/', login_required(download_mp4)),
     path('cameraAdmin', login_required(videoAdmin_view)),  
