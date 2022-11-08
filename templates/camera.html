@@ -11,9 +11,11 @@
         <div class="resume-section-content" style="margin-top: 2px;">
             <h2 class="mb-5">{{camera.title}}</h2>
             <img src="/api/camera/?camera_id={{ camera.camera_id }}" class="video" id="video{{ camera.camera_id }}">
+            {% if forloop.first %}
             <div class="chatRoom">
                 <iframe src='{% settings_value "SOCKET_SERVER" %}chat/{{ camera.title}}?nickname={{user.username}}'' width="600" height="450" frameborder="0" style="border:0"></iframe>
             </div>
+            {% endif %}  
         </div>
         
         </section>
