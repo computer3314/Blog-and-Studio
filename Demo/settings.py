@@ -28,6 +28,8 @@ DEBUG =  bool(strtobool(os.environ.get('DEBUG', 'True')))
 
 PRO_HOST = os.environ.get("PRO_HOST")
 
+SOCKET_SERVER=os.environ.get("SOCKET_SERVER")
+
 ALLOWED_HOSTS = ['localhost', '127.0.0.1','192.168.18.9', '[::1]','happy.shengda.ga','192.168.18.18']
 
 # Application definition
@@ -45,6 +47,8 @@ INSTALLED_APPS = [
     'camera',
     'task',
     'django_apscheduler',
+    'chat',   
+    'daphne',
     
 ]
 LOGIN_REDIRECT_URL = "/camera"
@@ -75,13 +79,15 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries':{
+            'custom_tags': 'Demo.templatetags.custom_tags',
+            
+            },
         },
     },
 ]
 
 WSGI_APPLICATION = 'Demo.wsgi.application'
-
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -94,7 +100,16 @@ DATABASES = {
         }
     }
 }
-
+ASGI_APPLICATION  =  "Demo.asgi.application"
+CHANNEL_LAYERS = {
+     "default": {
+         "BACKEND": "channels_redis.core.RedisChannelLayer",
+         "CONFIG": {
+             "hosts": [("127.0.0.1", 6379)],
+              #或"hosts": [os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/1')],
+         },
+     },
+ }
 # SMTP Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  #SMTP伺服器

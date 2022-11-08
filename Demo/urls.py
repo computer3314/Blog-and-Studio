@@ -27,6 +27,7 @@ from task.views import job_add_task,job_del_task,job_pause_task,job_resume_task,
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', aboutget),
+    path('chat/', include('chat.urls')),
     path('api/camera/', video),
     path('camera', video_view),
     path('cameralist', get_cameras),#查看相機列表

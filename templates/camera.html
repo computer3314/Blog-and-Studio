@@ -1,19 +1,23 @@
 {% extends 'baseVideo.html' %} 
 {% block body %}
 {% load static %}
+{% load custom_tags %}
 <link href="{% static 'css/video.css' %}" rel="stylesheet" />
+
     <!-- 顯示影片-->
-    
     <div class="container-fluid p-0" id="videos"> 
         {% for camera in camera_list %}
         <section class="resume-section">
         <div class="resume-section-content" style="margin-top: 2px;">
             <h2 class="mb-5">{{camera.title}}</h2>
             <img src="/api/camera/?camera_id={{ camera.camera_id }}" class="video" id="video{{ camera.camera_id }}">
+            <div class="chatRoom">
+                <iframe src='{% settings_value "SOCKET_SERVER" %}chat/{{ camera.title}}?nickname={{user.username}}'' width="600" height="450" frameborder="0" style="border:0"></iframe>
+            </div>
         </div>
+        
         </section>
         {% endfor %}
-
     </div>
     <div id="popup">
         <div class="bg">

@@ -33,3 +33,15 @@
         margin-top: 2%;
         max-height: 90%;
     }
+    .chatRoom {
+        position: relative;
+        padding-bottom: 75%;
+        overflow: hidden;
+    }
+    .chatRoom iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }

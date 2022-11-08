@@ -14,3 +14,4 @@ job/add/?job_id=task.views.update_ALLcamera&cron= 0 * * * * 每一小時更新�
 python manage.py makemigrations
 python manage.py migrate      
 進行makemigrations 
+python -m daphne -b 0.0.0.0 -p 8001 Demo.asgi:application #啟動websocket   8001port

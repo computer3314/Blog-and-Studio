@@ -8,3 +8,6 @@ django-apscheduler
 tzlocal==2.1
 ffmpeg
 python-dotenv==0.20.0
+daphne
+channels==3.0.4
+channels-redis
