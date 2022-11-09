@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html>
+    <style>
+        body {
+            padding-top: 0 !important;
+     
+        }
+    </style>
 <head>
     <meta charset="utf-8"/>
     <title>Chat Room</title>
@@ -9,9 +15,9 @@
 </head>
 <body>
 
-    <div>
-        <div class="form-group">
-        <textarea id="chat-log" readonly="readonly" class="form-control"  rows="10"></textarea> 
+  
+    <div class="form-group">
+        <textarea id="chat-log" readonly="readonly" class="form-control"  rows="13"></textarea> 
     </div>
         <div class="form-group">
         <input id="chat-message-input" class="form-control"  type="text" >
@@ -19,7 +25,7 @@
         <div class="form-group">
         <input id="chat-message-submit" class="form-control"  type="button" value="Send">
     </div>
-    </div>
+ 
   <input type="hidden" id="nick_name"  value="{{ nick_name }}">
     {{ room_name|json_script:"room-name" }}
 
@@ -34,7 +40,7 @@
         const chatSocket = new WebSocket(
              wss_protocol + window.location.host + '/ws/chat/'  + roomName + '/'
              );
- 
+            console.log(chatSocket)
         // 建立websocket連結時觸發這個funciton 歡迎進來的人
         chatSocket.onopen = function(e) {
              document.querySelector('#chat-log').value += ('[公告]歡迎進入' + roomName + '討論群。歡迎斗內案讚!\n')

@@ -49,5 +49,5 @@ class ChatConsumer(WebsocketConsumer):
          nickname = event['nickname']
          # 通過websocket發送消息到客户端
          self.send(text_data=json.dumps({
-             'message': f'{datetime_str}:{nickname}=>{message}'
+             'message': f'{nickname}=>{message}'
          }))
