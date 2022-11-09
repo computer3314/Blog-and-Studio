@@ -9,13 +9,18 @@
         {% for camera in camera_list %}
         <section class="resume-section">
         <div class="resume-section-content row " style="margin-top: 2px;">
+            <div class="col-10">
             <h2 class="mb-5">{{camera.title}}</h2>
-            <div class="col-md-9">
+        </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-info" onclick="refreshCachedImage('video{{ camera.camera_id }}')">reload</button>
+                  </div>
+            <div class="">
             <img src="/api/camera/?camera_id={{ camera.camera_id }}" class="video" id="video{{ camera.camera_id }}">
            </div>
             {% if forloop.first %}
-            <div class="chatRoom col-md-3">
-                <iframe src='{% settings_value "SOCKET_SERVER" %}chat/{{ camera.title}}?nickname={{user.username}}' width="600" height="450" frameborder="0" style="border:0"></iframe>
+            <div class="chatRoom">
+                <iframe src='{% settings_value "SOCKET_SERVER" %}chat/{{ camera.title}}?nickname={{user.username}}' frameborder="0" style="border:0"></iframe>
             </div>
             {% endif %}  
         </div>
@@ -73,6 +78,9 @@
          }
         
     }
-    
+    function refreshCachedImage(img_id) {//更新圖片
+    var img = document.getElementById(img_id);
+    img.src = img.src; // trick browser into reload
+};
 </script>
 {% endblock %}

@@ -32,22 +32,25 @@ class ChatConsumer(WebsocketConsumer):
          text_data_json = json.loads(text_data)
          message = text_data_json['message']
          nickname = text_data_json['nickname']
+         time = text_data_json['time']
          # 發送消息到頻道組，頻道組調用chat_message方法
          async_to_sync(self.channel_layer.group_send)(
              self.room_group_name,
              {
                  'type': 'chat_message',
                  'message': message,
-                 'nickname': nickname
+                 'nickname': nickname,
+                 'time': time
              }
          )
  
      # 從頻道收到訊息後執行方法
      def chat_message(self, event):
          message = event['message']
-         datetime_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
          nickname = event['nickname']
+         time = event['time']
          # 通過websocket發送消息到客户端
          self.send(text_data=json.dumps({
-             'message': f'{nickname}=>{message}'
+             'message': f'{nickname}:{message}',
+             'time': f'{time}'
          }))

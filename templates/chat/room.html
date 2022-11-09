@@ -1,34 +1,38 @@
 <!DOCTYPE html>
 <html>
     <style>
-        body {
-            padding-top: 0 !important;
-     
-        }
+
     </style>
 <head>
     <meta charset="utf-8"/>
     <title>Chat Room</title>
     {% load custom_tags %}
+    {% load static %}
+       
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href='{% settings_value "PRO_HOST" %}static/css/styles.css' rel="stylesheet" />
+        <script src='{% settings_value "PRO_HOST" %}static/node_modules/jquery/dist/jquery.min.js'></script>
+        <link href='{% settings_value "PRO_HOST" %}static/css/video.css' rel="stylesheet" />
 </head>
 <body>
 
-  
-    <div class="form-group">
-        <textarea id="chat-log" readonly="readonly" class="form-control"  rows="13"></textarea> 
-    </div>
-        <div class="form-group">
-        <input id="chat-message-input" class="form-control"  type="text" >
+    <div class="media-body form-control" id="messagebody">
+        <div class="message-wrapper"> 
+            <ul class="messages">
+            </ul>
         </div>
-        <div class="form-group">
-        <input id="chat-message-submit" class="form-control"  type="button" value="Send">
-    </div>
+        <div class="row">
+                <div class="form-group col-8">
+                <input id="chat-message-input"  type="text" >
+                </div>
+                <div class="form-group col-4">
+                <input id="chat-message-submit" class="form-control"  style="position: relative;float: left;transform:translateY(+35%);" type="button" value="Send">
+            </div>
+        </div>
  
   <input type="hidden" id="nick_name"  value="{{ nick_name }}">
     {{ room_name|json_script:"room-name" }}
-
+</div>
  
 <script>
         // 得到房間的名字
@@ -40,10 +44,10 @@
         const chatSocket = new WebSocket(
              wss_protocol + window.location.host + '/ws/chat/'  + roomName + '/'
              );
-            console.log(chatSocket)
         // 建立websocket連結時觸發這個funciton 歡迎進來的人
         chatSocket.onopen = function(e) {
-             document.querySelector('#chat-log').value += ('[公告]歡迎進入' + roomName + '討論群。歡迎斗內案讚!\n')
+            //  document.querySelector('#chat-log').value += ('[公告]歡迎進入' + roomName + '討論群。歡迎斗內案讚!\n')
+                $(".messages").append('<li class="message clearfix"> <div class="received"><p>'+'[公告]歡迎進入' + roomName + '討論群。歡迎斗內案讚!\n' +'</p><p class="date">'+ formatDate(new Date()) +'</p> </div></li>');
          }
  
         // 從後台接收到資料時觸發此方法
@@ -51,8 +55,8 @@
          chatSocket.onmessage = function(e) {
                 var textarea = document.getElementById('chat-log');
                 const data = JSON.parse(e.data);
-                document.querySelector('#chat-log').value += (data.message + '\n');
-                textarea.scrollTop = textarea.scrollHeight;
+                $(".messages").append('<li class="message clearfix"> <div class="received"><p>'+ data.message  +'</p><p class="date">'+ data.time +'</p> </div></li>');
+                scrollTo();
          };
         
          // websocket連結中斷觸發方法
@@ -60,7 +64,7 @@
              console.error('Chat socket closed unexpectedly');
          };
          
-         document.querySelector('#chat-message-input').focus();
+         //document.querySelector('#chat-message-input').focus();
          document.querySelector('#chat-message-input').onkeyup = function(e) {
              if (e.keyCode === 13) {  // enter, return
                  document.querySelector('#chat-message-submit').click();
@@ -87,11 +91,37 @@
                 //先把資料轉乘jsｏｎ　在送後端
                 chatSocket.send(JSON.stringify({
                     'nickname':nickname,
-                    'message': message
+                    'message': message,
+                    'time': formatDate(new Date())
                 }));
                 messageInputDom.value = '';
             }
          };
+         function scrollTo(){
+                $('.message-wrapper').animate({
+                    scrollTop: $('.message-wrapper').get(0).scrollHeight
+                },50)
+            }
+            function padTo2Digits(num) {
+  return num.toString().padStart(2, '0');
+}
+
+function formatDate(date) {
+  return (
+    [
+      date.getFullYear(),
+      padTo2Digits(date.getMonth() + 1),
+      padTo2Digits(date.getDate()),
+    ].join('-') +
+    ' ' +
+    [
+      padTo2Digits(date.getHours()),
+      padTo2Digits(date.getMinutes()),
+      padTo2Digits(date.getSeconds()),
+    ].join(':')
+  );
+}
+
      </script>
 </body>
 </html>

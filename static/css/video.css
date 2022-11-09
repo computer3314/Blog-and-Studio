@@ -1,5 +1,5 @@
 .video {
-    width: 80%;
+    width: 100%;
     max-width: 800px;
 }
 .max{width:100%;height:auto;}
@@ -37,6 +37,8 @@
         position: relative;
         padding-bottom: 75%;
         overflow: hidden;
+        width: 100%;
+        max-width: 800px;
     }
     .chatRoom iframe {
         position: absolute;
@@ -45,3 +47,78 @@
         width: 100% !important;
         height: 100% !important;
     }
+    body {
+        padding-top: 0 !important;
+    }
+    #messagebody .clearfix::after {
+display: block;
+clear: both;
+content: "";
+}
+#messagebody ul{
+margin: 0;
+padding: 0;
+}
+#messagebody li{
+list-style:none;
+}
+#messagebody .message-wrapper{
+border:1px solid #dddddd;
+height: 60vh;
+overflow-x: hidden;
+background-color: #6faee9; 
+padding: 10px;
+}
+
+
+#messagebody .media-body p{
+margin: 6px 0;
+}
+
+#messagebody  .message .message {
+margin-bottom: 15px;
+}
+#messagebody .message .message:last-child{
+margin-bottom: 0;
+}
+#messagebody .received, .sent{
+width:45%;
+padding:3px 10px;
+border-radius: 10px;
+}
+#messagebody .received{
+background: #ffffff;
+}
+#messagebody .sent{
+background: #3bebff;
+float: right;
+text-align: right;
+}
+
+#messagebody .date{
+color: #777777;
+font-size: 12px;
+}
+#messagebody .is_read{
+color: #777777;
+font-size: 12px;
+float: left ;
+margin: 6px 1 !important; 
+} 
+#messagebody .no_read{
+display: none;
+}
+
+#messagebody input[type="text"]{
+width: 100%;
+padding: 12px 20px;
+margin: 15px 0 0 0;
+display: inline-block;
+border-radius: 4px;
+box-sizing: border-box;
+outline:none;
+border:1px solid #cccccc;
+}
+#messagebody input[type=text]:focus{
+border: 1px solid #aaaaaa;
+}
