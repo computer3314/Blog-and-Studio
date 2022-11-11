@@ -3,11 +3,13 @@ from django_apscheduler.jobstores import DjangoJobStore, register_events, regist
 from task.task import TaskFactory
 from django.http import JsonResponse
 from camera.models import Camera,File,Move
+from chat.models import Chat
 import importlib
 import os
 from camera.cameras import CameraFactory, BaseCamera
 from datetime import datetime, timedelta
 import logging
+from dbcheck import db_retry
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 def job_add_task(request):
@@ -60,10 +62,13 @@ def delete_file():
     logger.info("影片檔資料夾:"+str(outputVideoFolder))
     logger.info("影片檔過期天數:"+str(camera.videodday))
     _removeold(outputVideoFolder,camera.videodday)
-    Move.objects.filter(created_at__lte=datetime.now()-timedelta(days=int(camera.dday))).delete()
+    db_retry(Move.objects.filter(created_at__lte=datetime.now()-timedelta(days=int(camera.dday)),camera=camera).delete())
     logger.info("刪除超過" + str(camera.dday) + "天移動偵測資料庫資料")
-    File.objects.filter(created_at__lte=datetime.now()-timedelta(days=int(camera.videodday))).delete()
+    db_retry(File.objects.filter(created_at__lte=datetime.now()-timedelta(days=int(camera.videodday)),camera=camera).delete())
     logger.info("刪除超過" + str(camera.videodday) + "天影片檔資料庫資料")
+
+   db_retry(Chat.objects.filter(created_at__lte=datetime.now()-timedelta(days=int(1))).delete())
+   logger.info("刪除全部超過" + str(1) + "天聊天室資料庫資料")
    logger.info("刪除過期檔案排程結束")
   #判斷過期檔案
 def shouldkeep(file,Dday):

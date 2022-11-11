@@ -2,6 +2,9 @@
     width: 100%;
     max-width: 800px;
 }
+.delmessage{
+            color:grey;
+}
 .max{width:100%;height:auto;}
 .min{width:100px;height:auto;}
 #popup{
@@ -39,6 +42,7 @@
         overflow: hidden;
         width: 100%;
         max-width: 800px;
+        height: 650px;
     }
     .chatRoom iframe {
         position: absolute;

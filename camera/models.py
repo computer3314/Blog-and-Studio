@@ -23,6 +23,7 @@ class Camera(models.Model):
     mailCheck=models.BooleanField('是否移動發信',default=False)
     scancheck=models.BooleanField('是否移動截圖',default=False)
     videocheck=models.BooleanField('是否連續錄製',default=False)
+    recordspeed = models.FloatField('錄製倍率',null=True, blank=True, default=float(6.0))
     isOpened=models.BooleanField('是否啟動',default=True)
     # Methods
     def camera_api(self):

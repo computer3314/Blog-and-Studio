@@ -6,6 +6,7 @@ npm install jquery popper.js --save
 npm install bootstrap@v5.2.2      
 npm install jquery   
 npm install --save videojs-landscape-fullscreen
+npm i jquery-contextmenu  右鍵選單
 timeout':60,
 #將固定刪除排程資料庫LOG加入排程中
 job/add/?job_id=task.views.delete_file&cron=30 1 * * * 每天1點檢查刪除過期檔案

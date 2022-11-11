@@ -188,22 +188,20 @@ def get_videoAviToMp4(request):
                 os.remove(videoUrl)#不是運行中的檔案也沒有時長 所以刪除
                 logger.info("不是運行中的檔案也沒有時長所以刪除"+videoUrl)
             else:
-                CameraFactory.get_cameratoVideo(camera_id, True)#先暫時關閉攝影機以便讀去影片
-                static="static/my_output/intime" #專門放置及時觀看影片
-                # 自動建立目錄     
-                if not os.path.exists(static):
-                    os.makedirs(static)
-                folder=static+"/"+str(current_user.id)+".mp4"
-                shutil.copyfile(videoUrl, folder)
-                CameraFactory.get_cameratoVideo(camera_id, False)#繼續錄製目前影片
-                moveObj=get_moves(videoUrl)
-                context = {
-                        'videoUrl':folder,
-                        'camera_id':camera_id,
-                        'action':True,
-                        'moveObj':json.dumps(moveObj)
-                }
-                return render(request, 'video.html',context)  
+                try:
+                        CameraFactory.get_cameratoVideo(camera_id, True)#先暫時關閉攝影機以便讀去影片
+                except Exception as e:
+                        logger.error(e)
+                finally:
+                        CameraFactory.get_cameratoVideo(camera_id, False)#繼續錄製目前影片
+                        moveObj=get_moves(videoUrl)
+                        context = {
+                                'videoUrl':videoUrl,
+                                'camera_id':camera_id,
+                                'action':True,
+                                'moveObj':json.dumps(moveObj)
+                        }
+                        return render(request, 'video.html',context)  
         except Exception as e:
             logger.error(e)
     return render(request, 'video.html') 

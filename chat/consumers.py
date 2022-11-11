@@ -2,8 +2,9 @@ import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import datetime
- 
- 
+from .models import Chat
+from dbcheck import db_retry
+from django.core import serializers
 class ChatConsumer(WebsocketConsumer):
      # websocket建立連接時執行方法
      def connect(self):
@@ -30,27 +31,65 @@ class ChatConsumer(WebsocketConsumer):
      # 從websocket接收到消息時執行函數
      def receive(self, text_data):
          text_data_json = json.loads(text_data)
-         message = text_data_json['message']
-         nickname = text_data_json['nickname']
-         time = text_data_json['time']
-         # 發送消息到頻道組，頻道組調用chat_message方法
-         async_to_sync(self.channel_layer.group_send)(
-             self.room_group_name,
-             {
-                 'type': 'chat_message',
-                 'message': message,
-                 'nickname': nickname,
-                 'time': time
-             }
-         )
+         Type = text_data_json['type']
+         if Type == 'chat_message':
+            try:
+                message = text_data_json['message']
+                nickname = text_data_json['nickname']
+                chat=db_retry(Chat.objects.create(roomname=self.room_name,nickname=nickname,message=message))
+                # 發送消息到頻道組，頻道組調用chat_message方法
+                async_to_sync(self.channel_layer.group_send)(
+                    self.room_group_name,
+                    {
+                        'type': Type,
+                        'id': f'{chat.id}',
+                        'roomname': f'{chat.roomname}',
+                        'nickname': f'{chat.nickname}',
+                        'message': f'{chat.message}',
+                        'time': f'{chat.created_at}'
+                    }
+                )
+            except Chat.DoesNotExist:
+            # Exception thrown when the .get() function does not find any item.
+              pass  # Handle the exception here. 
+         elif Type == 'delete_message':
+            delmessages = text_data_json['messages']
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': Type,
+                    'messages': delmessages,
+                }
+            )
  
      # 從頻道收到訊息後執行方法
      def chat_message(self, event):
-         message = event['message']
+         id = event['id']
+         roomname = event['roomname']
          nickname = event['nickname']
+         message = event['message']
          time = event['time']
-         # 通過websocket發送消息到客户端
+         Type = event['type']
+            # 通過websocket發送消息到客户端
          self.send(text_data=json.dumps({
-             'message': f'{nickname}:{message}',
-             'time': f'{time}'
-         }))
+                'type': f'{Type}',
+                'id': f'{id}',
+                'roomname': f'{roomname}',
+                'nickname': f'{nickname}',
+                'message': f'{message}',
+                'time': f'{time}'
+            }))
+
+    # 從頻道收到刪除訊息後執行方法
+     def delete_message(self, event):
+         messages = event['messages']
+         Type = event['type']
+         try:
+            # 通過websocket發送消息到客户端
+            self.send(text_data=json.dumps({
+                'type': f'{Type}',
+                'messages': f'{messages}',
+            }))
+         except Chat.DoesNotExist:
+            # Exception thrown when the .get() function does not find any item.
+            pass  # Handle the exception here. 
