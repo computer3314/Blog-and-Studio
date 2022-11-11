@@ -227,24 +227,28 @@ def get_moves(filename:str):
                 if file.starttime is None or file.endtime is None:
                     logger.info(filename+"前後時間有問題 無法取得偵測時段")
                 else:
-                    time=get_video_duration(filename)
+                    time=get_video_duration(filename)#真實的影片時間
+                    start_timer=str(file.starttime)
+                    end_timer=str(file.endtime)
                     logger.info(filename+"影片時長"+str(time))
                     logger.info(filename+"取得移動列表")
-                    logger.info(filename+"開始時間:")
-                    logger.info(file.starttime)
-                    logger.info(filename+"結束時間:")
-                    logger.info(file.endtime)
+                    logger.info(filename+"開始時間:"+start_timer)
+                    logger.info(filename+"結束時間:"+end_timer)
                     logger.info(filename+"移動偵測列表:")
-                    start_timer=str(file.starttime)
-                    head,sep,tail=start_timer.partition('.')
+                    head,sep,tail=start_timer.partition('.')#取得影片紀錄起時
                     start_timer = datetime.datetime.strptime(head, r"%Y-%m-%d %H:%M:%S")
+                    end,sep,tail=end_timer.partition('.')#取得影片紀錄末時
+                    end_timer = datetime.datetime.strptime(end, r"%Y-%m-%d %H:%M:%S")
+                    filetime=(end_timer-start_timer).total_seconds() #資料庫紀錄的影片時間
+                    filediff=float(time/filetime)#算出真實影片跟資料庫紀錄時間差異
+                    #realdiff=int(time/filetime)#取出真實影片時間跟資料庫紀錄時間差異
                     for move in moves:
                         end_time = str(move.movetime)
                         headend,sep,tail=end_time.partition('.')
                         end_time = datetime.datetime.strptime(headend, r"%Y-%m-%d %H:%M:%S")
                         diff = end_time - start_timer
                         move_list.append({
-                        "time": diff.total_seconds(),
+                        "time": diff.total_seconds()*filediff,#計算差異時間
                         "text": str(end_time)
                         })
             else:
