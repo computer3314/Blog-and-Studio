@@ -28,7 +28,7 @@
    <script src="{% static '/node_modules/videojs-landscape-fullscreen/dist/videojs-landscape-fullscreen.min.js' %}"></script>
  
 <script>
-　$(function(){ 
+$(document).ready(function() {
     videojs.addLanguage('zh-TW', {
   "Play": "播放",
   "Pause": "暫停",
@@ -40,7 +40,7 @@
    const apifile="/stream_video/?file_path="+fileurl
    const myVideo = videojs('myVideo', {
        language: 'zh-TW', // 設定使用語系為 zh-TW
-       sources:[{ src: apifile}],
+      //  sources:[{ src: apifile}],
         bigPlayButton: true,
         textTrackDisplay: false,
         posterImage: false,
@@ -72,14 +72,14 @@
     },
   });
   //建立按鈕
-      var deleteapi="downloadmp4/?file_path="+fileurl
-      var myButton = myVideo.controlBar.addChild('button', {});
-      var fullscreen = myVideo.controlBar.getChild("FullscreenToggle")
-      var index = myVideo.controlBar.children().indexOf(fullscreen)
-      var myButton = myVideo.controlBar.addChild("button", {}, index);
-      var myButtonDom = myButton.el();
-      myButtonDom.innerHTML ='<img src="static/assets/img/download.jpg" alt="下載" title="下載" style="height: 15px;width: 15px">';
-      myButtonDom.onclick = function () { window.open(deleteapi) };
+      // var deleteapi="downloadmp4/?file_path="+fileurl
+      // var myButton = myVideo.controlBar.addChild('button', {});
+      // var fullscreen = myVideo.controlBar.getChild("FullscreenToggle")
+      // var index = myVideo.controlBar.children().indexOf(fullscreen)
+      // var myButton = myVideo.controlBar.addChild("button", {}, index);
+      // var myButtonDom = myButton.el();
+      //myButtonDom.innerHTML ='<img src="static/assets/img/download.jpg" alt="下載" title="下載" style="height: 15px;width: 15px">';
+      //myButtonDom.onclick = function () { window.open(deleteapi) };
     })
 </script>
 </body>

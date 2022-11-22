@@ -16,3 +16,4 @@ python manage.py makemigrations
 python manage.py migrate      
 進行makemigrations 
 python -m daphne -b 0.0.0.0 -p 8001 Demo.asgi:application #啟動websocket   8001port
+python manage.py runserver --noreload 127.0.0.1:8000
