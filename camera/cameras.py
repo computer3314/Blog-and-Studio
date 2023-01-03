@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 # Create your views here.
 import os
+from os.path import join, getsize
 import time
 from django.conf import settings
 from myemail import my_send_mail
@@ -82,6 +83,8 @@ class BaseCamera:
     video_check=True
     #是否啟動
     isOpened=True
+    #資料夾限制容量(MB)
+    maxdirByte=10240
     #畫面平均值
     avg=0
     avg_float=0
@@ -117,7 +120,7 @@ class BaseCamera:
             logger.error("編號:" + self.Camera_id + " 找不到此相機")
             raise CameraException("編號:" + self.Camera_id + " 找不到此相機")
         elif self.isOpened is False:
-             logger.warn(msg)("編號:" + self.Camera_id + " 相機已經關閉")
+             logger.warn("編號:" + self.Camera_id + " 相機已經關閉")
              raise CameraException("編號:" + self.Camera_id + " 相機已經關閉")
         elif self.cam.isOpened():
             # 相機打開成功
@@ -137,6 +140,37 @@ class BaseCamera:
             logger.info("編號:" + self.Camera_id +" 釋放相機")
         if self.output is not None:
             self.output.release()
+    def getdirsize(self,dir):#取得檔案大小
+        size = 0
+        delete=0
+        for root, dirs, files in os.walk(dir):
+            size += sum([getsize(join(root, name)) for name in files])
+        if(size/1048576>self.maxdirByte):
+            # Get list of all files only in the given directory
+            list_of_files = filter( lambda x: os.path.isfile(os.path.join(dir, x)),
+                                    os.listdir(dir) )
+            # Sort list of files based on last modification time in ascending order
+            list_of_files = sorted( list_of_files,
+                                    key = lambda x: os.path.getmtime(os.path.join(dir, x))
+                                    )
+            # Iterate over sorted list of files and print file path 
+            # along with last modification time of file 
+            for file_name in list_of_files:
+                file_path = os.path.join(dir, file_name)
+                if delete == 0:     
+                     logger.info("刪除第一筆檔案:"+file_path)    
+                     os.remove(file_path)
+                     delete+=1
+        return size
+    def get_video_duration(self,filename):
+    #判斷時長
+        cap = cv2.VideoCapture(filename)
+        if cap.isOpened():
+            rate = cap.get(5)
+            frame_num =cap.get(7)
+            duration = frame_num/rate
+            return duration
+        return -1
     def get_output_video(self,isStop:bool):
         if self.cam is not None and self.video_check:
               if isStop is False:
@@ -174,6 +208,7 @@ class BaseCamera:
             raise ValueError("filename must end on .mp4")
 
         filename = self.outputVideoFolder+"/"+nameIn.replace(".mp4","_{0}.mp4").format(datetime.datetime.now().strftime("%Y-%m-%d"))
+        self.getdirsize(self.outputVideoFolder)#動態刪除系統檔案
         if os.path.isfile(filename):             # if already exists
             fn2 = filename[0:-4]+'_{0}.mp4'          # modify pattern to include a number
             count = 1

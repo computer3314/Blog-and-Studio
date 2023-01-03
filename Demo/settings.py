@@ -175,9 +175,12 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
+         'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
         'standard': {
-            'format': '[%(asctime)s][%(threadName)s:%(thread)d][task_id:%(name)s][%(filename)s:%(lineno)d]'
-                      '[%(levelname)s][%(message)s]'
+            'format': '[%(asctime)s][%(threadName)s:%(thread)d][task_id:%(name)s][%(levelname)s][%(message)s][%(filename)s:%(lineno)d]'
+  
         },
         'simple': {
             'format': '[%(levelname)s][%(asctime)s][%(filename)s:%(lineno)d]%(message)s'
@@ -220,8 +223,8 @@ LOGGING = {
             'class': 'logging.handlers.TimedRotatingFileHandler',  
             'filename': os.path.join(BASE_LOG_DIR, "TF_info.log"),  # 日志文件
             'backupCount': 3,  # 備份為3  xx.log --> xx.log.2018-08-23_00-00-00 --> xx.log.2018-08-24_00-00-00 --> ...
-            'when': 'D',  #每天一切， 可選值有S/秒 M/分 H/小時 D/天 W0-W6/週(0=週一) midnight/如果沒指定時間就默認在午夜
-            'formatter': 'standard',
+            'when': 'midnight',  #每天一切， 可選值有S/秒 M/分 H/小時 D/天 W0-W6/週(0=週一) midnight/如果沒指定時間就默認在午夜
+            'formatter': 'verbose',
             'encoding': 'utf-8',
         },
         'error': {
@@ -250,7 +253,7 @@ LOGGING = {
     },
     'loggers': {
         '': {  # 默認的logger應用如下配置
-            'handlers': ['error','console','TF'],  # 上線之後可以把'console'移除
+            'handlers': ['error','TF'],  # 上線之後可以把'console'移除
             'level': 'DEBUG',
             'propagate': True,
         },
