@@ -12,3 +12,4 @@ python-dotenv==0.20.0
 daphne
 channels==3.0.4
 channels-redis==4.0.0
+pip install selenium
