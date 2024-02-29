@@ -17,3 +17,7 @@ python manage.py migrate
 進行makemigrations 
 python -m daphne -b 0.0.0.0 -p 8001 Demo.asgi:application #啟動websocket   8001port
 python manage.py runserver --noreload 127.0.0.1:8000
+<br>
+1:個人部落格
+2:網路攝影機，使用opencv套件偵測動物動作，並且發送信件
+3:攝影機直播聊天室
