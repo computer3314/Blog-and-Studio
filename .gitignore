@@ -7,3 +7,4 @@ static/node_modules/*
 .env
 *.log
 logs/*
+.env
