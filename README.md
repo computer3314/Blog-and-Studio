@@ -1,5 +1,7 @@
 使用Python框架Django 為自己打造一個個人展示網站!
 <br/>
+網站:<url>https://happy.shengda.codes</url>
+<br/>
 #在static目錄下新增套件<br/>
 npm install <br/>
 npm install videojs-markers-plugin<br/>
