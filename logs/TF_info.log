@@ -1,0 +1,1208 @@
+INFO 2023-10-25 00:23:17,781 autoreload 11728 13740 Watching for file changes with StatReloader
+INFO 2023-10-25 00:23:18,052 base 11728 13740 Scheduler started
+INFO 2023-10-25 00:23:18,053 task 11728 13740 取得排程物件
+INFO 2023-10-25 00:23:18,053 task 11728 13740 啟動程式自動開啟
+INFO 2023-10-25 00:23:18,053 cameras 11728 13740 啟動所有相機實例開始
+INFO 2023-10-25 00:23:18,059 cameras 11728 13740 新增編號:1 相機開始
+INFO 2023-10-25 00:23:18,059 cameras 11728 13740 編號:1 相機基礎設定
+INFO 2023-10-25 00:23:18,069 cameras 11728 13740 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:23:18,069 cameras 11728 13740 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:23:18,076 cameras 11728 13740 編號:1 相機實例化失敗
+INFO 2023-10-25 00:23:18,076 cameras 11728 13740 編號:1 釋放相機
+INFO 2023-10-25 00:23:18,076 cameras 11728 13740 新增編號:1 相機結束
+INFO 2023-10-25 00:23:18,076 cameras 11728 13740 啟動所有相機實例結束
+INFO 2023-10-25 00:23:20,187 base 11728 8656 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:23:20,188 task 11728 8656 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:23:20,189 base 11728 4024 Running job "checkIn (trigger: date[2023-10-25 00:23:20 CST], next run at: 2023-10-25 00:23:20 CST)" (scheduled at 2023-10-25 00:23:20+08:00)
+INFO 2023-10-25 00:23:20,189 views 11728 4024 自動打卡程式啟動
+INFO 2023-10-25 00:23:20,214 base 11728 14688 Removed job 5e00cc44cea9435b800bde20dd027d10
+WARNING 2023-10-25 00:23:20,220 jobstores 11728 14688 Job '5e00cc44cea9435b800bde20dd027d10' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:23:26,904 views 11728 4024 嘗試切換到Alert彈窗1
+INFO 2023-10-25 00:23:26,907 views 11728 4024 嘗試切換到Alert彈窗2
+ERROR 2023-10-25 00:23:27,034 base 11728 4024 Job "checkIn (trigger: date[2023-10-25 00:23:20 CST], next run at: 2023-10-25 00:23:20 CST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Demo\task\views.py", line 118, in checkIn
+    alert.send_keys(usernames[0] + Keys.TAB + passwds[0])
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\common\alert.py", line 80, in send_keys
+    self.driver.execute(Command.W3C_SET_ALERT_VALUE, {"value": keys_to_typing(keysToSend), "text": keysToSend})
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 344, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 229, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: User prompt of type promptUserAndPass is not supported
+Stacktrace:
+RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:189:5
+UnsupportedOperationError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:784:5
+GeckoDriver.prototype.sendKeysToDialog@chrome://remote/content/marionette/driver.sys.mjs:2797:13
+
+WARNING 2023-10-25 00:23:29,055 jobstores 11728 4024 Job '5e00cc44cea9435b800bde20dd027d10' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:24:31,948 autoreload 11728 13740 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:24:33,500 autoreload 12996 9844 Watching for file changes with StatReloader
+INFO 2023-10-25 00:24:33,805 base 12996 9844 Scheduler started
+INFO 2023-10-25 00:24:33,806 task 12996 9844 取得排程物件
+INFO 2023-10-25 00:24:33,806 task 12996 9844 啟動程式自動開啟
+INFO 2023-10-25 00:24:33,806 cameras 12996 9844 啟動所有相機實例開始
+INFO 2023-10-25 00:24:33,810 cameras 12996 9844 新增編號:1 相機開始
+INFO 2023-10-25 00:24:33,810 cameras 12996 9844 編號:1 相機基礎設定
+INFO 2023-10-25 00:24:33,820 cameras 12996 9844 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:24:33,820 cameras 12996 9844 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:24:33,820 cameras 12996 9844 編號:1 相機實例化失敗
+INFO 2023-10-25 00:24:33,820 cameras 12996 9844 編號:1 釋放相機
+INFO 2023-10-25 00:24:33,821 cameras 12996 9844 新增編號:1 相機結束
+INFO 2023-10-25 00:24:33,821 cameras 12996 9844 啟動所有相機實例結束
+INFO 2023-10-25 00:24:38,545 base 12996 12848 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:24:38,545 task 12996 12848 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:24:38,549 base 12996 13392 Running job "checkIn (trigger: date[2023-10-25 00:24:38 CST], next run at: 2023-10-25 00:24:38 CST)" (scheduled at 2023-10-25 00:24:38+08:00)
+INFO 2023-10-25 00:24:38,572 views 12996 13392 自動打卡程式啟動
+INFO 2023-10-25 00:24:38,575 base 12996 13304 Removed job 5b8da22d5306482ba69f04daa1f8968d
+WARNING 2023-10-25 00:24:38,584 jobstores 12996 13304 Job '5b8da22d5306482ba69f04daa1f8968d' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:24:45,045 views 12996 13392 嘗試切換到Alert彈窗1
+INFO 2023-10-25 00:24:45,051 views 12996 13392 嘗試切換到Alert彈窗2
+ERROR 2023-10-25 00:24:45,078 base 12996 13392 Job "checkIn (trigger: date[2023-10-25 00:24:38 CST], next run at: 2023-10-25 00:24:38 CST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Demo\task\views.py", line 119, in checkIn
+    driver.execute_script(f"arguments[0].value='{usernames[0]}';", alert)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 404, in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 342, in execute
+    response = self.command_executor.execute(driver_command, params)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 295, in execute
+    data = utils.dump_json(params)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\utils.py", line 24, in dump_json
+    return json.dumps(json_struct)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\json\__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\json\encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\json\encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\json\encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type Alert is not JSON serializable
+WARNING 2023-10-25 00:24:47,120 jobstores 12996 13392 Job '5b8da22d5306482ba69f04daa1f8968d' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:26:15,397 autoreload 12996 9844 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:26:17,131 autoreload 14144 15376 Watching for file changes with StatReloader
+INFO 2023-10-25 00:26:17,445 base 14144 15376 Scheduler started
+INFO 2023-10-25 00:26:17,446 task 14144 15376 取得排程物件
+INFO 2023-10-25 00:26:17,447 task 14144 15376 啟動程式自動開啟
+INFO 2023-10-25 00:26:17,447 cameras 14144 15376 啟動所有相機實例開始
+INFO 2023-10-25 00:26:17,453 cameras 14144 15376 新增編號:1 相機開始
+INFO 2023-10-25 00:26:17,453 cameras 14144 15376 編號:1 相機基礎設定
+INFO 2023-10-25 00:26:17,462 cameras 14144 15376 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:26:17,463 cameras 14144 15376 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:26:17,463 cameras 14144 15376 編號:1 相機實例化失敗
+INFO 2023-10-25 00:26:17,463 cameras 14144 15376 編號:1 釋放相機
+INFO 2023-10-25 00:26:17,463 cameras 14144 15376 新增編號:1 相機結束
+INFO 2023-10-25 00:26:17,463 cameras 14144 15376 啟動所有相機實例結束
+INFO 2023-10-25 00:26:48,490 autoreload 14144 15376 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:26:49,881 autoreload 8304 9892 Watching for file changes with StatReloader
+INFO 2023-10-25 00:26:50,163 base 8304 9892 Scheduler started
+INFO 2023-10-25 00:26:50,165 task 8304 9892 取得排程物件
+INFO 2023-10-25 00:26:50,165 task 8304 9892 啟動程式自動開啟
+INFO 2023-10-25 00:26:50,165 cameras 8304 9892 啟動所有相機實例開始
+INFO 2023-10-25 00:26:50,170 cameras 8304 9892 新增編號:1 相機開始
+INFO 2023-10-25 00:26:50,170 cameras 8304 9892 編號:1 相機基礎設定
+INFO 2023-10-25 00:26:50,179 cameras 8304 9892 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:26:50,179 cameras 8304 9892 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:26:50,179 cameras 8304 9892 編號:1 相機實例化失敗
+INFO 2023-10-25 00:26:50,179 cameras 8304 9892 編號:1 釋放相機
+INFO 2023-10-25 00:26:50,179 cameras 8304 9892 新增編號:1 相機結束
+INFO 2023-10-25 00:26:50,179 cameras 8304 9892 啟動所有相機實例結束
+INFO 2023-10-25 00:27:02,242 base 8304 9312 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:27:02,242 task 8304 9312 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:27:02,244 base 8304 6816 Running job "checkIn (trigger: date[2023-10-25 00:27:02 CST], next run at: 2023-10-25 00:27:02 CST)" (scheduled at 2023-10-25 00:27:02+08:00)
+INFO 2023-10-25 00:27:02,245 views 8304 6816 自動打卡程式啟動
+INFO 2023-10-25 00:27:02,267 base 8304 14272 Removed job 97c71e334faf43d9aad535727be57725
+WARNING 2023-10-25 00:27:02,276 jobstores 8304 14272 Job '97c71e334faf43d9aad535727be57725' no longer exists! Skipping logging of job execution...
+ERROR 2023-10-25 00:27:08,640 base 8304 6816 Job "checkIn (trigger: date[2023-10-25 00:27:02 CST], next run at: 2023-10-25 00:27:02 CST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Demo\task\views.py", line 113, in checkIn
+    username_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, 'Username')))
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\support\wait.py", line 86, in until
+    value = method(self._driver)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\support\expected_conditions.py", line 81, in _predicate
+    return driver.find_element(*locator)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 738, in find_element
+    return self.execute(Command.FIND_ELEMENT, {"using": by, "value": value})["value"]
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 344, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 228, in check_response
+    raise exception_class(message, screen, stacktrace, alert_text)  # type: ignore[call-arg]  # mypy is not smart enough here
+selenium.common.exceptions.UnexpectedAlertPresentException: Alert Text: None
+Message: Dismissed user prompt dialog: This site is asking you to sign in.
+Stacktrace:
+RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:189:5
+UnexpectedAlertOpenError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:736:5
+GeckoDriver.prototype._handleUserPrompts@chrome://remote/content/marionette/driver.sys.mjs:2835:13
+
+WARNING 2023-10-25 00:27:10,665 jobstores 8304 6816 Job '97c71e334faf43d9aad535727be57725' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:28:22,110 autoreload 8304 9892 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:28:24,748 autoreload 18044 18048 Watching for file changes with StatReloader
+INFO 2023-10-25 00:28:27,349 base 18044 18048 Scheduler started
+INFO 2023-10-25 00:28:27,350 task 18044 18048 取得排程物件
+INFO 2023-10-25 00:28:27,350 task 18044 18048 啟動程式自動開啟
+INFO 2023-10-25 00:28:27,350 cameras 18044 18048 啟動所有相機實例開始
+INFO 2023-10-25 00:28:27,358 cameras 18044 18048 新增編號:1 相機開始
+INFO 2023-10-25 00:28:27,358 cameras 18044 18048 編號:1 相機基礎設定
+INFO 2023-10-25 00:28:27,367 cameras 18044 18048 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:28:27,367 cameras 18044 18048 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:28:27,368 cameras 18044 18048 編號:1 相機實例化失敗
+INFO 2023-10-25 00:28:27,368 cameras 18044 18048 編號:1 釋放相機
+INFO 2023-10-25 00:28:27,368 cameras 18044 18048 新增編號:1 相機結束
+INFO 2023-10-25 00:28:27,368 cameras 18044 18048 啟動所有相機實例結束
+INFO 2023-10-25 00:28:31,009 base 18044 2056 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:28:31,009 task 18044 2056 ID:task.views.checkIn執行成功
+WARNING 2023-10-25 00:28:31,011 base 18044 11560 Run time of job "checkIn (trigger: date[2023-10-25 00:28:30 CST], next run at: 2023-10-25 00:28:30 CST)" was missed by 0:00:01.011639
+INFO 2023-10-25 00:28:31,028 base 18044 8676 Removed job f2dc0ff87acd45c78276efc7d9fcc428
+WARNING 2023-10-25 00:28:31,032 jobstores 18044 11560 Job 'f2dc0ff87acd45c78276efc7d9fcc428' no longer exists! Skipping logging of job execution...
+WARNING 2023-10-25 00:28:31,037 jobstores 18044 8676 Job 'f2dc0ff87acd45c78276efc7d9fcc428' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:28:57,461 base 18044 2056 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:28:57,461 task 18044 2056 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:28:57,463 base 18044 11560 Running job "checkIn (trigger: date[2023-10-25 00:28:57 CST], next run at: 2023-10-25 00:28:57 CST)" (scheduled at 2023-10-25 00:28:57+08:00)
+INFO 2023-10-25 00:28:57,463 views 18044 11560 自動打卡程式啟動
+INFO 2023-10-25 00:28:57,506 base 18044 8676 Removed job 186a4ed4cdad4650aa18a76769f0119d
+WARNING 2023-10-25 00:28:57,513 jobstores 18044 8676 Job '186a4ed4cdad4650aa18a76769f0119d' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:29:01,889 autoreload 18044 18048 C:\Demo\task\views.py changed, reloading.
+ERROR 2023-10-25 00:29:04,890 base 18044 11560 Job "checkIn (trigger: date[2023-10-25 00:28:57 CST], next run at: 2023-10-25 00:28:57 CST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Demo\task\views.py", line 120, in checkIn
+    driver.execute_script(f"arguments[0].text='{usernames[0]}';", prompt)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 404, in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 342, in execute
+    response = self.command_executor.execute(driver_command, params)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 295, in execute
+    data = utils.dump_json(params)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\utils.py", line 24, in dump_json
+    return json.dumps(json_struct)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\json\__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\json\encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\json\encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\json\encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type Alert is not JSON serializable
+WARNING 2023-10-25 00:29:07,258 jobstores 18044 11560 Job '186a4ed4cdad4650aa18a76769f0119d' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:29:09,048 autoreload 16536 16124 Watching for file changes with StatReloader
+INFO 2023-10-25 00:29:09,400 base 16536 16124 Scheduler started
+INFO 2023-10-25 00:29:09,401 task 16536 16124 取得排程物件
+INFO 2023-10-25 00:29:09,401 task 16536 16124 啟動程式自動開啟
+INFO 2023-10-25 00:29:09,401 cameras 16536 16124 啟動所有相機實例開始
+INFO 2023-10-25 00:29:09,417 cameras 16536 16124 新增編號:1 相機開始
+INFO 2023-10-25 00:29:09,417 cameras 16536 16124 編號:1 相機基礎設定
+INFO 2023-10-25 00:29:09,431 cameras 16536 16124 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:29:09,432 cameras 16536 16124 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:29:09,432 cameras 16536 16124 編號:1 相機實例化失敗
+INFO 2023-10-25 00:29:09,432 cameras 16536 16124 編號:1 釋放相機
+INFO 2023-10-25 00:29:09,432 cameras 16536 16124 新增編號:1 相機結束
+INFO 2023-10-25 00:29:09,433 cameras 16536 16124 啟動所有相機實例結束
+INFO 2023-10-25 00:31:18,120 autoreload 16536 16124 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:31:19,615 autoreload 15796 636 Watching for file changes with StatReloader
+INFO 2023-10-25 00:31:19,911 base 15796 636 Scheduler started
+INFO 2023-10-25 00:31:19,912 task 15796 636 取得排程物件
+INFO 2023-10-25 00:31:19,912 task 15796 636 啟動程式自動開啟
+INFO 2023-10-25 00:31:19,912 cameras 15796 636 啟動所有相機實例開始
+INFO 2023-10-25 00:31:19,916 cameras 15796 636 新增編號:1 相機開始
+INFO 2023-10-25 00:31:19,916 cameras 15796 636 編號:1 相機基礎設定
+INFO 2023-10-25 00:31:19,926 cameras 15796 636 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:31:19,926 cameras 15796 636 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:31:19,926 cameras 15796 636 編號:1 相機實例化失敗
+INFO 2023-10-25 00:31:19,927 cameras 15796 636 編號:1 釋放相機
+INFO 2023-10-25 00:31:19,927 cameras 15796 636 新增編號:1 相機結束
+INFO 2023-10-25 00:31:19,927 cameras 15796 636 啟動所有相機實例結束
+INFO 2023-10-25 00:31:23,210 base 15796 11232 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:31:23,211 task 15796 11232 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:31:23,216 base 15796 8976 Running job "checkIn (trigger: date[2023-10-25 00:31:23 CST], next run at: 2023-10-25 00:31:23 CST)" (scheduled at 2023-10-25 00:31:23+08:00)
+INFO 2023-10-25 00:31:23,217 views 15796 8976 自動打卡程式啟動
+INFO 2023-10-25 00:31:23,237 base 15796 9696 Removed job b7752a04430841cbbcea2624de962838
+WARNING 2023-10-25 00:31:23,243 jobstores 15796 9696 Job 'b7752a04430841cbbcea2624de962838' no longer exists! Skipping logging of job execution...
+ERROR 2023-10-25 00:31:29,992 base 15796 8976 Job "checkIn (trigger: date[2023-10-25 00:31:23 CST], next run at: 2023-10-25 00:31:23 CST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Demo\task\views.py", line 120, in checkIn
+    driver.execute_script(f"arguments[0].value='{usernames[0]}';", prompt)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 404, in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 342, in execute
+    response = self.command_executor.execute(driver_command, params)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 295, in execute
+    data = utils.dump_json(params)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\utils.py", line 24, in dump_json
+    return json.dumps(json_struct)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\json\__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\json\encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\json\encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\json\encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type Alert is not JSON serializable
+WARNING 2023-10-25 00:31:32,016 jobstores 15796 8976 Job 'b7752a04430841cbbcea2624de962838' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:35:16,065 autoreload 15796 636 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:35:17,546 autoreload 4240 10140 Watching for file changes with StatReloader
+INFO 2023-10-25 00:35:17,834 base 4240 10140 Scheduler started
+INFO 2023-10-25 00:35:17,835 task 4240 10140 取得排程物件
+INFO 2023-10-25 00:35:17,835 task 4240 10140 啟動程式自動開啟
+INFO 2023-10-25 00:35:17,836 cameras 4240 10140 啟動所有相機實例開始
+INFO 2023-10-25 00:35:17,841 cameras 4240 10140 新增編號:1 相機開始
+INFO 2023-10-25 00:35:17,841 cameras 4240 10140 編號:1 相機基礎設定
+INFO 2023-10-25 00:35:17,851 cameras 4240 10140 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:35:17,851 cameras 4240 10140 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:35:17,852 cameras 4240 10140 編號:1 相機實例化失敗
+INFO 2023-10-25 00:35:17,852 cameras 4240 10140 編號:1 釋放相機
+INFO 2023-10-25 00:35:17,852 cameras 4240 10140 新增編號:1 相機結束
+INFO 2023-10-25 00:35:17,852 cameras 4240 10140 啟動所有相機實例結束
+INFO 2023-10-25 00:35:20,788 base 4240 1400 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:35:20,788 task 4240 1400 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:35:20,790 base 4240 12676 Running job "checkIn (trigger: date[2023-10-25 00:35:20 CST], next run at: 2023-10-25 00:35:20 CST)" (scheduled at 2023-10-25 00:35:20+08:00)
+INFO 2023-10-25 00:35:20,791 views 4240 12676 自動打卡程式啟動
+INFO 2023-10-25 00:35:20,809 base 4240 9716 Removed job 732b156b7f4a497faee5dd1757afcbb8
+WARNING 2023-10-25 00:35:20,815 jobstores 4240 9716 Job '732b156b7f4a497faee5dd1757afcbb8' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:35:30,619 base 4240 12676 Job "checkIn (trigger: date[2023-10-25 00:35:20 CST], next run at: 2023-10-25 00:35:20 CST)" executed successfully
+WARNING 2023-10-25 00:35:30,647 jobstores 4240 12676 Job '732b156b7f4a497faee5dd1757afcbb8' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:36:26,139 autoreload 4240 10140 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:36:27,693 autoreload 14420 13476 Watching for file changes with StatReloader
+INFO 2023-10-25 00:36:27,999 base 14420 13476 Scheduler started
+INFO 2023-10-25 00:36:28,001 task 14420 13476 取得排程物件
+INFO 2023-10-25 00:36:28,001 task 14420 13476 啟動程式自動開啟
+INFO 2023-10-25 00:36:28,001 cameras 14420 13476 啟動所有相機實例開始
+INFO 2023-10-25 00:36:28,005 cameras 14420 13476 新增編號:1 相機開始
+INFO 2023-10-25 00:36:28,006 cameras 14420 13476 編號:1 相機基礎設定
+INFO 2023-10-25 00:36:28,016 cameras 14420 13476 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:36:28,016 cameras 14420 13476 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:36:28,016 cameras 14420 13476 編號:1 相機實例化失敗
+INFO 2023-10-25 00:36:28,017 cameras 14420 13476 編號:1 釋放相機
+INFO 2023-10-25 00:36:28,017 cameras 14420 13476 新增編號:1 相機結束
+INFO 2023-10-25 00:36:28,017 cameras 14420 13476 啟動所有相機實例結束
+INFO 2023-10-25 00:37:14,569 autoreload 14420 13476 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:37:16,048 autoreload 6880 1732 Watching for file changes with StatReloader
+INFO 2023-10-25 00:37:16,388 base 6880 1732 Scheduler started
+INFO 2023-10-25 00:37:16,389 task 6880 1732 取得排程物件
+INFO 2023-10-25 00:37:16,389 task 6880 1732 啟動程式自動開啟
+INFO 2023-10-25 00:37:16,389 cameras 6880 1732 啟動所有相機實例開始
+INFO 2023-10-25 00:37:16,397 cameras 6880 1732 新增編號:1 相機開始
+INFO 2023-10-25 00:37:16,397 cameras 6880 1732 編號:1 相機基礎設定
+INFO 2023-10-25 00:37:16,406 cameras 6880 1732 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:37:16,406 cameras 6880 1732 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:37:16,406 cameras 6880 1732 編號:1 相機實例化失敗
+INFO 2023-10-25 00:37:16,406 cameras 6880 1732 編號:1 釋放相機
+INFO 2023-10-25 00:37:16,406 cameras 6880 1732 新增編號:1 相機結束
+INFO 2023-10-25 00:37:16,407 cameras 6880 1732 啟動所有相機實例結束
+INFO 2023-10-25 00:37:19,250 base 6880 17744 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:37:19,250 task 6880 17744 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:37:19,252 base 6880 13272 Running job "checkIn (trigger: date[2023-10-25 00:37:19 CST], next run at: 2023-10-25 00:37:19 CST)" (scheduled at 2023-10-25 00:37:19+08:00)
+INFO 2023-10-25 00:37:19,252 views 6880 13272 自動打卡程式啟動
+INFO 2023-10-25 00:37:19,274 base 6880 17728 Removed job b751c8cede5746c698a229554da78286
+WARNING 2023-10-25 00:37:19,279 jobstores 6880 17728 Job 'b751c8cede5746c698a229554da78286' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:37:28,148 base 6880 13272 Job "checkIn (trigger: date[2023-10-25 00:37:19 CST], next run at: 2023-10-25 00:37:19 CST)" executed successfully
+WARNING 2023-10-25 00:37:28,162 jobstores 6880 13272 Job 'b751c8cede5746c698a229554da78286' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:37:51,108 autoreload 6880 1732 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:37:52,641 autoreload 11980 15516 Watching for file changes with StatReloader
+INFO 2023-10-25 00:37:53,002 base 11980 15516 Scheduler started
+INFO 2023-10-25 00:37:53,004 task 11980 15516 取得排程物件
+INFO 2023-10-25 00:37:53,004 task 11980 15516 啟動程式自動開啟
+INFO 2023-10-25 00:37:53,004 cameras 11980 15516 啟動所有相機實例開始
+INFO 2023-10-25 00:37:53,010 cameras 11980 15516 新增編號:1 相機開始
+INFO 2023-10-25 00:37:53,010 cameras 11980 15516 編號:1 相機基礎設定
+INFO 2023-10-25 00:37:53,020 cameras 11980 15516 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:37:53,021 cameras 11980 15516 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:37:53,022 cameras 11980 15516 編號:1 相機實例化失敗
+INFO 2023-10-25 00:37:53,022 cameras 11980 15516 編號:1 釋放相機
+INFO 2023-10-25 00:37:53,022 cameras 11980 15516 新增編號:1 相機結束
+INFO 2023-10-25 00:37:53,022 cameras 11980 15516 啟動所有相機實例結束
+INFO 2023-10-25 00:37:56,962 base 11980 7736 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:37:56,962 task 11980 7736 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:37:56,965 base 11980 17480 Running job "checkIn (trigger: date[2023-10-25 00:37:56 CST], next run at: 2023-10-25 00:37:56 CST)" (scheduled at 2023-10-25 00:37:56+08:00)
+INFO 2023-10-25 00:37:56,965 views 11980 17480 自動打卡程式啟動
+INFO 2023-10-25 00:37:56,979 base 11980 13468 Removed job 97fc0f981a134cd1b575931aeaa62c61
+WARNING 2023-10-25 00:37:56,989 jobstores 11980 13468 Job '97fc0f981a134cd1b575931aeaa62c61' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:38:05,703 base 11980 17480 Job "checkIn (trigger: date[2023-10-25 00:37:56 CST], next run at: 2023-10-25 00:37:56 CST)" executed successfully
+WARNING 2023-10-25 00:38:05,716 jobstores 11980 17480 Job '97fc0f981a134cd1b575931aeaa62c61' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:39:32,485 autoreload 11980 15516 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:39:34,056 autoreload 7308 17204 Watching for file changes with StatReloader
+INFO 2023-10-25 00:39:34,336 base 7308 17204 Scheduler started
+INFO 2023-10-25 00:39:34,337 task 7308 17204 取得排程物件
+INFO 2023-10-25 00:39:34,337 task 7308 17204 啟動程式自動開啟
+INFO 2023-10-25 00:39:34,337 cameras 7308 17204 啟動所有相機實例開始
+INFO 2023-10-25 00:39:34,343 cameras 7308 17204 新增編號:1 相機開始
+INFO 2023-10-25 00:39:34,343 cameras 7308 17204 編號:1 相機基礎設定
+INFO 2023-10-25 00:39:34,352 cameras 7308 17204 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:39:34,352 cameras 7308 17204 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:39:34,353 cameras 7308 17204 編號:1 相機實例化失敗
+INFO 2023-10-25 00:39:34,353 cameras 7308 17204 編號:1 釋放相機
+INFO 2023-10-25 00:39:34,353 cameras 7308 17204 新增編號:1 相機結束
+INFO 2023-10-25 00:39:34,353 cameras 7308 17204 啟動所有相機實例結束
+INFO 2023-10-25 00:39:36,507 base 7308 17584 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:39:36,507 task 7308 17584 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:39:36,509 base 7308 17452 Running job "checkIn (trigger: date[2023-10-25 00:39:36 CST], next run at: 2023-10-25 00:39:36 CST)" (scheduled at 2023-10-25 00:39:36+08:00)
+INFO 2023-10-25 00:39:36,509 views 7308 17452 自動打卡程式啟動
+INFO 2023-10-25 00:39:36,526 base 7308 5220 Removed job 506df213b2314bbba1430905a187fe27
+WARNING 2023-10-25 00:39:36,541 jobstores 7308 5220 Job '506df213b2314bbba1430905a187fe27' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:39:45,189 base 7308 17452 Job "checkIn (trigger: date[2023-10-25 00:39:36 CST], next run at: 2023-10-25 00:39:36 CST)" executed successfully
+WARNING 2023-10-25 00:39:45,203 jobstores 7308 17452 Job '506df213b2314bbba1430905a187fe27' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:40:47,142 autoreload 7308 17204 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:40:48,635 autoreload 6076 14156 Watching for file changes with StatReloader
+INFO 2023-10-25 00:40:48,989 base 6076 14156 Scheduler started
+INFO 2023-10-25 00:40:48,990 task 6076 14156 取得排程物件
+INFO 2023-10-25 00:40:48,990 task 6076 14156 啟動程式自動開啟
+INFO 2023-10-25 00:40:48,990 cameras 6076 14156 啟動所有相機實例開始
+INFO 2023-10-25 00:40:48,993 cameras 6076 14156 新增編號:1 相機開始
+INFO 2023-10-25 00:40:48,994 cameras 6076 14156 編號:1 相機基礎設定
+INFO 2023-10-25 00:40:49,002 cameras 6076 14156 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:40:49,003 cameras 6076 14156 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:40:49,003 cameras 6076 14156 編號:1 相機實例化失敗
+INFO 2023-10-25 00:40:49,003 cameras 6076 14156 編號:1 釋放相機
+INFO 2023-10-25 00:40:49,003 cameras 6076 14156 新增編號:1 相機結束
+INFO 2023-10-25 00:40:49,003 cameras 6076 14156 啟動所有相機實例結束
+INFO 2023-10-25 00:40:51,118 base 6076 10756 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:40:51,118 task 6076 10756 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:40:51,122 base 6076 8884 Running job "checkIn (trigger: date[2023-10-25 00:40:51 CST], next run at: 2023-10-25 00:40:51 CST)" (scheduled at 2023-10-25 00:40:51+08:00)
+INFO 2023-10-25 00:40:51,123 views 6076 8884 自動打卡程式啟動
+INFO 2023-10-25 00:40:51,143 base 6076 1448 Removed job fc42e55b7b344950a1dcfc1c868e0fd2
+WARNING 2023-10-25 00:40:51,149 jobstores 6076 1448 Job 'fc42e55b7b344950a1dcfc1c868e0fd2' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:40:59,838 base 6076 8884 Job "checkIn (trigger: date[2023-10-25 00:40:51 CST], next run at: 2023-10-25 00:40:51 CST)" executed successfully
+WARNING 2023-10-25 00:40:59,855 jobstores 6076 8884 Job 'fc42e55b7b344950a1dcfc1c868e0fd2' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:43:37,779 autoreload 6076 14156 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:43:39,328 autoreload 11976 5684 Watching for file changes with StatReloader
+INFO 2023-10-25 00:43:39,650 base 11976 5684 Scheduler started
+INFO 2023-10-25 00:43:39,651 task 11976 5684 取得排程物件
+INFO 2023-10-25 00:43:39,651 task 11976 5684 啟動程式自動開啟
+INFO 2023-10-25 00:43:39,651 cameras 11976 5684 啟動所有相機實例開始
+INFO 2023-10-25 00:43:39,656 cameras 11976 5684 新增編號:1 相機開始
+INFO 2023-10-25 00:43:39,656 cameras 11976 5684 編號:1 相機基礎設定
+INFO 2023-10-25 00:43:39,666 cameras 11976 5684 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:43:39,667 cameras 11976 5684 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:43:39,667 cameras 11976 5684 編號:1 相機實例化失敗
+INFO 2023-10-25 00:43:39,667 cameras 11976 5684 編號:1 釋放相機
+INFO 2023-10-25 00:43:39,667 cameras 11976 5684 新增編號:1 相機結束
+INFO 2023-10-25 00:43:39,667 cameras 11976 5684 啟動所有相機實例結束
+INFO 2023-10-25 00:43:42,316 base 11976 11664 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:43:42,317 task 11976 11664 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:43:42,318 base 11976 9180 Running job "checkIn (trigger: date[2023-10-25 00:43:42 CST], next run at: 2023-10-25 00:43:42 CST)" (scheduled at 2023-10-25 00:43:42+08:00)
+INFO 2023-10-25 00:43:42,322 views 11976 9180 自動打卡程式啟動
+INFO 2023-10-25 00:43:42,336 base 11976 7240 Removed job c156c63449d745f0902a095a1a729ef3
+WARNING 2023-10-25 00:43:42,344 jobstores 11976 7240 Job 'c156c63449d745f0902a095a1a729ef3' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:43:51,202 base 11976 9180 Job "checkIn (trigger: date[2023-10-25 00:43:42 CST], next run at: 2023-10-25 00:43:42 CST)" executed successfully
+WARNING 2023-10-25 00:43:51,223 jobstores 11976 9180 Job 'c156c63449d745f0902a095a1a729ef3' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:45:28,188 autoreload 11976 5684 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:45:29,895 autoreload 16968 11800 Watching for file changes with StatReloader
+INFO 2023-10-25 00:45:30,262 base 16968 11800 Scheduler started
+INFO 2023-10-25 00:45:30,263 task 16968 11800 取得排程物件
+INFO 2023-10-25 00:45:30,264 task 16968 11800 啟動程式自動開啟
+INFO 2023-10-25 00:45:30,264 cameras 16968 11800 啟動所有相機實例開始
+INFO 2023-10-25 00:45:30,268 cameras 16968 11800 新增編號:1 相機開始
+INFO 2023-10-25 00:45:30,268 cameras 16968 11800 編號:1 相機基礎設定
+INFO 2023-10-25 00:45:30,280 cameras 16968 11800 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:45:30,280 cameras 16968 11800 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:45:30,280 cameras 16968 11800 編號:1 相機實例化失敗
+INFO 2023-10-25 00:45:30,280 cameras 16968 11800 編號:1 釋放相機
+INFO 2023-10-25 00:45:30,280 cameras 16968 11800 新增編號:1 相機結束
+INFO 2023-10-25 00:45:30,280 cameras 16968 11800 啟動所有相機實例結束
+INFO 2023-10-25 00:45:32,612 base 16968 18424 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:45:32,613 task 16968 18424 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:45:32,615 base 16968 4492 Running job "checkIn (trigger: date[2023-10-25 00:45:32 CST], next run at: 2023-10-25 00:45:32 CST)" (scheduled at 2023-10-25 00:45:32+08:00)
+INFO 2023-10-25 00:45:32,615 views 16968 4492 自動打卡程式啟動
+INFO 2023-10-25 00:45:32,638 base 16968 12676 Removed job 716a840168a44e2c8d5c8925231b388e
+WARNING 2023-10-25 00:45:32,647 jobstores 16968 12676 Job '716a840168a44e2c8d5c8925231b388e' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:45:43,353 base 16968 4492 Job "checkIn (trigger: date[2023-10-25 00:45:32 CST], next run at: 2023-10-25 00:45:32 CST)" executed successfully
+WARNING 2023-10-25 00:45:43,367 jobstores 16968 4492 Job '716a840168a44e2c8d5c8925231b388e' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:46:50,725 autoreload 16968 11800 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:46:52,426 autoreload 7628 17076 Watching for file changes with StatReloader
+INFO 2023-10-25 00:46:52,778 base 7628 17076 Scheduler started
+INFO 2023-10-25 00:46:52,780 task 7628 17076 取得排程物件
+INFO 2023-10-25 00:46:52,780 task 7628 17076 啟動程式自動開啟
+INFO 2023-10-25 00:46:52,780 cameras 7628 17076 啟動所有相機實例開始
+INFO 2023-10-25 00:46:52,788 cameras 7628 17076 新增編號:1 相機開始
+INFO 2023-10-25 00:46:52,788 cameras 7628 17076 編號:1 相機基礎設定
+INFO 2023-10-25 00:46:52,797 cameras 7628 17076 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:46:52,798 cameras 7628 17076 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:46:52,798 cameras 7628 17076 編號:1 相機實例化失敗
+INFO 2023-10-25 00:46:52,798 cameras 7628 17076 編號:1 釋放相機
+INFO 2023-10-25 00:46:52,798 cameras 7628 17076 新增編號:1 相機結束
+INFO 2023-10-25 00:46:52,798 cameras 7628 17076 啟動所有相機實例結束
+INFO 2023-10-25 00:47:09,291 autoreload 7628 17076 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:47:10,771 autoreload 11216 15256 Watching for file changes with StatReloader
+INFO 2023-10-25 00:47:11,085 base 11216 15256 Scheduler started
+INFO 2023-10-25 00:47:11,086 task 11216 15256 取得排程物件
+INFO 2023-10-25 00:47:11,086 task 11216 15256 啟動程式自動開啟
+INFO 2023-10-25 00:47:11,086 cameras 11216 15256 啟動所有相機實例開始
+INFO 2023-10-25 00:47:11,091 cameras 11216 15256 新增編號:1 相機開始
+INFO 2023-10-25 00:47:11,091 cameras 11216 15256 編號:1 相機基礎設定
+INFO 2023-10-25 00:47:11,101 cameras 11216 15256 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:47:11,101 cameras 11216 15256 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:47:11,101 cameras 11216 15256 編號:1 相機實例化失敗
+INFO 2023-10-25 00:47:11,102 cameras 11216 15256 編號:1 釋放相機
+INFO 2023-10-25 00:47:11,102 cameras 11216 15256 新增編號:1 相機結束
+INFO 2023-10-25 00:47:11,102 cameras 11216 15256 啟動所有相機實例結束
+INFO 2023-10-25 00:47:13,800 base 11216 676 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:47:13,800 task 11216 676 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:47:13,804 base 11216 4028 Running job "checkIn (trigger: date[2023-10-25 00:47:13 CST], next run at: 2023-10-25 00:47:13 CST)" (scheduled at 2023-10-25 00:47:13+08:00)
+INFO 2023-10-25 00:47:13,805 views 11216 4028 自動打卡程式啟動
+INFO 2023-10-25 00:47:13,816 base 11216 18372 Removed job ab479c51b08b4a029ab1beb88359aa1b
+WARNING 2023-10-25 00:47:13,823 jobstores 11216 18372 Job 'ab479c51b08b4a029ab1beb88359aa1b' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:47:22,820 base 11216 4028 Job "checkIn (trigger: date[2023-10-25 00:47:13 CST], next run at: 2023-10-25 00:47:13 CST)" executed successfully
+WARNING 2023-10-25 00:47:22,828 jobstores 11216 4028 Job 'ab479c51b08b4a029ab1beb88359aa1b' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:47:42,158 autoreload 11216 15256 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:47:43,710 autoreload 17508 9888 Watching for file changes with StatReloader
+INFO 2023-10-25 00:47:44,008 base 17508 9888 Scheduler started
+INFO 2023-10-25 00:47:44,010 task 17508 9888 取得排程物件
+INFO 2023-10-25 00:47:44,010 task 17508 9888 啟動程式自動開啟
+INFO 2023-10-25 00:47:44,011 cameras 17508 9888 啟動所有相機實例開始
+INFO 2023-10-25 00:47:44,015 cameras 17508 9888 新增編號:1 相機開始
+INFO 2023-10-25 00:47:44,016 cameras 17508 9888 編號:1 相機基礎設定
+INFO 2023-10-25 00:47:44,026 cameras 17508 9888 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:47:44,027 cameras 17508 9888 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:47:44,027 cameras 17508 9888 編號:1 相機實例化失敗
+INFO 2023-10-25 00:47:44,027 cameras 17508 9888 編號:1 釋放相機
+INFO 2023-10-25 00:47:44,027 cameras 17508 9888 新增編號:1 相機結束
+INFO 2023-10-25 00:47:44,027 cameras 17508 9888 啟動所有相機實例結束
+INFO 2023-10-25 00:48:12,568 base 17508 15744 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:48:12,568 task 17508 15744 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:48:12,570 base 17508 15108 Running job "checkIn (trigger: date[2023-10-25 00:48:12 CST], next run at: 2023-10-25 00:48:12 CST)" (scheduled at 2023-10-25 00:48:12+08:00)
+INFO 2023-10-25 00:48:12,571 views 17508 15108 自動打卡程式啟動
+INFO 2023-10-25 00:48:12,596 base 17508 1816 Removed job 0bf7c8311a154e5795f258fa844fd7cd
+WARNING 2023-10-25 00:48:12,603 jobstores 17508 1816 Job '0bf7c8311a154e5795f258fa844fd7cd' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:48:21,760 base 17508 15108 Job "checkIn (trigger: date[2023-10-25 00:48:12 CST], next run at: 2023-10-25 00:48:12 CST)" executed successfully
+WARNING 2023-10-25 00:48:21,768 jobstores 17508 15108 Job '0bf7c8311a154e5795f258fa844fd7cd' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:48:36,676 autoreload 17508 9888 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:48:38,141 autoreload 12928 16884 Watching for file changes with StatReloader
+INFO 2023-10-25 00:48:38,473 base 12928 16884 Scheduler started
+INFO 2023-10-25 00:48:38,474 task 12928 16884 取得排程物件
+INFO 2023-10-25 00:48:38,475 task 12928 16884 啟動程式自動開啟
+INFO 2023-10-25 00:48:38,475 cameras 12928 16884 啟動所有相機實例開始
+INFO 2023-10-25 00:48:38,479 cameras 12928 16884 新增編號:1 相機開始
+INFO 2023-10-25 00:48:38,480 cameras 12928 16884 編號:1 相機基礎設定
+INFO 2023-10-25 00:48:38,488 cameras 12928 16884 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:48:38,488 cameras 12928 16884 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:48:38,489 cameras 12928 16884 編號:1 相機實例化失敗
+INFO 2023-10-25 00:48:38,489 cameras 12928 16884 編號:1 釋放相機
+INFO 2023-10-25 00:48:38,489 cameras 12928 16884 新增編號:1 相機結束
+INFO 2023-10-25 00:48:38,489 cameras 12928 16884 啟動所有相機實例結束
+INFO 2023-10-25 00:48:42,436 base 12928 7240 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:48:42,436 task 12928 7240 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:48:42,439 base 12928 12832 Running job "checkIn (trigger: date[2023-10-25 00:48:42 CST], next run at: 2023-10-25 00:48:42 CST)" (scheduled at 2023-10-25 00:48:42+08:00)
+INFO 2023-10-25 00:48:42,440 views 12928 12832 自動打卡程式啟動
+INFO 2023-10-25 00:48:42,464 base 12928 17300 Removed job 45e327ef37ee4285a4c00a3acefd4170
+WARNING 2023-10-25 00:48:42,501 jobstores 12928 17300 Job '45e327ef37ee4285a4c00a3acefd4170' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:48:53,407 base 12928 12832 Job "checkIn (trigger: date[2023-10-25 00:48:42 CST], next run at: 2023-10-25 00:48:42 CST)" executed successfully
+WARNING 2023-10-25 00:48:53,415 jobstores 12928 12832 Job '45e327ef37ee4285a4c00a3acefd4170' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:50:53,911 autoreload 12928 16884 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:50:55,463 autoreload 17108 14136 Watching for file changes with StatReloader
+INFO 2023-10-25 00:50:55,753 base 17108 14136 Scheduler started
+INFO 2023-10-25 00:50:55,755 task 17108 14136 取得排程物件
+INFO 2023-10-25 00:50:55,755 task 17108 14136 啟動程式自動開啟
+INFO 2023-10-25 00:50:55,755 cameras 17108 14136 啟動所有相機實例開始
+INFO 2023-10-25 00:50:55,759 cameras 17108 14136 新增編號:1 相機開始
+INFO 2023-10-25 00:50:55,759 cameras 17108 14136 編號:1 相機基礎設定
+INFO 2023-10-25 00:50:55,768 cameras 17108 14136 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:50:55,768 cameras 17108 14136 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:50:55,769 cameras 17108 14136 編號:1 相機實例化失敗
+INFO 2023-10-25 00:50:55,769 cameras 17108 14136 編號:1 釋放相機
+INFO 2023-10-25 00:50:55,769 cameras 17108 14136 新增編號:1 相機結束
+INFO 2023-10-25 00:50:55,769 cameras 17108 14136 啟動所有相機實例結束
+INFO 2023-10-25 00:51:01,513 base 17108 14672 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:51:01,513 task 17108 14672 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:51:01,519 base 17108 15980 Running job "checkIn (trigger: date[2023-10-25 00:51:01 CST], next run at: 2023-10-25 00:51:01 CST)" (scheduled at 2023-10-25 00:51:01+08:00)
+INFO 2023-10-25 00:51:01,521 views 17108 15980 自動打卡程式啟動
+INFO 2023-10-25 00:51:01,537 base 17108 14484 Removed job a8d67359c4df4bf581e4d49dea420b23
+WARNING 2023-10-25 00:51:01,543 jobstores 17108 14484 Job 'a8d67359c4df4bf581e4d49dea420b23' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:51:20,332 base 17108 15980 Job "checkIn (trigger: date[2023-10-25 00:51:01 CST], next run at: 2023-10-25 00:51:01 CST)" executed successfully
+WARNING 2023-10-25 00:51:20,357 jobstores 17108 15980 Job 'a8d67359c4df4bf581e4d49dea420b23' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:51:26,130 autoreload 17108 14136 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:51:27,655 autoreload 784 9408 Watching for file changes with StatReloader
+INFO 2023-10-25 00:51:27,982 base 784 9408 Scheduler started
+INFO 2023-10-25 00:51:27,983 task 784 9408 取得排程物件
+INFO 2023-10-25 00:51:27,984 task 784 9408 啟動程式自動開啟
+INFO 2023-10-25 00:51:27,984 cameras 784 9408 啟動所有相機實例開始
+INFO 2023-10-25 00:51:27,988 cameras 784 9408 新增編號:1 相機開始
+INFO 2023-10-25 00:51:27,988 cameras 784 9408 編號:1 相機基礎設定
+INFO 2023-10-25 00:51:27,997 cameras 784 9408 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:51:27,997 cameras 784 9408 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:51:27,998 cameras 784 9408 編號:1 相機實例化失敗
+INFO 2023-10-25 00:51:27,998 cameras 784 9408 編號:1 釋放相機
+INFO 2023-10-25 00:51:27,998 cameras 784 9408 新增編號:1 相機結束
+INFO 2023-10-25 00:51:27,998 cameras 784 9408 啟動所有相機實例結束
+INFO 2023-10-25 00:51:33,019 base 784 16676 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:51:33,019 task 784 16676 ID:task.views.checkIn執行成功
+WARNING 2023-10-25 00:51:33,021 base 784 1776 Run time of job "checkIn (trigger: date[2023-10-25 00:51:32 CST], next run at: 2023-10-25 00:51:32 CST)" was missed by 0:00:01.021598
+INFO 2023-10-25 00:51:33,090 base 784 16084 Removed job 0fbf4ecbbc1e40ea95147bc73aac9885
+WARNING 2023-10-25 00:51:33,094 jobstores 784 1776 Job '0fbf4ecbbc1e40ea95147bc73aac9885' no longer exists! Skipping logging of job execution...
+WARNING 2023-10-25 00:51:33,099 jobstores 784 16084 Job '0fbf4ecbbc1e40ea95147bc73aac9885' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:51:51,633 base 784 16676 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:51:51,633 task 784 16676 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:51:51,635 base 784 1776 Running job "checkIn (trigger: date[2023-10-25 00:51:51 CST], next run at: 2023-10-25 00:51:51 CST)" (scheduled at 2023-10-25 00:51:51+08:00)
+INFO 2023-10-25 00:51:51,636 views 784 1776 自動打卡程式啟動
+INFO 2023-10-25 00:51:51,654 base 784 16084 Removed job dd0489ae791d4ff9a1e8c1504795b98b
+WARNING 2023-10-25 00:51:51,667 jobstores 784 16084 Job 'dd0489ae791d4ff9a1e8c1504795b98b' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:52:00,587 base 784 1776 Job "checkIn (trigger: date[2023-10-25 00:51:51 CST], next run at: 2023-10-25 00:51:51 CST)" executed successfully
+WARNING 2023-10-25 00:52:00,603 jobstores 784 1776 Job 'dd0489ae791d4ff9a1e8c1504795b98b' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:52:30,785 autoreload 784 9408 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:52:32,315 autoreload 7884 1872 Watching for file changes with StatReloader
+INFO 2023-10-25 00:52:32,600 base 7884 1872 Scheduler started
+INFO 2023-10-25 00:52:32,602 task 7884 1872 取得排程物件
+INFO 2023-10-25 00:52:32,602 task 7884 1872 啟動程式自動開啟
+INFO 2023-10-25 00:52:32,602 cameras 7884 1872 啟動所有相機實例開始
+INFO 2023-10-25 00:52:32,614 cameras 7884 1872 新增編號:1 相機開始
+INFO 2023-10-25 00:52:32,615 cameras 7884 1872 編號:1 相機基礎設定
+INFO 2023-10-25 00:52:32,624 cameras 7884 1872 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:52:32,624 cameras 7884 1872 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:52:32,624 cameras 7884 1872 編號:1 相機實例化失敗
+INFO 2023-10-25 00:52:32,625 cameras 7884 1872 編號:1 釋放相機
+INFO 2023-10-25 00:52:32,625 cameras 7884 1872 新增編號:1 相機結束
+INFO 2023-10-25 00:52:32,625 cameras 7884 1872 啟動所有相機實例結束
+INFO 2023-10-25 00:53:27,739 autoreload 7884 1872 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:53:29,178 autoreload 15536 9012 Watching for file changes with StatReloader
+INFO 2023-10-25 00:53:29,477 base 15536 9012 Scheduler started
+INFO 2023-10-25 00:53:29,478 task 15536 9012 取得排程物件
+INFO 2023-10-25 00:53:29,478 task 15536 9012 啟動程式自動開啟
+INFO 2023-10-25 00:53:29,478 cameras 15536 9012 啟動所有相機實例開始
+INFO 2023-10-25 00:53:29,483 cameras 15536 9012 新增編號:1 相機開始
+INFO 2023-10-25 00:53:29,484 cameras 15536 9012 編號:1 相機基礎設定
+INFO 2023-10-25 00:53:29,492 cameras 15536 9012 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:53:29,493 cameras 15536 9012 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:53:29,493 cameras 15536 9012 編號:1 相機實例化失敗
+INFO 2023-10-25 00:53:29,493 cameras 15536 9012 編號:1 釋放相機
+INFO 2023-10-25 00:53:29,493 cameras 15536 9012 新增編號:1 相機結束
+INFO 2023-10-25 00:53:29,493 cameras 15536 9012 啟動所有相機實例結束
+INFO 2023-10-25 00:53:33,612 base 15536 16388 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:53:33,612 task 15536 16388 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:53:33,614 base 15536 14740 Running job "checkIn (trigger: date[2023-10-25 00:53:33 CST], next run at: 2023-10-25 00:53:33 CST)" (scheduled at 2023-10-25 00:53:33+08:00)
+INFO 2023-10-25 00:53:33,616 views 15536 14740 自動打卡程式啟動
+INFO 2023-10-25 00:53:33,630 base 15536 17748 Removed job ecac25761ace4eec8fcb4c9a12e1e70b
+WARNING 2023-10-25 00:53:33,640 jobstores 15536 17748 Job 'ecac25761ace4eec8fcb4c9a12e1e70b' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:53:42,341 base 15536 14740 Job "checkIn (trigger: date[2023-10-25 00:53:33 CST], next run at: 2023-10-25 00:53:33 CST)" executed successfully
+WARNING 2023-10-25 00:53:42,355 jobstores 15536 14740 Job 'ecac25761ace4eec8fcb4c9a12e1e70b' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:56:10,079 autoreload 15536 9012 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:56:11,642 autoreload 8348 6196 Watching for file changes with StatReloader
+INFO 2023-10-25 00:56:11,958 base 8348 6196 Scheduler started
+INFO 2023-10-25 00:56:11,960 task 8348 6196 取得排程物件
+INFO 2023-10-25 00:56:11,960 task 8348 6196 啟動程式自動開啟
+INFO 2023-10-25 00:56:11,960 cameras 8348 6196 啟動所有相機實例開始
+INFO 2023-10-25 00:56:11,966 cameras 8348 6196 新增編號:1 相機開始
+INFO 2023-10-25 00:56:11,966 cameras 8348 6196 編號:1 相機基礎設定
+INFO 2023-10-25 00:56:11,976 cameras 8348 6196 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:56:11,976 cameras 8348 6196 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:56:11,977 cameras 8348 6196 編號:1 相機實例化失敗
+INFO 2023-10-25 00:56:11,977 cameras 8348 6196 編號:1 釋放相機
+INFO 2023-10-25 00:56:11,977 cameras 8348 6196 新增編號:1 相機結束
+INFO 2023-10-25 00:56:11,977 cameras 8348 6196 啟動所有相機實例結束
+INFO 2023-10-25 00:56:15,914 base 8348 1688 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:56:15,915 task 8348 1688 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:56:15,918 base 8348 14956 Running job "checkIn (trigger: date[2023-10-25 00:56:15 CST], next run at: 2023-10-25 00:56:15 CST)" (scheduled at 2023-10-25 00:56:15+08:00)
+INFO 2023-10-25 00:56:15,920 views 8348 14956 自動打卡程式啟動
+INFO 2023-10-25 00:56:15,936 base 8348 12360 Removed job 054f9d610c6b4f63a3638e182b48e17c
+WARNING 2023-10-25 00:56:15,948 jobstores 8348 12360 Job '054f9d610c6b4f63a3638e182b48e17c' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:56:34,706 base 8348 14956 Job "checkIn (trigger: date[2023-10-25 00:56:15 CST], next run at: 2023-10-25 00:56:15 CST)" executed successfully
+WARNING 2023-10-25 00:56:34,719 jobstores 8348 14956 Job '054f9d610c6b4f63a3638e182b48e17c' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:57:39,346 autoreload 8348 6196 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:57:40,819 autoreload 9476 17048 Watching for file changes with StatReloader
+INFO 2023-10-25 00:57:51,310 autoreload 9476 17048 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:57:52,733 autoreload 9884 5588 Watching for file changes with StatReloader
+INFO 2023-10-25 00:57:53,015 base 9884 5588 Scheduler started
+INFO 2023-10-25 00:57:53,016 task 9884 5588 取得排程物件
+INFO 2023-10-25 00:57:53,016 task 9884 5588 啟動程式自動開啟
+INFO 2023-10-25 00:57:53,017 cameras 9884 5588 啟動所有相機實例開始
+INFO 2023-10-25 00:57:53,021 cameras 9884 5588 新增編號:1 相機開始
+INFO 2023-10-25 00:57:53,021 cameras 9884 5588 編號:1 相機基礎設定
+INFO 2023-10-25 00:57:53,031 cameras 9884 5588 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:57:53,031 cameras 9884 5588 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:57:53,031 cameras 9884 5588 編號:1 相機實例化失敗
+INFO 2023-10-25 00:57:53,031 cameras 9884 5588 編號:1 釋放相機
+INFO 2023-10-25 00:57:53,031 cameras 9884 5588 新增編號:1 相機結束
+INFO 2023-10-25 00:57:53,031 cameras 9884 5588 啟動所有相機實例結束
+INFO 2023-10-25 00:57:56,058 base 9884 10192 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:57:56,058 task 9884 10192 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:57:56,060 base 9884 12692 Running job "checkIn (trigger: date[2023-10-25 00:57:56 CST], next run at: 2023-10-25 00:57:56 CST)" (scheduled at 2023-10-25 00:57:56+08:00)
+INFO 2023-10-25 00:57:56,060 views 9884 12692 自動打卡程式啟動
+INFO 2023-10-25 00:57:56,078 base 9884 13372 Removed job a5ba909ba9a34f9097b1f566cd2ba126
+WARNING 2023-10-25 00:57:56,086 jobstores 9884 13372 Job 'a5ba909ba9a34f9097b1f566cd2ba126' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:58:10,712 base 9884 12692 Job "checkIn (trigger: date[2023-10-25 00:57:56 CST], next run at: 2023-10-25 00:57:56 CST)" executed successfully
+WARNING 2023-10-25 00:58:10,738 jobstores 9884 12692 Job 'a5ba909ba9a34f9097b1f566cd2ba126' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:59:05,083 autoreload 9884 5588 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:59:06,558 autoreload 5604 15904 Watching for file changes with StatReloader
+INFO 2023-10-25 00:59:06,841 base 5604 15904 Scheduler started
+INFO 2023-10-25 00:59:06,842 task 5604 15904 取得排程物件
+INFO 2023-10-25 00:59:06,842 task 5604 15904 啟動程式自動開啟
+INFO 2023-10-25 00:59:06,842 cameras 5604 15904 啟動所有相機實例開始
+INFO 2023-10-25 00:59:06,847 cameras 5604 15904 新增編號:1 相機開始
+INFO 2023-10-25 00:59:06,848 cameras 5604 15904 編號:1 相機基礎設定
+INFO 2023-10-25 00:59:06,857 cameras 5604 15904 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:59:06,857 cameras 5604 15904 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:59:06,857 cameras 5604 15904 編號:1 相機實例化失敗
+INFO 2023-10-25 00:59:06,857 cameras 5604 15904 編號:1 釋放相機
+INFO 2023-10-25 00:59:06,857 cameras 5604 15904 新增編號:1 相機結束
+INFO 2023-10-25 00:59:06,858 cameras 5604 15904 啟動所有相機實例結束
+INFO 2023-10-25 00:59:08,564 base 5604 15536 Added job "checkIn" to job store "default"
+INFO 2023-10-25 00:59:08,564 task 5604 15536 ID:task.views.checkIn執行成功
+INFO 2023-10-25 00:59:08,566 base 5604 6968 Running job "checkIn (trigger: date[2023-10-25 00:59:08 CST], next run at: 2023-10-25 00:59:08 CST)" (scheduled at 2023-10-25 00:59:08+08:00)
+INFO 2023-10-25 00:59:08,567 views 5604 6968 自動打卡程式啟動
+INFO 2023-10-25 00:59:08,608 base 5604 7992 Removed job edd933e064824b88b872b58f26aee4d2
+WARNING 2023-10-25 00:59:08,628 jobstores 5604 7992 Job 'edd933e064824b88b872b58f26aee4d2' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:59:17,327 base 5604 6968 Job "checkIn (trigger: date[2023-10-25 00:59:08 CST], next run at: 2023-10-25 00:59:08 CST)" executed successfully
+WARNING 2023-10-25 00:59:17,348 jobstores 5604 6968 Job 'edd933e064824b88b872b58f26aee4d2' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 00:59:51,341 autoreload 5604 15904 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 00:59:52,820 autoreload 8616 8676 Watching for file changes with StatReloader
+INFO 2023-10-25 00:59:53,159 base 8616 8676 Scheduler started
+INFO 2023-10-25 00:59:53,160 task 8616 8676 取得排程物件
+INFO 2023-10-25 00:59:53,160 task 8616 8676 啟動程式自動開啟
+INFO 2023-10-25 00:59:53,160 cameras 8616 8676 啟動所有相機實例開始
+INFO 2023-10-25 00:59:53,165 cameras 8616 8676 新增編號:1 相機開始
+INFO 2023-10-25 00:59:53,165 cameras 8616 8676 編號:1 相機基礎設定
+INFO 2023-10-25 00:59:53,176 cameras 8616 8676 編號:1 相機長寬fps設定
+ERROR 2023-10-25 00:59:53,176 cameras 8616 8676 編號:1 相機訪問失敗
+WARNING 2023-10-25 00:59:53,176 cameras 8616 8676 編號:1 相機實例化失敗
+INFO 2023-10-25 00:59:53,176 cameras 8616 8676 編號:1 釋放相機
+INFO 2023-10-25 00:59:53,176 cameras 8616 8676 新增編號:1 相機結束
+INFO 2023-10-25 00:59:53,177 cameras 8616 8676 啟動所有相機實例結束
+INFO 2023-10-25 01:00:04,931 base 8616 3196 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:00:04,931 task 8616 3196 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:00:04,934 base 8616 14672 Running job "checkIn (trigger: date[2023-10-25 01:00:04 CST], next run at: 2023-10-25 01:00:04 CST)" (scheduled at 2023-10-25 01:00:04+08:00)
+INFO 2023-10-25 01:00:04,935 views 8616 14672 自動打卡程式啟動
+INFO 2023-10-25 01:00:04,985 base 8616 10980 Removed job 287b6fa18c2748d89a5608a4b6f28749
+WARNING 2023-10-25 01:00:04,992 jobstores 8616 10980 Job '287b6fa18c2748d89a5608a4b6f28749' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:00:16,136 base 8616 14672 Job "checkIn (trigger: date[2023-10-25 01:00:04 CST], next run at: 2023-10-25 01:00:04 CST)" executed successfully
+WARNING 2023-10-25 01:00:16,149 jobstores 8616 14672 Job '287b6fa18c2748d89a5608a4b6f28749' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:00:23,308 autoreload 8616 8676 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:00:24,874 autoreload 8700 14252 Watching for file changes with StatReloader
+INFO 2023-10-25 01:00:25,201 base 8700 14252 Scheduler started
+INFO 2023-10-25 01:00:25,203 task 8700 14252 取得排程物件
+INFO 2023-10-25 01:00:25,203 task 8700 14252 啟動程式自動開啟
+INFO 2023-10-25 01:00:25,203 cameras 8700 14252 啟動所有相機實例開始
+INFO 2023-10-25 01:00:25,208 cameras 8700 14252 新增編號:1 相機開始
+INFO 2023-10-25 01:00:25,210 cameras 8700 14252 編號:1 相機基礎設定
+INFO 2023-10-25 01:00:25,219 cameras 8700 14252 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:00:25,219 cameras 8700 14252 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:00:25,219 cameras 8700 14252 編號:1 相機實例化失敗
+INFO 2023-10-25 01:00:25,219 cameras 8700 14252 編號:1 釋放相機
+INFO 2023-10-25 01:00:25,219 cameras 8700 14252 新增編號:1 相機結束
+INFO 2023-10-25 01:00:25,219 cameras 8700 14252 啟動所有相機實例結束
+INFO 2023-10-25 01:00:27,938 base 8700 11080 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:00:27,938 task 8700 11080 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:00:27,941 base 8700 4536 Running job "checkIn (trigger: date[2023-10-25 01:00:27 CST], next run at: 2023-10-25 01:00:27 CST)" (scheduled at 2023-10-25 01:00:27+08:00)
+INFO 2023-10-25 01:00:27,941 views 8700 4536 自動打卡程式啟動
+INFO 2023-10-25 01:00:27,957 base 8700 15304 Removed job 4cc6bd9c70de4f6aa8d4467d051a835e
+WARNING 2023-10-25 01:00:27,964 jobstores 8700 15304 Job '4cc6bd9c70de4f6aa8d4467d051a835e' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:00:39,070 base 8700 4536 Job "checkIn (trigger: date[2023-10-25 01:00:27 CST], next run at: 2023-10-25 01:00:27 CST)" executed successfully
+WARNING 2023-10-25 01:00:39,079 jobstores 8700 4536 Job '4cc6bd9c70de4f6aa8d4467d051a835e' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:03:51,661 autoreload 8700 14252 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:03:53,145 autoreload 9800 11976 Watching for file changes with StatReloader
+INFO 2023-10-25 01:03:53,489 base 9800 11976 Scheduler started
+INFO 2023-10-25 01:03:53,490 task 9800 11976 取得排程物件
+INFO 2023-10-25 01:03:53,490 task 9800 11976 啟動程式自動開啟
+INFO 2023-10-25 01:03:53,490 cameras 9800 11976 啟動所有相機實例開始
+INFO 2023-10-25 01:03:53,496 cameras 9800 11976 新增編號:1 相機開始
+INFO 2023-10-25 01:03:53,496 cameras 9800 11976 編號:1 相機基礎設定
+INFO 2023-10-25 01:03:53,506 cameras 9800 11976 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:03:53,506 cameras 9800 11976 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:03:53,507 cameras 9800 11976 編號:1 相機實例化失敗
+INFO 2023-10-25 01:03:53,507 cameras 9800 11976 編號:1 釋放相機
+INFO 2023-10-25 01:03:53,507 cameras 9800 11976 新增編號:1 相機結束
+INFO 2023-10-25 01:03:53,507 cameras 9800 11976 啟動所有相機實例結束
+INFO 2023-10-25 01:04:22,407 base 9800 17604 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:04:22,407 task 9800 17604 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:04:22,410 base 9800 16288 Running job "checkIn (trigger: date[2023-10-25 01:04:22 CST], next run at: 2023-10-25 01:04:22 CST)" (scheduled at 2023-10-25 01:04:22+08:00)
+INFO 2023-10-25 01:04:22,415 views 9800 16288 自動打卡程式啟動
+INFO 2023-10-25 01:04:22,458 base 9800 5788 Removed job e3870872c07440f8b9102f7189c47f99
+WARNING 2023-10-25 01:04:22,466 jobstores 9800 5788 Job 'e3870872c07440f8b9102f7189c47f99' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:04:42,146 base 9800 16288 Job "checkIn (trigger: date[2023-10-25 01:04:22 CST], next run at: 2023-10-25 01:04:22 CST)" executed successfully
+WARNING 2023-10-25 01:04:42,153 jobstores 9800 16288 Job 'e3870872c07440f8b9102f7189c47f99' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:05:02,406 autoreload 9800 11976 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:05:03,872 autoreload 10376 14052 Watching for file changes with StatReloader
+INFO 2023-10-25 01:05:04,187 base 10376 14052 Scheduler started
+INFO 2023-10-25 01:05:04,188 task 10376 14052 取得排程物件
+INFO 2023-10-25 01:05:04,189 task 10376 14052 啟動程式自動開啟
+INFO 2023-10-25 01:05:04,189 cameras 10376 14052 啟動所有相機實例開始
+INFO 2023-10-25 01:05:04,194 cameras 10376 14052 新增編號:1 相機開始
+INFO 2023-10-25 01:05:04,194 cameras 10376 14052 編號:1 相機基礎設定
+INFO 2023-10-25 01:05:04,207 cameras 10376 14052 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:05:04,207 cameras 10376 14052 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:05:04,207 cameras 10376 14052 編號:1 相機實例化失敗
+INFO 2023-10-25 01:05:04,207 cameras 10376 14052 編號:1 釋放相機
+INFO 2023-10-25 01:05:04,208 cameras 10376 14052 新增編號:1 相機結束
+INFO 2023-10-25 01:05:04,208 cameras 10376 14052 啟動所有相機實例結束
+INFO 2023-10-25 01:05:13,736 autoreload 10376 14052 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:05:15,471 autoreload 10364 15336 Watching for file changes with StatReloader
+INFO 2023-10-25 01:05:15,784 base 10364 15336 Scheduler started
+INFO 2023-10-25 01:05:15,785 task 10364 15336 取得排程物件
+INFO 2023-10-25 01:05:15,785 task 10364 15336 啟動程式自動開啟
+INFO 2023-10-25 01:05:15,786 cameras 10364 15336 啟動所有相機實例開始
+INFO 2023-10-25 01:05:15,790 cameras 10364 15336 新增編號:1 相機開始
+INFO 2023-10-25 01:05:15,790 cameras 10364 15336 編號:1 相機基礎設定
+INFO 2023-10-25 01:05:15,800 cameras 10364 15336 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:05:15,800 cameras 10364 15336 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:05:15,800 cameras 10364 15336 編號:1 相機實例化失敗
+INFO 2023-10-25 01:05:15,800 cameras 10364 15336 編號:1 釋放相機
+INFO 2023-10-25 01:05:15,801 cameras 10364 15336 新增編號:1 相機結束
+INFO 2023-10-25 01:05:15,801 cameras 10364 15336 啟動所有相機實例結束
+INFO 2023-10-25 01:05:19,378 base 10364 12452 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:05:19,379 task 10364 12452 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:05:19,382 base 10364 17760 Running job "checkIn (trigger: date[2023-10-25 01:05:19 CST], next run at: 2023-10-25 01:05:19 CST)" (scheduled at 2023-10-25 01:05:19+08:00)
+INFO 2023-10-25 01:05:19,383 views 10364 17760 自動打卡程式啟動
+INFO 2023-10-25 01:05:19,401 base 10364 17776 Removed job 492ab5fdd82a4afdb757b9e600a3ce79
+WARNING 2023-10-25 01:05:19,410 jobstores 10364 17776 Job '492ab5fdd82a4afdb757b9e600a3ce79' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:05:38,625 base 10364 17760 Job "checkIn (trigger: date[2023-10-25 01:05:19 CST], next run at: 2023-10-25 01:05:19 CST)" executed successfully
+WARNING 2023-10-25 01:05:38,637 jobstores 10364 17760 Job '492ab5fdd82a4afdb757b9e600a3ce79' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:05:55,880 autoreload 10364 15336 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:05:57,323 autoreload 17448 10284 Watching for file changes with StatReloader
+INFO 2023-10-25 01:05:57,716 base 17448 10284 Scheduler started
+INFO 2023-10-25 01:05:57,717 task 17448 10284 取得排程物件
+INFO 2023-10-25 01:05:57,717 task 17448 10284 啟動程式自動開啟
+INFO 2023-10-25 01:05:57,717 cameras 17448 10284 啟動所有相機實例開始
+INFO 2023-10-25 01:05:57,722 cameras 17448 10284 新增編號:1 相機開始
+INFO 2023-10-25 01:05:57,722 cameras 17448 10284 編號:1 相機基礎設定
+INFO 2023-10-25 01:05:57,731 cameras 17448 10284 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:05:57,731 cameras 17448 10284 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:05:57,731 cameras 17448 10284 編號:1 相機實例化失敗
+INFO 2023-10-25 01:05:57,731 cameras 17448 10284 編號:1 釋放相機
+INFO 2023-10-25 01:05:57,731 cameras 17448 10284 新增編號:1 相機結束
+INFO 2023-10-25 01:05:57,731 cameras 17448 10284 啟動所有相機實例結束
+INFO 2023-10-25 01:06:03,860 base 17448 6412 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:06:03,860 task 17448 6412 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:06:03,866 base 17448 13776 Running job "checkIn (trigger: date[2023-10-25 01:06:03 CST], next run at: 2023-10-25 01:06:03 CST)" (scheduled at 2023-10-25 01:06:03+08:00)
+INFO 2023-10-25 01:06:03,867 views 17448 13776 自動打卡程式啟動
+INFO 2023-10-25 01:06:03,895 base 17448 3476 Removed job f5c59bc01b6e44958d1624e9c487ea87
+WARNING 2023-10-25 01:06:03,911 jobstores 17448 3476 Job 'f5c59bc01b6e44958d1624e9c487ea87' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:06:23,109 base 17448 13776 Job "checkIn (trigger: date[2023-10-25 01:06:03 CST], next run at: 2023-10-25 01:06:03 CST)" executed successfully
+WARNING 2023-10-25 01:06:23,123 jobstores 17448 13776 Job 'f5c59bc01b6e44958d1624e9c487ea87' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:06:44,810 autoreload 17448 10284 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:06:46,260 autoreload 12692 11992 Watching for file changes with StatReloader
+INFO 2023-10-25 01:06:46,541 base 12692 11992 Scheduler started
+INFO 2023-10-25 01:06:46,542 task 12692 11992 取得排程物件
+INFO 2023-10-25 01:06:46,542 task 12692 11992 啟動程式自動開啟
+INFO 2023-10-25 01:06:46,542 cameras 12692 11992 啟動所有相機實例開始
+INFO 2023-10-25 01:06:46,546 cameras 12692 11992 新增編號:1 相機開始
+INFO 2023-10-25 01:06:46,547 cameras 12692 11992 編號:1 相機基礎設定
+INFO 2023-10-25 01:06:46,556 cameras 12692 11992 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:06:46,556 cameras 12692 11992 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:06:46,556 cameras 12692 11992 編號:1 相機實例化失敗
+INFO 2023-10-25 01:06:46,556 cameras 12692 11992 編號:1 釋放相機
+INFO 2023-10-25 01:06:46,556 cameras 12692 11992 新增編號:1 相機結束
+INFO 2023-10-25 01:06:46,556 cameras 12692 11992 啟動所有相機實例結束
+INFO 2023-10-25 01:06:53,022 base 12692 9524 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:06:53,023 task 12692 9524 ID:task.views.checkIn執行成功
+WARNING 2023-10-25 01:06:53,025 base 12692 17252 Run time of job "checkIn (trigger: date[2023-10-25 01:06:52 CST], next run at: 2023-10-25 01:06:52 CST)" was missed by 0:00:01.025968
+INFO 2023-10-25 01:06:53,054 base 12692 16700 Removed job d450fef48ac54e5fb641fd18a5fa0158
+WARNING 2023-10-25 01:06:53,061 jobstores 12692 17252 Job 'd450fef48ac54e5fb641fd18a5fa0158' no longer exists! Skipping logging of job execution...
+WARNING 2023-10-25 01:06:53,066 jobstores 12692 16700 Job 'd450fef48ac54e5fb641fd18a5fa0158' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:07:14,015 base 12692 9524 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:07:14,015 task 12692 9524 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:07:14,018 base 12692 17252 Running job "checkIn (trigger: date[2023-10-25 01:07:14 CST], next run at: 2023-10-25 01:07:14 CST)" (scheduled at 2023-10-25 01:07:14+08:00)
+INFO 2023-10-25 01:07:14,018 views 12692 17252 自動打卡程式啟動
+INFO 2023-10-25 01:07:14,035 base 12692 16700 Removed job 67031f2ccbec40eca413cf2d12af7203
+WARNING 2023-10-25 01:07:14,042 jobstores 12692 16700 Job '67031f2ccbec40eca413cf2d12af7203' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:07:33,279 base 12692 17252 Job "checkIn (trigger: date[2023-10-25 01:07:14 CST], next run at: 2023-10-25 01:07:14 CST)" executed successfully
+WARNING 2023-10-25 01:07:33,283 jobstores 12692 17252 Job '67031f2ccbec40eca413cf2d12af7203' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:07:42,274 autoreload 12692 11992 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:07:43,953 autoreload 14508 6392 Watching for file changes with StatReloader
+INFO 2023-10-25 01:07:44,351 base 14508 6392 Scheduler started
+INFO 2023-10-25 01:07:44,352 task 14508 6392 取得排程物件
+INFO 2023-10-25 01:07:44,353 task 14508 6392 啟動程式自動開啟
+INFO 2023-10-25 01:07:44,353 cameras 14508 6392 啟動所有相機實例開始
+INFO 2023-10-25 01:07:44,358 cameras 14508 6392 新增編號:1 相機開始
+INFO 2023-10-25 01:07:44,359 cameras 14508 6392 編號:1 相機基礎設定
+INFO 2023-10-25 01:07:44,369 cameras 14508 6392 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:07:44,370 cameras 14508 6392 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:07:44,370 cameras 14508 6392 編號:1 相機實例化失敗
+INFO 2023-10-25 01:07:44,370 cameras 14508 6392 編號:1 釋放相機
+INFO 2023-10-25 01:07:44,370 cameras 14508 6392 新增編號:1 相機結束
+INFO 2023-10-25 01:07:44,370 cameras 14508 6392 啟動所有相機實例結束
+INFO 2023-10-25 01:07:46,841 base 14508 11836 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:07:46,842 task 14508 11836 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:07:46,843 base 14508 16084 Running job "checkIn (trigger: date[2023-10-25 01:07:46 CST], next run at: 2023-10-25 01:07:46 CST)" (scheduled at 2023-10-25 01:07:46+08:00)
+INFO 2023-10-25 01:07:46,844 views 14508 16084 自動打卡程式啟動
+INFO 2023-10-25 01:07:46,872 base 14508 10624 Removed job 4a6ab6ec3181486cad24da0b756106c0
+WARNING 2023-10-25 01:07:46,879 jobstores 14508 10624 Job '4a6ab6ec3181486cad24da0b756106c0' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:07:55,864 base 14508 16084 Job "checkIn (trigger: date[2023-10-25 01:07:46 CST], next run at: 2023-10-25 01:07:46 CST)" executed successfully
+WARNING 2023-10-25 01:07:55,883 jobstores 14508 16084 Job '4a6ab6ec3181486cad24da0b756106c0' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:09:50,791 autoreload 14508 6392 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:09:52,472 autoreload 9932 7292 Watching for file changes with StatReloader
+INFO 2023-10-25 01:09:52,847 base 9932 7292 Scheduler started
+INFO 2023-10-25 01:09:52,848 task 9932 7292 取得排程物件
+INFO 2023-10-25 01:09:52,848 task 9932 7292 啟動程式自動開啟
+INFO 2023-10-25 01:09:52,849 cameras 9932 7292 啟動所有相機實例開始
+INFO 2023-10-25 01:09:52,854 cameras 9932 7292 新增編號:1 相機開始
+INFO 2023-10-25 01:09:52,855 cameras 9932 7292 編號:1 相機基礎設定
+INFO 2023-10-25 01:09:52,863 cameras 9932 7292 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:09:52,863 cameras 9932 7292 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:09:52,864 cameras 9932 7292 編號:1 相機實例化失敗
+INFO 2023-10-25 01:09:52,864 cameras 9932 7292 編號:1 釋放相機
+INFO 2023-10-25 01:09:52,864 cameras 9932 7292 新增編號:1 相機結束
+INFO 2023-10-25 01:09:52,864 cameras 9932 7292 啟動所有相機實例結束
+INFO 2023-10-25 01:09:56,930 base 9932 13356 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:09:56,931 task 9932 13356 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:09:56,937 base 9932 712 Running job "checkIn (trigger: date[2023-10-25 01:09:56 CST], next run at: 2023-10-25 01:09:56 CST)" (scheduled at 2023-10-25 01:09:56+08:00)
+INFO 2023-10-25 01:09:56,938 views 9932 712 自動打卡程式啟動
+INFO 2023-10-25 01:09:56,946 base 9932 5324 Removed job 2d744bc6dc154fb2abfa758d7a0bef40
+WARNING 2023-10-25 01:09:56,954 jobstores 9932 5324 Job '2d744bc6dc154fb2abfa758d7a0bef40' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:10:16,683 base 9932 712 Job "checkIn (trigger: date[2023-10-25 01:09:56 CST], next run at: 2023-10-25 01:09:56 CST)" executed successfully
+WARNING 2023-10-25 01:10:16,690 jobstores 9932 712 Job '2d744bc6dc154fb2abfa758d7a0bef40' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:10:28,431 autoreload 9932 7292 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:10:29,944 autoreload 2192 6476 Watching for file changes with StatReloader
+INFO 2023-10-25 01:10:30,265 base 2192 6476 Scheduler started
+INFO 2023-10-25 01:10:30,266 task 2192 6476 取得排程物件
+INFO 2023-10-25 01:10:30,267 task 2192 6476 啟動程式自動開啟
+INFO 2023-10-25 01:10:30,267 cameras 2192 6476 啟動所有相機實例開始
+INFO 2023-10-25 01:10:30,271 cameras 2192 6476 新增編號:1 相機開始
+INFO 2023-10-25 01:10:30,271 cameras 2192 6476 編號:1 相機基礎設定
+INFO 2023-10-25 01:10:30,281 cameras 2192 6476 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:10:30,281 cameras 2192 6476 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:10:30,281 cameras 2192 6476 編號:1 相機實例化失敗
+INFO 2023-10-25 01:10:30,281 cameras 2192 6476 編號:1 釋放相機
+INFO 2023-10-25 01:10:30,281 cameras 2192 6476 新增編號:1 相機結束
+INFO 2023-10-25 01:10:30,281 cameras 2192 6476 啟動所有相機實例結束
+INFO 2023-10-25 01:10:48,062 base 2192 13108 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:10:48,063 task 2192 13108 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:10:48,066 base 2192 15264 Running job "checkIn (trigger: date[2023-10-25 01:10:48 CST], next run at: 2023-10-25 01:10:48 CST)" (scheduled at 2023-10-25 01:10:48+08:00)
+INFO 2023-10-25 01:10:48,066 views 2192 15264 自動打卡程式啟動
+INFO 2023-10-25 01:10:48,083 base 2192 5412 Removed job 7fbbf97014374467886817cc10a35412
+WARNING 2023-10-25 01:10:48,091 jobstores 2192 5412 Job '7fbbf97014374467886817cc10a35412' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:11:01,222 base 2192 15264 Job "checkIn (trigger: date[2023-10-25 01:10:48 CST], next run at: 2023-10-25 01:10:48 CST)" executed successfully
+WARNING 2023-10-25 01:11:01,254 jobstores 2192 15264 Job '7fbbf97014374467886817cc10a35412' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:12:59,800 autoreload 2192 6476 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:13:01,224 autoreload 15380 17900 Watching for file changes with StatReloader
+INFO 2023-10-25 01:13:01,536 base 15380 17900 Scheduler started
+INFO 2023-10-25 01:13:01,537 task 15380 17900 取得排程物件
+INFO 2023-10-25 01:13:01,537 task 15380 17900 啟動程式自動開啟
+INFO 2023-10-25 01:13:01,537 cameras 15380 17900 啟動所有相機實例開始
+INFO 2023-10-25 01:13:01,543 cameras 15380 17900 新增編號:1 相機開始
+INFO 2023-10-25 01:13:01,544 cameras 15380 17900 編號:1 相機基礎設定
+INFO 2023-10-25 01:13:01,552 cameras 15380 17900 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:13:01,553 cameras 15380 17900 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:13:01,553 cameras 15380 17900 編號:1 相機實例化失敗
+INFO 2023-10-25 01:13:01,553 cameras 15380 17900 編號:1 釋放相機
+INFO 2023-10-25 01:13:01,553 cameras 15380 17900 新增編號:1 相機結束
+INFO 2023-10-25 01:13:01,553 cameras 15380 17900 啟動所有相機實例結束
+INFO 2023-10-25 01:13:07,461 base 15380 16952 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:13:07,461 task 15380 16952 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:13:07,463 base 15380 17480 Running job "checkIn (trigger: date[2023-10-25 01:13:07 CST], next run at: 2023-10-25 01:13:07 CST)" (scheduled at 2023-10-25 01:13:07+08:00)
+INFO 2023-10-25 01:13:07,464 views 15380 17480 自動打卡程式啟動
+INFO 2023-10-25 01:13:07,490 base 15380 13516 Removed job ca6867c32df5422d9e1c7a0c1a6ae1eb
+WARNING 2023-10-25 01:13:07,495 jobstores 15380 13516 Job 'ca6867c32df5422d9e1c7a0c1a6ae1eb' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:13:26,606 base 15380 17480 Job "checkIn (trigger: date[2023-10-25 01:13:07 CST], next run at: 2023-10-25 01:13:07 CST)" executed successfully
+WARNING 2023-10-25 01:13:26,632 jobstores 15380 17480 Job 'ca6867c32df5422d9e1c7a0c1a6ae1eb' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:13:46,522 autoreload 15380 17900 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:13:48,124 autoreload 16176 17216 Watching for file changes with StatReloader
+INFO 2023-10-25 01:13:50,893 autoreload 16176 17216 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:13:52,273 autoreload 14568 17896 Watching for file changes with StatReloader
+INFO 2023-10-25 01:13:52,547 base 14568 17896 Scheduler started
+INFO 2023-10-25 01:13:52,548 task 14568 17896 取得排程物件
+INFO 2023-10-25 01:13:52,549 task 14568 17896 啟動程式自動開啟
+INFO 2023-10-25 01:13:52,549 cameras 14568 17896 啟動所有相機實例開始
+INFO 2023-10-25 01:13:52,553 cameras 14568 17896 新增編號:1 相機開始
+INFO 2023-10-25 01:13:52,553 cameras 14568 17896 編號:1 相機基礎設定
+INFO 2023-10-25 01:13:52,563 cameras 14568 17896 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:13:52,563 cameras 14568 17896 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:13:52,563 cameras 14568 17896 編號:1 相機實例化失敗
+INFO 2023-10-25 01:13:52,563 cameras 14568 17896 編號:1 釋放相機
+INFO 2023-10-25 01:13:52,563 cameras 14568 17896 新增編號:1 相機結束
+INFO 2023-10-25 01:13:52,563 cameras 14568 17896 啟動所有相機實例結束
+INFO 2023-10-25 01:13:58,774 base 14568 4240 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:13:58,774 task 14568 4240 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:13:58,776 base 14568 10012 Running job "checkIn (trigger: date[2023-10-25 01:13:58 CST], next run at: 2023-10-25 01:13:58 CST)" (scheduled at 2023-10-25 01:13:58+08:00)
+INFO 2023-10-25 01:13:58,777 views 14568 10012 自動打卡程式啟動
+INFO 2023-10-25 01:13:58,802 base 14568 16936 Removed job 36fdfe6cd02b49ac92607f4b597959a1
+WARNING 2023-10-25 01:13:58,811 jobstores 14568 16936 Job '36fdfe6cd02b49ac92607f4b597959a1' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:14:07,978 base 14568 10012 Job "checkIn (trigger: date[2023-10-25 01:13:58 CST], next run at: 2023-10-25 01:13:58 CST)" executed successfully
+WARNING 2023-10-25 01:14:07,985 jobstores 14568 10012 Job '36fdfe6cd02b49ac92607f4b597959a1' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:14:23,812 autoreload 14568 17896 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:14:25,317 autoreload 16188 9024 Watching for file changes with StatReloader
+INFO 2023-10-25 01:14:25,624 base 16188 9024 Scheduler started
+INFO 2023-10-25 01:14:25,626 task 16188 9024 取得排程物件
+INFO 2023-10-25 01:14:25,626 task 16188 9024 啟動程式自動開啟
+INFO 2023-10-25 01:14:25,626 cameras 16188 9024 啟動所有相機實例開始
+INFO 2023-10-25 01:14:25,633 cameras 16188 9024 新增編號:1 相機開始
+INFO 2023-10-25 01:14:25,633 cameras 16188 9024 編號:1 相機基礎設定
+INFO 2023-10-25 01:14:25,648 cameras 16188 9024 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:14:25,648 cameras 16188 9024 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:14:25,649 cameras 16188 9024 編號:1 相機實例化失敗
+INFO 2023-10-25 01:14:25,649 cameras 16188 9024 編號:1 釋放相機
+INFO 2023-10-25 01:14:25,649 cameras 16188 9024 新增編號:1 相機結束
+INFO 2023-10-25 01:14:25,649 cameras 16188 9024 啟動所有相機實例結束
+INFO 2023-10-25 01:14:27,572 base 16188 15204 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:14:27,573 task 16188 15204 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:14:27,576 base 16188 8520 Running job "checkIn (trigger: date[2023-10-25 01:14:27 CST], next run at: 2023-10-25 01:14:27 CST)" (scheduled at 2023-10-25 01:14:27+08:00)
+INFO 2023-10-25 01:14:27,577 views 16188 8520 自動打卡程式啟動
+INFO 2023-10-25 01:14:27,596 base 16188 17764 Removed job 493594e366ca46cb999faf997e9f6905
+WARNING 2023-10-25 01:14:27,605 jobstores 16188 17764 Job '493594e366ca46cb999faf997e9f6905' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:14:36,811 base 16188 8520 Job "checkIn (trigger: date[2023-10-25 01:14:27 CST], next run at: 2023-10-25 01:14:27 CST)" executed successfully
+WARNING 2023-10-25 01:14:36,835 jobstores 16188 8520 Job '493594e366ca46cb999faf997e9f6905' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:14:42,680 autoreload 16188 9024 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:14:44,397 autoreload 17028 14484 Watching for file changes with StatReloader
+INFO 2023-10-25 01:14:44,717 base 17028 14484 Scheduler started
+INFO 2023-10-25 01:14:44,718 task 17028 14484 取得排程物件
+INFO 2023-10-25 01:14:44,718 task 17028 14484 啟動程式自動開啟
+INFO 2023-10-25 01:14:44,718 cameras 17028 14484 啟動所有相機實例開始
+INFO 2023-10-25 01:14:44,723 cameras 17028 14484 新增編號:1 相機開始
+INFO 2023-10-25 01:14:44,723 cameras 17028 14484 編號:1 相機基礎設定
+INFO 2023-10-25 01:14:44,733 cameras 17028 14484 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:14:44,733 cameras 17028 14484 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:14:44,733 cameras 17028 14484 編號:1 相機實例化失敗
+INFO 2023-10-25 01:14:44,733 cameras 17028 14484 編號:1 釋放相機
+INFO 2023-10-25 01:14:44,733 cameras 17028 14484 新增編號:1 相機結束
+INFO 2023-10-25 01:14:44,733 cameras 17028 14484 啟動所有相機實例結束
+INFO 2023-10-25 01:14:51,438 base 17028 17864 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:14:51,438 task 17028 17864 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:14:51,442 base 17028 9488 Running job "checkIn (trigger: date[2023-10-25 01:14:51 CST], next run at: 2023-10-25 01:14:51 CST)" (scheduled at 2023-10-25 01:14:51+08:00)
+INFO 2023-10-25 01:14:51,443 views 17028 9488 自動打卡程式啟動
+INFO 2023-10-25 01:14:51,470 base 17028 10012 Removed job 229d196d4dc0442e98266ccae1f5ae30
+WARNING 2023-10-25 01:14:51,477 jobstores 17028 10012 Job '229d196d4dc0442e98266ccae1f5ae30' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:15:02,429 base 17028 9488 Job "checkIn (trigger: date[2023-10-25 01:14:51 CST], next run at: 2023-10-25 01:14:51 CST)" executed successfully
+WARNING 2023-10-25 01:15:02,442 jobstores 17028 9488 Job '229d196d4dc0442e98266ccae1f5ae30' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:15:18,021 autoreload 17028 14484 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 01:15:19,514 autoreload 2504 2248 Watching for file changes with StatReloader
+INFO 2023-10-25 01:15:19,834 base 2504 2248 Scheduler started
+INFO 2023-10-25 01:15:19,835 task 2504 2248 取得排程物件
+INFO 2023-10-25 01:15:19,835 task 2504 2248 啟動程式自動開啟
+INFO 2023-10-25 01:15:19,835 cameras 2504 2248 啟動所有相機實例開始
+INFO 2023-10-25 01:15:19,839 cameras 2504 2248 新增編號:1 相機開始
+INFO 2023-10-25 01:15:19,839 cameras 2504 2248 編號:1 相機基礎設定
+INFO 2023-10-25 01:15:19,848 cameras 2504 2248 編號:1 相機長寬fps設定
+ERROR 2023-10-25 01:15:19,849 cameras 2504 2248 編號:1 相機訪問失敗
+WARNING 2023-10-25 01:15:19,849 cameras 2504 2248 編號:1 相機實例化失敗
+INFO 2023-10-25 01:15:19,849 cameras 2504 2248 編號:1 釋放相機
+INFO 2023-10-25 01:15:19,849 cameras 2504 2248 新增編號:1 相機結束
+INFO 2023-10-25 01:15:19,849 cameras 2504 2248 啟動所有相機實例結束
+INFO 2023-10-25 01:15:23,577 base 2504 11236 Added job "checkIn" to job store "default"
+INFO 2023-10-25 01:15:23,578 task 2504 11236 ID:task.views.checkIn執行成功
+INFO 2023-10-25 01:15:23,583 base 2504 10116 Running job "checkIn (trigger: date[2023-10-25 01:15:23 CST], next run at: 2023-10-25 01:15:23 CST)" (scheduled at 2023-10-25 01:15:23+08:00)
+INFO 2023-10-25 01:15:23,584 views 2504 10116 自動打卡程式啟動
+INFO 2023-10-25 01:15:23,596 base 2504 920 Removed job 099e1695d5d147909652ad524343af16
+WARNING 2023-10-25 01:15:23,603 jobstores 2504 920 Job '099e1695d5d147909652ad524343af16' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 01:15:44,905 base 2504 10116 Job "checkIn (trigger: date[2023-10-25 01:15:23 CST], next run at: 2023-10-25 01:15:23 CST)" executed successfully
+WARNING 2023-10-25 01:15:44,918 jobstores 2504 10116 Job '099e1695d5d147909652ad524343af16' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:26:42,421 autoreload 10448 9080 Watching for file changes with StatReloader
+INFO 2023-10-25 23:26:45,203 base 10448 9080 Scheduler started
+INFO 2023-10-25 23:26:45,204 task 10448 9080 取得排程物件
+INFO 2023-10-25 23:26:45,204 task 10448 9080 啟動程式自動開啟
+INFO 2023-10-25 23:26:45,205 cameras 10448 9080 啟動所有相機實例開始
+INFO 2023-10-25 23:26:45,212 cameras 10448 9080 新增編號:1 相機開始
+INFO 2023-10-25 23:26:45,212 cameras 10448 9080 編號:1 相機基礎設定
+INFO 2023-10-25 23:26:45,223 cameras 10448 9080 編號:1 相機長寬fps設定
+ERROR 2023-10-25 23:26:45,223 cameras 10448 9080 編號:1 相機訪問失敗
+WARNING 2023-10-25 23:26:45,224 cameras 10448 9080 編號:1 相機實例化失敗
+INFO 2023-10-25 23:26:45,224 cameras 10448 9080 編號:1 釋放相機
+INFO 2023-10-25 23:26:45,224 cameras 10448 9080 新增編號:1 相機結束
+INFO 2023-10-25 23:26:45,224 cameras 10448 9080 啟動所有相機實例結束
+INFO 2023-10-25 23:28:16,900 base 10448 7676 Added job "checkIn" to job store "default"
+INFO 2023-10-25 23:28:16,900 task 10448 7676 ID:task.views.checkIn執行成功
+INFO 2023-10-25 23:28:16,903 base 10448 14956 Running job "checkIn (trigger: date[2023-10-25 23:28:16 CST], next run at: 2023-10-25 23:28:16 CST)" (scheduled at 2023-10-25 23:28:16+08:00)
+INFO 2023-10-25 23:28:16,904 views 10448 14956 自動打卡程式啟動
+INFO 2023-10-25 23:28:16,916 base 10448 17608 Removed job b08672f4150e41b29260b6adee3d4dbe
+WARNING 2023-10-25 23:28:16,923 jobstores 10448 17608 Job 'b08672f4150e41b29260b6adee3d4dbe' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:28:40,070 base 10448 14956 Job "checkIn (trigger: date[2023-10-25 23:28:16 CST], next run at: 2023-10-25 23:28:16 CST)" executed successfully
+WARNING 2023-10-25 23:28:40,084 jobstores 10448 14956 Job 'b08672f4150e41b29260b6adee3d4dbe' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:29:39,953 autoreload 10448 9080 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 23:29:41,411 autoreload 2000 14512 Watching for file changes with StatReloader
+INFO 2023-10-25 23:29:41,716 base 2000 14512 Scheduler started
+INFO 2023-10-25 23:29:41,718 task 2000 14512 取得排程物件
+INFO 2023-10-25 23:29:41,718 task 2000 14512 啟動程式自動開啟
+INFO 2023-10-25 23:29:41,718 cameras 2000 14512 啟動所有相機實例開始
+INFO 2023-10-25 23:29:41,723 cameras 2000 14512 新增編號:1 相機開始
+INFO 2023-10-25 23:29:41,723 cameras 2000 14512 編號:1 相機基礎設定
+INFO 2023-10-25 23:29:41,733 cameras 2000 14512 編號:1 相機長寬fps設定
+ERROR 2023-10-25 23:29:41,734 cameras 2000 14512 編號:1 相機訪問失敗
+WARNING 2023-10-25 23:29:41,734 cameras 2000 14512 編號:1 相機實例化失敗
+INFO 2023-10-25 23:29:41,734 cameras 2000 14512 編號:1 釋放相機
+INFO 2023-10-25 23:29:41,734 cameras 2000 14512 新增編號:1 相機結束
+INFO 2023-10-25 23:29:41,734 cameras 2000 14512 啟動所有相機實例結束
+INFO 2023-10-25 23:29:47,691 task 2000 15380 取得排程列表
+INFO 2023-10-25 23:29:52,332 base 2000 15380 Added job "checkIn" to job store "default"
+INFO 2023-10-25 23:29:52,333 task 2000 15380 ID:task.views.checkIn執行成功
+INFO 2023-10-25 23:29:52,334 base 2000 2660 Running job "checkIn (trigger: date[2023-10-25 23:29:52 CST], next run at: 2023-10-25 23:29:52 CST)" (scheduled at 2023-10-25 23:29:52+08:00)
+INFO 2023-10-25 23:29:52,334 views 2000 2660 自動打卡程式啟動
+INFO 2023-10-25 23:29:52,356 base 2000 1768 Removed job 2227e075475b4a32983b56790a3e0d8b
+WARNING 2023-10-25 23:29:52,366 jobstores 2000 1768 Job '2227e075475b4a32983b56790a3e0d8b' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:30:03,257 base 2000 2660 Job "checkIn (trigger: date[2023-10-25 23:29:52 CST], next run at: 2023-10-25 23:29:52 CST)" executed successfully
+WARNING 2023-10-25 23:30:03,283 jobstores 2000 2660 Job '2227e075475b4a32983b56790a3e0d8b' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:34:14,597 autoreload 2000 14512 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 23:34:16,190 autoreload 14740 5920 Watching for file changes with StatReloader
+INFO 2023-10-25 23:34:16,498 base 14740 5920 Scheduler started
+INFO 2023-10-25 23:34:16,499 task 14740 5920 取得排程物件
+INFO 2023-10-25 23:34:16,499 task 14740 5920 啟動程式自動開啟
+INFO 2023-10-25 23:34:16,499 cameras 14740 5920 啟動所有相機實例開始
+INFO 2023-10-25 23:34:16,504 cameras 14740 5920 新增編號:1 相機開始
+INFO 2023-10-25 23:34:16,504 cameras 14740 5920 編號:1 相機基礎設定
+INFO 2023-10-25 23:34:16,513 cameras 14740 5920 編號:1 相機長寬fps設定
+ERROR 2023-10-25 23:34:16,514 cameras 14740 5920 編號:1 相機訪問失敗
+WARNING 2023-10-25 23:34:16,514 cameras 14740 5920 編號:1 相機實例化失敗
+INFO 2023-10-25 23:34:16,514 cameras 14740 5920 編號:1 釋放相機
+INFO 2023-10-25 23:34:16,514 cameras 14740 5920 新增編號:1 相機結束
+INFO 2023-10-25 23:34:16,514 cameras 14740 5920 啟動所有相機實例結束
+INFO 2023-10-25 23:34:21,024 base 14740 4220 Added job "checkIn" to job store "default"
+INFO 2023-10-25 23:34:21,024 task 14740 4220 ID:task.views.checkIn執行成功
+WARNING 2023-10-25 23:34:21,026 base 14740 12076 Run time of job "checkIn (trigger: date[2023-10-25 23:34:20 CST], next run at: 2023-10-25 23:34:20 CST)" was missed by 0:00:01.026950
+INFO 2023-10-25 23:34:21,048 base 14740 1624 Removed job ff231733ba7a420ba047b7a67ae6479e
+WARNING 2023-10-25 23:34:21,074 jobstores 14740 12076 Job 'ff231733ba7a420ba047b7a67ae6479e' no longer exists! Skipping logging of job execution...
+WARNING 2023-10-25 23:34:21,084 jobstores 14740 1624 Job 'ff231733ba7a420ba047b7a67ae6479e' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:34:46,754 base 14740 4220 Added job "checkIn" to job store "default"
+INFO 2023-10-25 23:34:46,754 task 14740 4220 ID:task.views.checkIn執行成功
+INFO 2023-10-25 23:34:46,757 base 14740 12076 Running job "checkIn (trigger: date[2023-10-25 23:34:46 CST], next run at: 2023-10-25 23:34:46 CST)" (scheduled at 2023-10-25 23:34:46+08:00)
+INFO 2023-10-25 23:34:46,757 views 14740 12076 自動打卡程式啟動
+INFO 2023-10-25 23:34:46,770 base 14740 1624 Removed job e206e1e07fda4fd8a50aa18bcacead48
+WARNING 2023-10-25 23:34:46,778 jobstores 14740 1624 Job 'e206e1e07fda4fd8a50aa18bcacead48' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:34:58,001 base 14740 12076 Job "checkIn (trigger: date[2023-10-25 23:34:46 CST], next run at: 2023-10-25 23:34:46 CST)" executed successfully
+WARNING 2023-10-25 23:34:58,020 jobstores 14740 12076 Job 'e206e1e07fda4fd8a50aa18bcacead48' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:35:51,126 autoreload 14740 5920 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 23:35:52,538 autoreload 9640 1880 Watching for file changes with StatReloader
+INFO 2023-10-25 23:35:52,840 base 9640 1880 Scheduler started
+INFO 2023-10-25 23:35:52,841 task 9640 1880 取得排程物件
+INFO 2023-10-25 23:35:52,841 task 9640 1880 啟動程式自動開啟
+INFO 2023-10-25 23:35:52,842 cameras 9640 1880 啟動所有相機實例開始
+INFO 2023-10-25 23:35:52,846 cameras 9640 1880 新增編號:1 相機開始
+INFO 2023-10-25 23:35:52,847 cameras 9640 1880 編號:1 相機基礎設定
+INFO 2023-10-25 23:35:52,857 cameras 9640 1880 編號:1 相機長寬fps設定
+ERROR 2023-10-25 23:35:52,858 cameras 9640 1880 編號:1 相機訪問失敗
+WARNING 2023-10-25 23:35:52,858 cameras 9640 1880 編號:1 相機實例化失敗
+INFO 2023-10-25 23:35:52,858 cameras 9640 1880 編號:1 釋放相機
+INFO 2023-10-25 23:35:52,858 cameras 9640 1880 新增編號:1 相機結束
+INFO 2023-10-25 23:35:52,858 cameras 9640 1880 啟動所有相機實例結束
+INFO 2023-10-25 23:35:58,775 base 9640 5600 Added job "checkIn" to job store "default"
+INFO 2023-10-25 23:35:58,776 task 9640 5600 ID:task.views.checkIn執行成功
+INFO 2023-10-25 23:35:58,778 base 9640 2844 Running job "checkIn (trigger: date[2023-10-25 23:35:58 CST], next run at: 2023-10-25 23:35:58 CST)" (scheduled at 2023-10-25 23:35:58+08:00)
+INFO 2023-10-25 23:35:58,779 views 9640 2844 自動打卡程式啟動
+INFO 2023-10-25 23:35:58,811 base 9640 17152 Removed job 994bd6bb9ebc4fed9cce398871b6f6d6
+WARNING 2023-10-25 23:35:58,818 jobstores 9640 17152 Job '994bd6bb9ebc4fed9cce398871b6f6d6' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:36:10,359 base 9640 2844 Job "checkIn (trigger: date[2023-10-25 23:35:58 CST], next run at: 2023-10-25 23:35:58 CST)" executed successfully
+WARNING 2023-10-25 23:36:10,379 jobstores 9640 2844 Job '994bd6bb9ebc4fed9cce398871b6f6d6' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:37:50,611 base 9640 5600 Added job "checkIn" to job store "default"
+INFO 2023-10-25 23:37:50,611 task 9640 5600 ID:task.views.checkIn執行成功
+INFO 2023-10-25 23:37:50,613 base 9640 2844 Running job "checkIn (trigger: date[2023-10-25 23:37:50 CST], next run at: 2023-10-25 23:37:50 CST)" (scheduled at 2023-10-25 23:37:50+08:00)
+INFO 2023-10-25 23:37:50,613 views 9640 2844 自動打卡程式啟動
+INFO 2023-10-25 23:37:50,625 base 9640 17152 Removed job 8650d6b9a97244d29dcb1d183c5d3088
+WARNING 2023-10-25 23:37:50,637 jobstores 9640 17152 Job '8650d6b9a97244d29dcb1d183c5d3088' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:38:04,026 base 9640 2844 Job "checkIn (trigger: date[2023-10-25 23:37:50 CST], next run at: 2023-10-25 23:37:50 CST)" executed successfully
+WARNING 2023-10-25 23:38:04,031 jobstores 9640 2844 Job '8650d6b9a97244d29dcb1d183c5d3088' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:43:21,502 base 9640 5600 Added job "checkIn" to job store "default"
+INFO 2023-10-25 23:43:21,502 task 9640 5600 ID:task.views.checkIn執行成功
+INFO 2023-10-25 23:43:21,504 base 9640 2844 Running job "checkIn (trigger: date[2023-10-25 23:43:21 CST], next run at: 2023-10-25 23:43:21 CST)" (scheduled at 2023-10-25 23:43:21+08:00)
+INFO 2023-10-25 23:43:21,504 views 9640 2844 自動打卡程式啟動
+INFO 2023-10-25 23:43:21,514 base 9640 17152 Removed job 1e24e820ed644f0ba9fb8fd32589fba1
+WARNING 2023-10-25 23:43:21,522 jobstores 9640 17152 Job '1e24e820ed644f0ba9fb8fd32589fba1' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:43:33,621 base 9640 2844 Job "checkIn (trigger: date[2023-10-25 23:43:21 CST], next run at: 2023-10-25 23:43:21 CST)" executed successfully
+WARNING 2023-10-25 23:43:33,640 jobstores 9640 2844 Job '1e24e820ed644f0ba9fb8fd32589fba1' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:48:59,801 autoreload 9640 1880 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 23:49:01,523 autoreload 18232 2292 Watching for file changes with StatReloader
+INFO 2023-10-25 23:49:01,894 base 18232 2292 Scheduler started
+INFO 2023-10-25 23:49:01,895 task 18232 2292 取得排程物件
+INFO 2023-10-25 23:49:01,895 task 18232 2292 啟動程式自動開啟
+INFO 2023-10-25 23:49:01,895 cameras 18232 2292 啟動所有相機實例開始
+INFO 2023-10-25 23:49:01,902 cameras 18232 2292 新增編號:1 相機開始
+INFO 2023-10-25 23:49:01,902 cameras 18232 2292 編號:1 相機基礎設定
+INFO 2023-10-25 23:49:01,911 cameras 18232 2292 編號:1 相機長寬fps設定
+ERROR 2023-10-25 23:49:01,912 cameras 18232 2292 編號:1 相機訪問失敗
+WARNING 2023-10-25 23:49:01,912 cameras 18232 2292 編號:1 相機實例化失敗
+INFO 2023-10-25 23:49:01,912 cameras 18232 2292 編號:1 釋放相機
+INFO 2023-10-25 23:49:01,912 cameras 18232 2292 新增編號:1 相機結束
+INFO 2023-10-25 23:49:01,913 cameras 18232 2292 啟動所有相機實例結束
+INFO 2023-10-25 23:49:03,713 base 18232 8508 Added job "checkIn" to job store "default"
+INFO 2023-10-25 23:49:03,713 task 18232 8508 ID:task.views.checkIn執行成功
+INFO 2023-10-25 23:49:03,715 base 18232 1884 Running job "checkIn (trigger: date[2023-10-25 23:49:03 CST], next run at: 2023-10-25 23:49:03 CST)" (scheduled at 2023-10-25 23:49:03+08:00)
+INFO 2023-10-25 23:49:03,717 views 18232 1884 自動打卡程式啟動
+ERROR 2023-10-25 23:49:03,724 base 18232 1884 Job "checkIn (trigger: date[2023-10-25 23:49:03 CST], next run at: 2023-10-25 23:49:03 CST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Demo\task\views.py", line 111, in checkIn
+    driver = webdriver.Chrome(executable_path=chrome_path)
+TypeError: __init__() got an unexpected keyword argument 'executable_path'
+INFO 2023-10-25 23:49:03,739 base 18232 13512 Removed job 83e3e650da444b00bfd5527c6ef09b11
+WARNING 2023-10-25 23:49:03,745 jobstores 18232 1884 Job '83e3e650da444b00bfd5527c6ef09b11' no longer exists! Skipping logging of job execution...
+WARNING 2023-10-25 23:49:03,749 jobstores 18232 13512 Job '83e3e650da444b00bfd5527c6ef09b11' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:49:23,036 base 18232 8508 Added job "checkIn" to job store "default"
+INFO 2023-10-25 23:49:23,037 task 18232 8508 ID:task.views.checkIn執行成功
+INFO 2023-10-25 23:49:23,040 base 18232 1884 Running job "checkIn (trigger: date[2023-10-25 23:49:23 CST], next run at: 2023-10-25 23:49:23 CST)" (scheduled at 2023-10-25 23:49:23+08:00)
+INFO 2023-10-25 23:49:23,040 views 18232 1884 自動打卡程式啟動
+ERROR 2023-10-25 23:49:23,041 base 18232 1884 Job "checkIn (trigger: date[2023-10-25 23:49:23 CST], next run at: 2023-10-25 23:49:23 CST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Demo\task\views.py", line 111, in checkIn
+    driver = webdriver.Chrome(executable_path=chrome_path)
+TypeError: __init__() got an unexpected keyword argument 'executable_path'
+INFO 2023-10-25 23:49:23,054 base 18232 13512 Removed job 378ebbf5fb1b4902ac43398bf34faeaa
+WARNING 2023-10-25 23:49:23,059 jobstores 18232 1884 Job '378ebbf5fb1b4902ac43398bf34faeaa' no longer exists! Skipping logging of job execution...
+WARNING 2023-10-25 23:49:23,064 jobstores 18232 13512 Job '378ebbf5fb1b4902ac43398bf34faeaa' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:50:15,564 base 18232 8508 Added job "checkIn" to job store "default"
+INFO 2023-10-25 23:50:15,565 task 18232 8508 ID:task.views.checkIn執行成功
+INFO 2023-10-25 23:50:15,568 base 18232 1884 Running job "checkIn (trigger: date[2023-10-25 23:50:15 CST], next run at: 2023-10-25 23:50:15 CST)" (scheduled at 2023-10-25 23:50:15+08:00)
+INFO 2023-10-25 23:50:15,570 views 18232 1884 自動打卡程式啟動
+ERROR 2023-10-25 23:50:15,572 base 18232 1884 Job "checkIn (trigger: date[2023-10-25 23:50:15 CST], next run at: 2023-10-25 23:50:15 CST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Demo\task\views.py", line 111, in checkIn
+    driver = webdriver.Chrome(executable_path=chrome_path)
+TypeError: __init__() got an unexpected keyword argument 'executable_path'
+INFO 2023-10-25 23:50:15,593 base 18232 13512 Removed job 50de2fe3a41f41bfa2550a0479961ac1
+WARNING 2023-10-25 23:50:15,609 jobstores 18232 1884 Job '50de2fe3a41f41bfa2550a0479961ac1' no longer exists! Skipping logging of job execution...
+WARNING 2023-10-25 23:50:15,617 jobstores 18232 13512 Job '50de2fe3a41f41bfa2550a0479961ac1' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:52:01,555 base 18232 8508 Added job "checkIn" to job store "default"
+INFO 2023-10-25 23:52:01,555 task 18232 8508 ID:task.views.checkIn執行成功
+INFO 2023-10-25 23:52:01,558 base 18232 1884 Running job "checkIn (trigger: date[2023-10-25 23:52:01 CST], next run at: 2023-10-25 23:52:01 CST)" (scheduled at 2023-10-25 23:52:01+08:00)
+INFO 2023-10-25 23:52:01,559 views 18232 1884 自動打卡程式啟動
+ERROR 2023-10-25 23:52:01,561 base 18232 1884 Job "checkIn (trigger: date[2023-10-25 23:52:01 CST], next run at: 2023-10-25 23:52:01 CST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Demo\task\views.py", line 111, in checkIn
+    driver = webdriver.Chrome(executable_path=chrome_path)
+TypeError: __init__() got an unexpected keyword argument 'executable_path'
+INFO 2023-10-25 23:52:01,582 base 18232 13512 Removed job bf1fcf73c36f4399a3c9beb06ba5afca
+WARNING 2023-10-25 23:52:01,586 jobstores 18232 1884 Job 'bf1fcf73c36f4399a3c9beb06ba5afca' no longer exists! Skipping logging of job execution...
+WARNING 2023-10-25 23:52:01,592 jobstores 18232 13512 Job 'bf1fcf73c36f4399a3c9beb06ba5afca' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:56:09,149 base 18232 8508 Added job "checkIn" to job store "default"
+INFO 2023-10-25 23:56:09,149 task 18232 8508 ID:task.views.checkIn執行成功
+INFO 2023-10-25 23:56:09,151 base 18232 1884 Running job "checkIn (trigger: date[2023-10-25 23:56:09 CST], next run at: 2023-10-25 23:56:09 CST)" (scheduled at 2023-10-25 23:56:09+08:00)
+INFO 2023-10-25 23:56:09,151 views 18232 1884 自動打卡程式啟動
+ERROR 2023-10-25 23:56:09,153 base 18232 1884 Job "checkIn (trigger: date[2023-10-25 23:56:09 CST], next run at: 2023-10-25 23:56:09 CST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Demo\task\views.py", line 111, in checkIn
+    driver = webdriver.Chrome(executable_path=chrome_path)
+TypeError: __init__() got an unexpected keyword argument 'executable_path'
+INFO 2023-10-25 23:56:09,177 base 18232 13512 Removed job a649ef33599744b6a2d43d4eb76bf196
+WARNING 2023-10-25 23:56:09,184 jobstores 18232 1884 Job 'a649ef33599744b6a2d43d4eb76bf196' no longer exists! Skipping logging of job execution...
+WARNING 2023-10-25 23:56:09,197 jobstores 18232 13512 Job 'a649ef33599744b6a2d43d4eb76bf196' no longer exists! Skipping logging of job execution...
+INFO 2023-10-25 23:58:19,698 autoreload 18232 2292 C:\Demo\task\views.py changed, reloading.
+INFO 2023-10-25 23:58:21,162 autoreload 18136 18056 Watching for file changes with StatReloader
+INFO 2023-10-25 23:58:21,456 base 18136 18056 Scheduler started
+INFO 2023-10-25 23:58:21,457 task 18136 18056 取得排程物件
+INFO 2023-10-25 23:58:21,457 task 18136 18056 啟動程式自動開啟
+INFO 2023-10-25 23:58:21,457 cameras 18136 18056 啟動所有相機實例開始
+INFO 2023-10-25 23:58:21,462 cameras 18136 18056 新增編號:1 相機開始
+INFO 2023-10-25 23:58:21,463 cameras 18136 18056 編號:1 相機基礎設定
+INFO 2023-10-25 23:58:21,473 cameras 18136 18056 編號:1 相機長寬fps設定
+ERROR 2023-10-25 23:58:21,473 cameras 18136 18056 編號:1 相機訪問失敗
+WARNING 2023-10-25 23:58:21,473 cameras 18136 18056 編號:1 相機實例化失敗
+INFO 2023-10-25 23:58:21,474 cameras 18136 18056 編號:1 釋放相機
+INFO 2023-10-25 23:58:21,474 cameras 18136 18056 新增編號:1 相機結束
+INFO 2023-10-25 23:58:21,474 cameras 18136 18056 啟動所有相機實例結束
+INFO 2023-10-25 23:58:23,903 base 18136 15988 Added job "checkIn" to job store "default"
+INFO 2023-10-25 23:58:23,903 task 18136 15988 ID:task.views.checkIn執行成功
+INFO 2023-10-25 23:58:23,906 base 18136 3704 Running job "checkIn (trigger: date[2023-10-25 23:58:23 CST], next run at: 2023-10-25 23:58:23 CST)" (scheduled at 2023-10-25 23:58:23+08:00)
+INFO 2023-10-25 23:58:23,906 views 18136 3704 自動打卡程式啟動
+ERROR 2023-10-25 23:58:23,910 base 18136 3704 Job "checkIn (trigger: date[2023-10-25 23:58:23 CST], next run at: 2023-10-25 23:58:23 CST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python38\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Demo\task\views.py", line 111, in checkIn
+    driver = webdriver.Chrome(executable_path=chrome_path)
+TypeError: __init__() got an unexpected keyword argument 'executable_path'
+INFO 2023-10-25 23:58:23,925 base 18136 12500 Removed job fa746dc664ee4256b0fc81959c150710
+WARNING 2023-10-25 23:58:23,933 jobstores 18136 3704 Job 'fa746dc664ee4256b0fc81959c150710' no longer exists! Skipping logging of job execution...
+WARNING 2023-10-25 23:58:23,938 jobstores 18136 12500 Job 'fa746dc664ee4256b0fc81959c150710' no longer exists! Skipping logging of job execution...
