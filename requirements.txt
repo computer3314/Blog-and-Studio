@@ -1,15 +1,15 @@
 Django==3.2.16
-django==3.2.16
 djangorestframework==3.14.0
 psycopg2==2.9.1
 opencv-python==4.6.0.66
 Pillow==8.4.0
 pytz==2022.5
-django-apscheduler
+django-apscheduler==0.6.2  # 指定版本
 tzlocal==2.1
-ffmpeg
 python-dotenv==0.20.0
-daphne
+daphne  # 這個套件沒有指定版本，可以手動查詢後補上
 channels==3.0.4
 channels-redis==4.0.0
-pip install selenium
+selenium==4.1.0  # 移除 `pip install`，改為標準格式
+
+# `ffmpeg` 移除，應該在系統或 Dockerfile 內安裝
